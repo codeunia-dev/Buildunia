@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codeunia: The Definitive Mark</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --bg: #000000;
+            --text-main: #FFFFFF;
+            --text-subtle: #A1A1A1;
+            --border: #272727;
+            --brand-gradient-start: #10B981; /* Green */
+            --brand-gradient-end: #3B82F6; /* Blue */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 4rem 2rem;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 6rem;
+        }
+
+        .header h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            margin: 0 0 1rem 0;
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            color: var(--text-subtle);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .concept-presentation {
+            background: #0A0A0A;
+            border: 1px solid var(--border);
+            border-radius: 1.5rem;
+            padding: 5rem 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-display {
+            width: 250px;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .logo-svg {
+            width: 180px;
+            height: 180px;
+            overflow: visible;
+        }
+        
+        .logo-svg .wing-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: draw-wings 2s ease-out 0.5s forwards;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: center;
+        }
+
+        .logo-display:hover .wing-path {
+            animation: none;
+            transform: scale(1.05);
+        }
+
+        @keyframes draw-wings {
+            to { stroke-dashoffset: 0; }
+        }
+        
+        .logo-info {
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .logo-info h2 {
+            font-size: 2.75rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            margin: 0 0 1rem 0;
+        }
+
+        .logo-info p {
+            font-size: 1.15rem;
+            color: var(--text-subtle);
+            margin-bottom: 2rem;
+        }
+        
+        .logo-info .highlight {
+            background: linear-gradient(90deg, var(--brand-gradient-start), var(--brand-gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+
+        .divider {
+            width: 100px;
+            height: 1px;
+            background-color: var(--border);
+            margin: 3rem auto;
+        }
+        
+        @media (max-width: 768px) {
+            body { padding: 2rem 1rem; }
+            .concept-presentation { padding: 3rem 2rem; }
+            .header h1 { font-size: 3rem; }
+            .logo-info h2 { font-size: 2rem; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>The Codeunia Mark</h1>
+            <p>A definitive concept built on a powerful metaphor. This logo is designed to be intelligent, unique, and to establish a timeless, story-driven brand identity.</p>
+        </header>
+
+        <div class="concept-presentation">
+            <div class="logo-display">
+                <svg class="logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="var(--brand-gradient-start)" />
+                            <stop offset="100%" stop-color="var(--brand-gradient-end)" />
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- The abstract bird, woven from a single path -->
+                    <path class="wing-path" 
+                        d="M20 100 L60 60 L100 100 L60 140 Z M100 100 L140 60 L180 100 L140 140 Z"
+                        fill="none" 
+                        stroke="url(#brandGradient)" 
+                        stroke-width="25" 
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </svg>
+            </div>
+            
+            <div class="logo-info">
+                <h2>The Unia Weaver</h2>
+                <p>
+                    This logo is a symbol of <span class="highlight">Construction</span>, <span class="highlight">Community</span>, and <span class="highlight">Code</span>. It is an abstract, geometric bird, inspired by the weaverbird—nature's most skilled architect.
+                </p>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="logo-info">
+                <h2>The Logic</h2>
+                <p>
+                    Weaverbirds build intricate, strong nests by weaving together individual strands. This is a perfect metaphor for Codeunia. The two "wings" of the logo are formed from the universal code brackets (`< >`), representing the individual developers and technologies.
+                </p>
+                <p>
+                    Where they meet, they form a strong, unified structure. The story is clear and powerful: **Codeunia is where individual strands of code and talent are woven together to build something strong, beautiful, and communal.**
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

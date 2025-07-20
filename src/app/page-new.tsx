@@ -88,16 +88,16 @@ const getDifficultyColor = (difficulty: string) => {
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen !bg-black">
+    <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="!bg-black py-20">
+      <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
               From Idea to IoT:
-              <span className="text-blue-400"> Build Your Future, Today</span>
+              <span className="text-blue-600"> Build Your Future, Today</span>
             </h1>
-            <p className="text-xl text-gray-100 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
               Unlock the world of Internet of Things through hands-on project kits designed for college students and tech enthusiasts. Learn, build, and get mentored by experts.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -115,50 +115,50 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 !bg-black">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               How It Works
             </h2>
-            <p className="text-xl text-gray-100">
+            <p className="text-xl text-gray-600">
               Your journey to IoT mastery in three simple steps
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="bg-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-white">1</span>
+              <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-blue-600">1</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">Pick a Project</h3>
-              <p className="text-gray-200">Choose from our curated collection of IoT projects designed for different skill levels.</p>
+              <h3 className="text-xl font-semibold mb-2">Pick a Project</h3>
+              <p className="text-gray-600">Choose from our curated collection of IoT projects designed for different skill levels.</p>
             </div>
             <div className="text-center">
-              <div className="bg-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-white">2</span>
+              <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-blue-600">2</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">Build & Learn</h3>
-              <p className="text-gray-200">Follow our detailed guides and build real IoT solutions with all components included.</p>
+              <h3 className="text-xl font-semibold mb-2">Build & Learn</h3>
+              <p className="text-gray-600">Follow our detailed guides and build real IoT solutions with all components included.</p>
             </div>
             <div className="text-center">
-              <div className="bg-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-white">3</span>
+              <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-blue-600">3</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">Get Mentorship</h3>
-              <p className="text-gray-200">Connect with IoT experts for personalized guidance and career advice.</p>
+              <h3 className="text-xl font-semibold mb-2">Get Mentorship</h3>
+              <p className="text-gray-600">Connect with IoT experts for personalized guidance and career advice.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Featured Projects */}
-      <section className="py-20 bg-black">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Featured Projects
             </h2>
-            <p className="text-xl text-gray-100">
+            <p className="text-xl text-gray-600">
               Start your IoT journey with these popular projects
             </p>
           </div>
@@ -202,24 +202,24 @@ export default function HomePage() {
       </section>
 
       {/* Features */}
-      <section className="py-20 !bg-black">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Why Choose BuildUnia?
             </h2>
-            <p className="text-xl text-gray-100">
+            <p className="text-xl text-gray-600">
               Everything you need to master IoT development
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <div key={index} className="text-center">
-                <div className="bg-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  <feature.icon className="h-8 w-8 text-white" />
+                <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <feature.icon className="h-8 w-8 text-blue-600" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-white">{feature.title}</h3>
-                <p className="text-gray-200">{feature.description}</p>
+                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -227,7 +227,7 @@ export default function HomePage() {
       </section>
 
       {/* Mentorship CTA */}
-      <section className="py-20 bg-blue-700 text-white">
+      <section className="py-20 bg-blue-600 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Ready to Level Up Your IoT Skills?
@@ -250,13 +250,13 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-black">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               What Students Say
             </h2>
-            <p className="text-xl text-gray-100">
+            <p className="text-xl text-gray-600">
               Join thousands of students who've transformed their IoT skills
             </p>
           </div>

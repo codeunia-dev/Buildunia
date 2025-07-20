@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codeunia: The Definitive Mark</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --bg: #000000;
+            --text-main: #FFFFFF;
+            --text-subtle: #A1A1A1;
+            --border: #272727;
+            --brand-primary: #FFFFFF;
+            --brand-accent: #007AFF;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 4rem 2rem;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 6rem;
+        }
+
+        .header h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            margin: 0 0 1rem 0;
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            color: var(--text-subtle);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .concept-presentation {
+            background: #0A0A0A;
+            border: 1px solid var(--border);
+            border-radius: 1.5rem;
+            padding: 5rem 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-display {
+            width: 250px;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .logo-svg {
+            width: 180px;
+            height: 180px;
+            overflow: visible;
+        }
+        
+        .logo-svg .shape {
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: center;
+        }
+
+        .logo-display:hover .c-shape {
+            transform: rotate(-10deg);
+        }
+        .logo-display:hover .dot-shape {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .logo-info {
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .logo-info h2 {
+            font-size: 2.75rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            margin: 0 0 1rem 0;
+        }
+
+        .logo-info p {
+            font-size: 1.15rem;
+            color: var(--text-subtle);
+            margin-bottom: 2rem;
+        }
+        
+        .logo-info .highlight {
+            color: var(--brand-accent);
+            font-weight: 600;
+        }
+
+        .divider {
+            width: 100px;
+            height: 1px;
+            background-color: var(--border);
+            margin: 3rem auto;
+        }
+        
+        @media (max-width: 768px) {
+            body { padding: 2rem 1rem; }
+            .concept-presentation { padding: 3rem 2rem; }
+            .header h1 { font-size: 3rem; }
+            .logo-info h2 { font-size: 2rem; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>The Codeunia Mark</h1>
+            <p>A definitive concept built on a powerful metaphor. This logo is designed to be intelligent, unique, and to establish a timeless, story-driven brand identity.</p>
+        </header>
+
+        <div class="concept-presentation">
+            <div class="logo-display">
+                <svg class="logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- The 'C' for Code -->
+                    <path class="shape c-shape" 
+                        d="M165,100 A65,65 0 1 1 100,35"
+                        fill="none" 
+                        stroke="var(--brand-primary)" 
+                        stroke-width="30" 
+                        stroke-linecap="round"
+                    />
+                    
+                    <!-- The Dot for Unia/Community -->
+                    <circle class="shape dot-shape" cx="100" cy="165" r="15" fill="var(--brand-accent)"/>
+                </svg>
+            </div>
+            
+            <div class="logo-info">
+                <h2>The Unia Point</h2>
+                <p>
+                    This logo is a symbol of <span class="highlight">Focus</span>, <span class="highlight">Completion</span>, and <span class="highlight">Community</span>. It is a modern, minimalist mark that is confident, clean, and conceptually strong.
+                </p>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="logo-info">
+                <h2>The Logic</h2>
+                <p>
+                    The primary shape is a strong, unmistakable **'C' for Code**. It represents the world of programming—the structure, the language, the environment.
+                </p>
+                <p>
+                    The dot is the **Unia**: the community, the individual developer, the focal point. It is the spark of life that completes the code and gives it purpose. The story is clear and powerful: **The community is the essential point that completes the world of code.**
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

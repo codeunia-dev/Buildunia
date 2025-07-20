@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Codeunia Orbital Mark</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+    :root {
+      --bg: #000000;
+      --text-main: #FFFFFF;
+      --text-subtle: #A1A1A1;
+      --brand-gradient-start: #007AFF;
+      --brand-gradient-end: #5E5CE6;
+    }
+
+    body {
+      margin: 0;
+      padding: 4rem 2rem;
+      background-color: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 2rem;
+    }
+
+    .logo-container {
+      width: 220px;
+      height: 220px;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .orbit-path {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: draw-orbit 2s ease-out forwards;
+    }
+
+    @keyframes draw-orbit {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>The Orbital Mark</h1>
+
+  <div class="logo-container">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#007AFF" />
+          <stop offset="100%" stop-color="#5E5CE6" />
+        </linearGradient>
+      </defs>
+
+      <!-- Refined open C-to-U path -->
+      <path
+        class="orbit-path"
+        d="M160,100 A60,60 0 1 1 100,45 Q80,160 120,150"
+        fill="none"
+        stroke="url(#brandGradient)"
+        stroke-width="30"
+        stroke-linecap="round"
+      />
+    </svg>
+  </div>
+
+</body>
+</html>
