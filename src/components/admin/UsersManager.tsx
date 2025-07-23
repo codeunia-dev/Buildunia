@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Users, Search, UserCheck, UserX, Crown } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase'
 import Image from 'next/image';
 
 interface UserProfile {
@@ -20,6 +20,7 @@ interface UserProfile {
 }
 
 export default function UsersManager() {
+  const supabase = createClient();
   const [users, setUsers] = useState<UserProfile[]>([])
   const [filteredUsers, setFilteredUsers] = useState<UserProfile[]>([])
   const [isLoading, setIsLoading] = useState(true)

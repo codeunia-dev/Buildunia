@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase'
 import { CheckCircle, XCircle, AlertCircle, Loader2 } from 'lucide-react'
 
 interface TestResult {
@@ -14,6 +14,7 @@ interface TestResult {
 }
 
 export default function StorageTest() {
+  const supabase = createClient();
   const [tests, setTests] = useState<TestResult[]>([])
   const [isRunning, setIsRunning] = useState(false)
 
