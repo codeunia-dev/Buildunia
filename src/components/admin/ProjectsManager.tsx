@@ -9,12 +9,13 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import { Plus, Edit2, Trash2, Eye, Package } from 'lucide-react'
-import { supabase, Project } from '@/lib/supabase'
+import { createClient, Project } from '@/lib/supabase'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import ImageUpload from './ImageUpload'
 import { deleteProjectImage, ImageUploadResult } from '@/lib/imageUpload'
 
 export default function ProjectsManager() {
+  const supabase = createClient();
   const [projects, setProjects] = useState<Project[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isDialogOpen, setIsDialogOpen] = useState(false)

@@ -7,13 +7,14 @@ import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/logo'
 import { useAuth } from '@/contexts/AuthContext'
 import { useCart } from '@/contexts/CartContext'
-import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 
 export function Navbar() {
   // NOTE: In the future, admin/auth should be handled by Codeunia SSO/auth.
   const [isOpen, setIsOpen] = useState(false)
   const { user, signOut } = useAuth()
   const { state } = useCart()
+  const router = useRouter()
   // Only codeunia@gmail.com is admin
   const isAdmin = user?.email === 'codeunia@gmail.com';
 
@@ -25,6 +26,12 @@ export function Navbar() {
     { name: 'Contact', href: '/contact' },
     { name: 'Blog', href: '/blog' },
   ]
+
+  // Helper for sign out with redirect
+  const handleSignOut = async () => {
+    await signOut()
+    router.push('/auth/signin')
+  }
 
   return (
     <nav className="bg-black shadow-lg sticky top-0 z-50 border-b border-gray-800">
@@ -72,7 +79,7 @@ export function Navbar() {
                     </Link>
                   </Button>
                 )}
-                <Button variant="outline" size="sm" onClick={() => signOut()}>
+                <Button variant="outline" size="sm" onClick={handleSignOut}>
                   Sign Out
                 </Button>
               </div>
@@ -138,7 +145,7 @@ export function Navbar() {
                         </Link>
                       </Button>
                     )}
-                    <Button variant="outline" size="sm" onClick={() => signOut()}>
+                    <Button variant="outline" size="sm" onClick={handleSignOut}>
                       Sign Out
                     </Button>
                   </div>

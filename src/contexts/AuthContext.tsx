@@ -3,24 +3,20 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 import { User } from '@supabase/supabase-js'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase'
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<unknown>;
-  signUp: (email: string, password: string) => Promise<unknown>;
-  signOut: () => Promise<unknown>;
-  signInWithGitHub: () => Promise<void>;
+  isAdmin: boolean;
+  signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
-  signIn: async () => {},
-  signUp: async () => {},
+  isAdmin: false,
   signOut: async () => {},
-  signInWithGitHub: async () => {},
 })
 
 export const useAuth = () => useContext(AuthContext)
@@ -28,52 +24,39 @@ export const useAuth = () => useContext(AuthContext)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const supabase = createClient()
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null)
+    // get initial session here 
+    const getInitialSession = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
       setLoading(false)
-    })
+    }
 
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
+    getInitialSession()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (_event, session) => {
+        setUser(session?.user ?? null)
+        setLoading(false)
+      }
+    )
 
     return () => subscription.unsubscribe()
-  }, [])
+  }, [supabase.auth])
 
-  const signIn = async (email: string, password: string) => {
-    return await supabase.auth.signInWithPassword({ email, password })
-  }
-
-  const signUp = async (email: string, password: string) => {
-    return await supabase.auth.signUp({ email, password })
-  }
+  const isAdmin = user?.user_metadata?.role === 'admin'
 
   const signOut = async () => {
-    return await supabase.auth.signOut()
-  }
-
-  const signInWithGitHub = async () => {
-    await supabase.auth.signInWithOAuth({ provider: 'github' })
-  }
-
-  const value = {
-    user,
-    loading,
-    signIn,
-    signUp,
-    signOut,
-    signInWithGitHub,
+    await supabase.auth.signOut()
+    setUser(null)
+    // Optionally, you can redirect to the sign-in page here if desired
+    // window.location.href = '/auth/signin';
   }
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={{ user, loading, isAdmin, signOut }}>
       {children}
     </AuthContext.Provider>
   )

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Package, Users, ShoppingCart, DollarSign, TrendingUp, TrendingDown } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase'
 import { Project } from '@/lib/supabase';
 
 interface CategoryCount {
@@ -37,6 +37,7 @@ export default function AdminStats() {
   }, [])
 
   const fetchStats = async () => {
+    const supabase = createClient();
     try {
       // Fetch total projects
       const { count: projectCount } = await supabase
