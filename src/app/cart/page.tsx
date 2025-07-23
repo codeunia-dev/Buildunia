@@ -17,7 +17,7 @@ export default function CartPage() {
           <ShoppingBag className="h-24 w-24 text-gray-300 mx-auto mb-6" />
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Your cart is empty</h1>
           <p className="text-gray-600 mb-8">
-            Looks like you haven't added any projects to your cart yet.
+            Looks like you haven&apos;t added any projects to your cart yet.
           </p>
           <Button asChild>
             <Link href="/projects">Browse Projects</Link>
@@ -31,6 +31,7 @@ export default function CartPage() {
     <div className="min-h-screen bg-black">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Shopping Cart</h1>
+        <p className="text-gray-500 mb-8">You&apos;re almost there! Review your items and proceed to checkout.</p>
         
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Cart Items */}

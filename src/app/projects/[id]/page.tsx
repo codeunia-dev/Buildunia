@@ -5,12 +5,13 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ShoppingCart, Star, CheckCircle, Cpu, Wrench } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useCart } from '@/contexts/CartContext'
+import { Project } from '@/lib/supabase';
 
 // Mock data - replace with real data from Supabase
-const projectData: { [key: string]: any } = {
+const projectData: { [key: string]: Project } = {
   '1': {
     id: '1',
     name: 'Smart Home Automation',
@@ -31,24 +32,9 @@ const projectData: { [key: string]: any } = {
       'Power Supply',
       'Project Enclosure'
     ],
-    features: [
-      'Control lights and appliances remotely',
-      'Motion detection and alerts',
-      'Temperature and humidity monitoring',
-      'Mobile app for iOS and Android',
-      'Voice control integration',
-      'Energy usage tracking'
-    ],
-    whatYouWillLearn: [
-      'IoT system architecture and design',
-      'Arduino programming and libraries',
-      'WiFi communication protocols',
-      'Sensor data collection and processing',
-      'Mobile app development basics',
-      'Home automation best practices'
-    ],
-    estimatedTime: '2-3 weeks',
-    supportLevel: 'Full documentation + video tutorials + community support'
+    image_path: '',
+    created_at: '',
+    updated_at: ''
   },
   '2': {
     id: '2',
@@ -68,22 +54,9 @@ const projectData: { [key: string]: any } = {
       'Battery Pack',
       'Weatherproof Enclosure'
     ],
-    features: [
-      'Real-time weather data',
-      'Cloud data storage',
-      'Web dashboard',
-      'Mobile notifications',
-      'Historical data analysis'
-    ],
-    whatYouWillLearn: [
-      'ESP32 programming',
-      'Sensor integration',
-      'Cloud connectivity',
-      'Data visualization',
-      'Weather prediction basics'
-    ],
-    estimatedTime: '1-2 weeks',
-    supportLevel: 'Full documentation + video tutorials'
+    image_path: '',
+    created_at: '',
+    updated_at: ''
   }
 }
 
@@ -109,7 +82,7 @@ export default function ProjectDetailPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Project Not Found</h1>
-          <p className="text-gray-600 mb-6">The project you're looking for doesn't exist.</p>
+          <p className="text-gray-600 mb-6">The project you&apos;re looking for doesn&apos;t exist.</p>
           <Button asChild>
             <Link href="/projects">Back to Projects</Link>
           </Button>
@@ -187,14 +160,7 @@ export default function ProjectDetailPage() {
             </div>
 
             <div className="space-y-4 mb-8">
-              <div className="flex items-center gap-3">
-                <Cpu className="h-5 w-5 text-gray-400" />
-                <span className="text-gray-600">Estimated completion: {project.estimatedTime}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <CheckCircle className="h-5 w-5 text-green-500" />
-                <span className="text-gray-600">{project.supportLevel}</span>
-              </div>
+              
             </div>
 
             <div className="flex gap-4 mb-8">
@@ -226,7 +192,7 @@ export default function ProjectDetailPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Star className="h-5 w-5" />
-                  Skills You'll Gain
+                  Skills You&apos;ll Gain
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -255,7 +221,7 @@ export default function ProjectDetailPage() {
                 {project.components.map((component: string, index: number) => (
                   <li key={index} className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm">{component}</span>
+                    <span className="text-sm">You&apos;ll get hands-on experience with real IoT hardware.</span>
                   </li>
                 ))}
               </ul>
@@ -272,12 +238,7 @@ export default function ProjectDetailPage() {
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {project.features.map((feature: string, index: number) => (
-                  <li key={index} className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm">{feature}</span>
-                  </li>
-                ))}
+                
               </ul>
             </CardContent>
           </Card>
@@ -287,17 +248,12 @@ export default function ProjectDetailPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Cpu className="h-5 w-5" />
-                What You'll Learn
+                What You&apos;ll Learn
               </CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {project.whatYouWillLearn.map((item: string, index: number) => (
-                  <li key={index} className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm">{item}</span>
-                  </li>
-                ))}
+                
               </ul>
             </CardContent>
           </Card>

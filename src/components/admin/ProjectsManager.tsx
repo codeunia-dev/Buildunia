@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -79,7 +79,7 @@ export default function ProjectsManager() {
 
       if (editingProject) {
         // If editing and there's an old image path, delete it if the image changed
-        const oldImagePath = (editingProject as any).image_path
+        const oldImagePath = editingProject?.image_path;
         if (oldImagePath && oldImagePath !== formData.image_path && formData.image_path) {
           await deleteProjectImage(oldImagePath)
         }
@@ -129,7 +129,7 @@ export default function ProjectsManager() {
       description: project.description,
       price: project.price.toString(),
       image_url: project.image_url,
-      image_path: (project as any).image_path || '',
+      image_path: project.image_path || '',
       difficulty: project.difficulty,
       category: project.category,
       components: project.components.join(', '),
@@ -145,7 +145,7 @@ export default function ProjectsManager() {
     try {
       // Get the project to find the image path
       const project = projects.find(p => p.id === id)
-      const imagePath = (project as any)?.image_path
+      const imagePath = project?.image_path;
 
       // Delete the project from database
       const { error } = await supabase

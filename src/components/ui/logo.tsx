@@ -5,10 +5,9 @@ import React from 'react'
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg'
   className?: string
-  animated?: boolean
 }
 
-export function Logo({ size = 'md', className = '', animated = true }: LogoProps) {
+export function Logo({ size = 'md', className = '' }: LogoProps) {
   const sizeMap = {
     sm: { container: 'w-8 h-8', svg: 'w-8 h-8' },
     md: { container: 'w-12 h-12', svg: 'w-12 h-12' },

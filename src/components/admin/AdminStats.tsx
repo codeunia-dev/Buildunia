@@ -5,14 +5,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Package, Users, ShoppingCart, DollarSign, TrendingUp, TrendingDown } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { Project } from '@/lib/supabase';
+
+interface CategoryCount {
+  category: string;
+  count: number;
+}
 
 interface Stats {
-  totalProjects: number
-  totalUsers: number
-  totalOrders: number
-  totalRevenue: number
-  recentProjects: any[]
-  popularCategories: any[]
+  totalProjects: number;
+  totalUsers: number;
+  totalOrders: number;
+  totalRevenue: number;
+  recentProjects: Project[];
+  popularCategories: CategoryCount[];
 }
 
 export default function AdminStats() {
@@ -54,15 +60,15 @@ export default function AdminStats() {
         .from('projects')
         .select('category')
 
-      const categoryCount = projects?.reduce((acc: any, project) => {
-        acc[project.category] = (acc[project.category] || 0) + 1
-        return acc
-      }, {}) || {}
+      const categoryCount = projects?.reduce((acc: Record<string, number>, project: { category: string }) => {
+        acc[project.category] = (acc[project.category] || 0) + 1;
+        return acc;
+      }, {}) || {};
 
-      const popularCategories = Object.entries(categoryCount)
-        .map(([category, count]) => ({ category, count }))
-        .sort((a: any, b: any) => b.count - a.count)
-        .slice(0, 5)
+      const popularCategories: CategoryCount[] = Object.entries(categoryCount)
+        .map(([category, count]) => ({ category, count: count as number }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 5);
 
       setStats({
         totalProjects: projectCount || 0,
@@ -206,7 +212,7 @@ export default function AdminStats() {
               <p className="text-gray-500 text-center py-4">No categories yet</p>
             ) : (
               <div className="space-y-4">
-                {stats.popularCategories.map((category: any, index) => (
+                {stats.popularCategories.map((category: CategoryCount, index) => (
                   <div key={category.category} className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-2 h-2 rounded-full bg-blue-500" />

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Code, Cpu, Users, Star, CheckCircle } from 'lucide-react'
+import { ArrowRight, Code, Cpu, Users, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -234,7 +234,7 @@ export default function HomePage() {
           </h2>
           <p className="text-xl mb-8 opacity-90">
             Get personalized mentorship from IoT experts and accelerate your learning journey. 
-            From code reviews to career guidance, we're here to help you succeed.
+            From code reviews to career guidance, we&apos;re here to help you succeed.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" variant="secondary" asChild>
@@ -257,7 +257,7 @@ export default function HomePage() {
               What Students Say
             </h2>
             <p className="text-xl text-gray-600">
-              Join thousands of students who've transformed their IoT skills
+              Join thousands of students who&apos;ve transformed their IoT skills
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -269,7 +269,7 @@ export default function HomePage() {
                       <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
                     ))}
                   </div>
-                  <p className="text-gray-600 mb-4">"{testimonial.content}"</p>
+                  <p className="text-gray-600 mb-4">&quot;{testimonial.content}&quot;</p>
                   <div>
                     <p className="font-semibold">{testimonial.name}</p>
                     <p className="text-sm text-gray-500">{testimonial.role}</p>

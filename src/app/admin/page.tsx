@@ -1,5 +1,3 @@
-import { redirect } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
 import AdminDashboard from '@/components/admin/AdminDashboard'
 
 export default async function AdminPage() {

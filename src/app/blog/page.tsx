@@ -114,9 +114,8 @@ export default function BlogPage() {
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             IoT Learning Hub
           </h1>
-          <p className="text-xl text-gray-600 mb-8">
-            Tutorials, guides, and insights to help you master IoT development. 
-            From beginner tips to advanced techniques, we've got you covered.
+          <p className="text-xl text-gray-100">
+            Join thousands of students who&apos;ve transformed their IoT skills
           </p>
         </div>
       </section>

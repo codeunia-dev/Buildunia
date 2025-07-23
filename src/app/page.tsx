@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Code, Cpu, Users, Star, CheckCircle } from 'lucide-react'
+import { ArrowRight, Code, Cpu, Users, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -79,10 +79,10 @@ const features = [
 
 const getDifficultyColor = (difficulty: string) => {
   switch (difficulty) {
-    case 'beginner': return 'bg-green-100 text-green-800'
-    case 'intermediate': return 'bg-yellow-100 text-yellow-800'
-    case 'advanced': return 'bg-red-100 text-red-800'
-    default: return 'bg-gray-100 text-gray-800'
+    case 'beginner': return 'bg-green-500/20 text-green-300 border border-green-600 shadow-sm rounded-full px-3 py-1 font-semibold tracking-wide backdrop-blur-sm'
+    case 'intermediate': return 'bg-yellow-400/20 text-yellow-200 border border-yellow-500 shadow-sm rounded-full px-3 py-1 font-semibold tracking-wide backdrop-blur-sm'
+    case 'advanced': return 'bg-red-500/20 text-red-300 border border-red-600 shadow-sm rounded-full px-3 py-1 font-semibold tracking-wide backdrop-blur-sm'
+    default: return 'bg-gray-700 text-gray-200 border border-gray-500 shadow-sm rounded-full px-3 py-1 font-semibold tracking-wide backdrop-blur-sm'
   }
 }
 
@@ -234,7 +234,7 @@ export default function HomePage() {
           </h2>
           <p className="text-xl mb-8 opacity-90">
             Get personalized mentorship from IoT experts and accelerate your learning journey. 
-            From code reviews to career guidance, we're here to help you succeed.
+            From code reviews to career guidance, we&apos;re here to help you succeed.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" variant="secondary" asChild>
@@ -257,7 +257,7 @@ export default function HomePage() {
               What Students Say
             </h2>
             <p className="text-xl text-gray-100">
-              Join thousands of students who've transformed their IoT skills
+              Join thousands of students who&apos;ve transformed their IoT skills
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -269,7 +269,7 @@ export default function HomePage() {
                       <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
                     ))}
                   </div>
-                  <p className="text-gray-600 mb-4">"{testimonial.content}"</p>
+                  <p className="text-gray-600 mb-4">&quot;{testimonial.content}&quot;</p>
                   <div>
                     <p className="font-semibold">{testimonial.name}</p>
                     <p className="text-sm text-gray-500">{testimonial.role}</p>

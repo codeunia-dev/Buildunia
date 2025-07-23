@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Upload, X, Image as ImageIcon, Loader2, AlertCircle } from 'lucide-react'
 import { uploadProjectImage, ImageUploadResult } from '@/lib/imageUpload'
+import Image from 'next/image';
 
 interface ImageUploadProps {
   onImageUploaded: (result: ImageUploadResult) => void
@@ -180,13 +181,15 @@ export default function ImageUpload({
       {preview ? (
         <div className="relative">
           <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
-            <img
+            <Image
               src={preview}
               alt="Project preview"
               className="w-full h-48 object-cover"
+              width={800}
+              height={384}
               onError={() => {
-                setUploadError('Failed to display image')
-                setPreview(null)
+                setUploadError('Failed to display image');
+                setPreview(null);
               }}
             />
           </div>

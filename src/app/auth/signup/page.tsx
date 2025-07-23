@@ -2,14 +2,14 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Logo } from '@/components/ui/logo'
 import { useAuth } from '@/contexts/AuthContext'
+import type { AuthError } from '@supabase/supabase-js';
 
 export default function SignUpPage() {
   const [email, setEmail] = useState('')
@@ -21,7 +21,6 @@ export default function SignUpPage() {
   const [message, setMessage] = useState('')
   
   const { signUp } = useAuth()
-  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -42,13 +41,14 @@ export default function SignUpPage() {
     }
 
     try {
-      const { error } = await signUp(email, password)
+      const result = await signUp(email, password);
+      const error = (result as { error: AuthError | null }).error;
       if (error) {
         setError(error.message)
       } else {
         setMessage('Check your email for the confirmation link!')
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred')
     } finally {
       setLoading(false)

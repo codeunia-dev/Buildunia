@@ -2,9 +2,8 @@
 
 import { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Plus, Package, Users, BarChart3, Settings } from 'lucide-react'
+import { Package, Users, BarChart3, Settings } from 'lucide-react'
 import ProjectsManager from './ProjectsManager'
 import AdminStats from './AdminStats'
 import UsersManager from './UsersManager'
@@ -62,7 +61,7 @@ export default function AdminDashboard() {
           <div className="space-y-6">
             <h2 className="text-2xl font-semibold">Upload Diagnostics</h2>
             <p className="text-gray-600">
-              If you're having trouble uploading images, run these diagnostic tests to identify the issue.
+              If you&apos;re having trouble uploading images, run these diagnostic tests to identify the issue.
             </p>
             <StorageTest />
           </div>

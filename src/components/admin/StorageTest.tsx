@@ -10,14 +10,14 @@ interface TestResult {
   test: string
   status: 'pending' | 'success' | 'error'
   message: string
-  details?: any
+  details?: unknown
 }
 
 export default function StorageTest() {
   const [tests, setTests] = useState<TestResult[]>([])
   const [isRunning, setIsRunning] = useState(false)
 
-  const updateTest = (testName: string, status: TestResult['status'], message: string, details?: any) => {
+  const updateTest = (testName: string, status: TestResult['status'], message: string, details?: unknown) => {
     setTests(prev => {
       const newTests = [...prev]
       const existingIndex = newTests.findIndex(t => t.test === testName)
@@ -154,25 +154,37 @@ export default function StorageTest() {
 
         {tests.length > 0 && (
           <div className="space-y-3">
-            {tests.map((test, index) => (
-              <div key={index} className="flex items-start gap-3 p-3 border rounded-lg">
-                {getStatusIcon(test.status)}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <h4 className="font-medium">{test.test}</h4>
+            {tests.map((test, index) => {
+              let detailsString: string | null = null;
+              if (test.details) {
+                if (typeof test.details === 'string') {
+                  detailsString = test.details;
+                } else {
+                  try {
+                    detailsString = JSON.stringify(test.details, null, 2);
+                  } catch {
+                    detailsString = String(test.details);
+                  }
+                }
+              }
+              return (
+                <div key={index} className="flex items-start gap-3 p-3 border rounded-lg">
+                  {getStatusIcon(test.status)}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-medium">{test.test}</h4>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-1">{test.message}</p>
+                    {detailsString && (
+                      <details className="mt-2">
+                        <summary className="text-xs text-gray-500 cursor-pointer">Show details</summary>
+                        <pre className="text-xs bg-gray-50 p-2 rounded mt-1 overflow-auto">{detailsString}</pre>
+                      </details>
+                    )}
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">{test.message}</p>
-                  {test.details && (
-                    <details className="mt-2">
-                      <summary className="text-xs text-gray-500 cursor-pointer">Show details</summary>
-                      <pre className="text-xs bg-gray-50 p-2 rounded mt-1 overflow-auto">
-                        {JSON.stringify(test.details, null, 2)}
-                      </pre>
-                    </details>
-                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 

@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import { Code, Heart, Users, Target, Award, Globe } from 'lucide-react'
+import { Code, Users, Target, Globe } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const values = [
   {
@@ -33,69 +33,43 @@ const stats = [
   { number: '98%', label: 'Satisfaction Rate' }
 ]
 
-const team = [
-  {
-    name: 'Dr. Alex Chen',
-    role: 'Founder & Lead Mentor',
-    bio: 'Former IoT engineer at Google and Tesla with 8+ years of experience building large-scale IoT systems.',
-    image: '/placeholder-team.jpg'
-  },
-  {
-    name: 'Sarah Kim',
-    role: 'Content Creator',
-    bio: 'Educational specialist with a passion for making complex technical concepts accessible to everyone.',
-    image: '/placeholder-team.jpg'
-  },
-  {
-    name: 'Michael Rodriguez',
-    role: 'Hardware Specialist',
-    bio: 'Electronics engineer with expertise in embedded systems and hardware design for IoT applications.',
-    image: '/placeholder-team.jpg'
-  }
-]
-
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
+      <section className="bg-gradient-to-br from-gray-900 to-blue-900 py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
             About BuildUnia
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            A Codeunia product on a mission to democratize IoT education by providing hands-on learning experiences 
-            that bridge the gap between theory and real-world application.
+          <p className="text-xl text-gray-300">
+            We&apos;re passionate about making IoT accessible to everyone.
           </p>
         </div>
       </section>
 
       {/* Mission Statement */}
-      <section className="py-20">
+      <section className="py-20 bg-black">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Our Mission</h2>
-          <p className="text-lg text-gray-600 leading-relaxed">
-            At BuildUnia, a Codeunia product, we believe that the best way to learn IoT is through hands-on experience. 
-            We create comprehensive project kits that combine carefully selected hardware with 
-            expert guidance, making it easy for students and enthusiasts to build real IoT solutions. 
-            Our goal is to empower the next generation of innovators with the skills and confidence 
-            to shape the connected world of tomorrow.
+          <h2 className="text-3xl font-bold text-white mb-8">Our Mission</h2>
+          <p className="text-lg text-gray-300 leading-relaxed">
+            At BuildUnia, a Codeunia product, we believe that the best way to learn IoT is through hands-on experience. We create comprehensive project kits that combine carefully selected hardware with expert guidance, making it easy for students and enthusiasts to build real IoT solutions. Our goal is to empower the next generation of innovators with the skills and confidence to shape the connected world of tomorrow.
           </p>
         </div>
       </section>
 
       {/* Stats */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Impact</h2>
-            <p className="text-xl text-gray-600">Making a difference in IoT education worldwide</p>
+            <h2 className="text-3xl font-bold text-white mb-4">Our Impact</h2>
+            <p className="text-xl text-gray-300">Making a difference in IoT education worldwide</p>
           </div>
           <div className="grid md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-4xl font-bold text-blue-600 mb-2">{stat.number}</div>
-                <div className="text-gray-600">{stat.label}</div>
+                <div className="text-4xl font-bold text-blue-400 mb-2">{stat.number}</div>
+                <div className="text-gray-300">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -103,23 +77,23 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="py-20">
+      <section className="py-20 bg-black">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Values</h2>
-            <p className="text-xl text-gray-600">The principles that guide everything we do</p>
+            <h2 className="text-3xl font-bold text-white mb-4">Our Values</h2>
+            <p className="text-xl text-gray-300">The principles that guide everything we do</p>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
             {values.map((value, index) => (
-              <Card key={index}>
+              <Card key={index} className="bg-gray-900 border-gray-700">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-3">
-                    <value.icon className="h-8 w-8 text-blue-600" />
+                  <CardTitle className="flex items-center gap-3 text-white">
+                    <value.icon className="h-8 w-8 text-blue-400" />
                     {value.title}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">{value.description}</p>
+                  <p className="text-gray-300">{value.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -128,12 +102,12 @@ export default function AboutPage() {
       </section>
 
       {/* Story */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Story</h2>
+            <h2 className="text-3xl font-bold text-white mb-4">Our Story</h2>
           </div>
-          <div className="prose prose-lg mx-auto text-gray-600">
+          <div className="prose prose-lg mx-auto text-gray-300">
             <p>
               BuildUnia was born from a simple observation: while IoT technology was revolutionizing 
               industries worldwide, there was a significant gap between academic theory and 
@@ -143,7 +117,7 @@ export default function AboutPage() {
               As an IoT engineer working at major tech companies, our founder Dr. Alex Chen 
               noticed that many brilliant computer science and engineering students struggled 
               to translate their theoretical knowledge into working IoT systems. The missing 
-              piece wasn't intelligence or motivation—it was access to proper guidance and 
+              piece wasn&apos;t intelligence or motivation—it was access to proper guidance and 
               real-world project experience.
             </p>
             <p>
@@ -164,34 +138,14 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team */}
-      <section className="py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
-            <p className="text-xl text-gray-600">The passionate people behind BuildUnia</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {team.map((member, index) => (
-              <Card key={index}>
-                <CardContent className="pt-6 text-center">
-                  <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4"></div>
-                  <h3 className="text-lg font-semibold mb-1">{member.name}</h3>
-                  <p className="text-blue-600 mb-3">{member.role}</p>
-                  <p className="text-gray-600 text-sm">{member.bio}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Team section removed as requested */}
 
       {/* CTA */}
-      <section className="py-20 bg-blue-600 text-white">
+      <section className="py-20 bg-black text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Start Your IoT Journey?</h2>
           <p className="text-xl mb-8 opacity-90">
-            Join thousands of students who have transformed their understanding of IoT through 
+            Join thousands of students who&apos;ve transformed their understanding of IoT through 
             hands-on learning and expert mentorship.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

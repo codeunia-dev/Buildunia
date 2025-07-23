@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Menu, X, ShoppingCart, User, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/logo'
@@ -10,30 +10,12 @@ import { useCart } from '@/contexts/CartContext'
 import { supabase } from '@/lib/supabase'
 
 export function Navbar() {
+  // NOTE: In the future, admin/auth should be handled by Codeunia SSO/auth.
   const [isOpen, setIsOpen] = useState(false)
-  const [isAdmin, setIsAdmin] = useState(false)
   const { user, signOut } = useAuth()
   const { state } = useCart()
-
-  useEffect(() => {
-    if (user) {
-      checkAdminRole()
-    }
-  }, [user])
-
-  const checkAdminRole = async () => {
-    try {
-      const { data } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user?.id)
-        .single()
-      
-      setIsAdmin(data?.role === 'admin')
-    } catch (error) {
-      console.error('Error checking admin role:', error)
-    }
-  }
+  // Only codeunia@gmail.com is admin
+  const isAdmin = user?.email === 'codeunia@gmail.com';
 
   const navigation = [
     { name: 'Home', href: '/' },

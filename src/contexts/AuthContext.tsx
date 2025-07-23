@@ -1,3 +1,4 @@
+// TODO: Replace this auth logic with Codeunia SSO/auth integration in production.
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
@@ -5,11 +6,12 @@ import { User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
 
 interface AuthContextType {
-  user: User | null
-  loading: boolean
-  signIn: (email: string, password: string) => Promise<any>
-  signUp: (email: string, password: string) => Promise<any>
-  signOut: () => Promise<any>
+  user: User | null;
+  loading: boolean;
+  signIn: (email: string, password: string) => Promise<unknown>;
+  signUp: (email: string, password: string) => Promise<unknown>;
+  signOut: () => Promise<unknown>;
+  signInWithGitHub: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -18,6 +20,7 @@ const AuthContext = createContext<AuthContextType>({
   signIn: async () => {},
   signUp: async () => {},
   signOut: async () => {},
+  signInWithGitHub: async () => {},
 })
 
 export const useAuth = () => useContext(AuthContext)
@@ -56,12 +59,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return await supabase.auth.signOut()
   }
 
+  const signInWithGitHub = async () => {
+    await supabase.auth.signInWithOAuth({ provider: 'github' })
+  }
+
   const value = {
     user,
     loading,
     signIn,
     signUp,
     signOut,
+    signInWithGitHub,
   }
 
   return (

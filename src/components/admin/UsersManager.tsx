@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Users, Search, UserCheck, UserX, Crown } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import Image from 'next/image';
 
 interface UserProfile {
   id: string
@@ -24,13 +25,25 @@ export default function UsersManager() {
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
 
+  const filterUsers = useCallback(() => {
+    if (!searchTerm) {
+      setFilteredUsers(users);
+      return;
+    }
+    const filtered = users.filter(user => 
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.full_name && user.full_name.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+    setFilteredUsers(filtered);
+  }, [searchTerm, users]);
+
   useEffect(() => {
     fetchUsers()
   }, [])
 
   useEffect(() => {
-    filterUsers()
-  }, [users, searchTerm])
+    filterUsers();
+  }, [filterUsers]);
 
   const fetchUsers = async () => {
     try {
@@ -46,19 +59,6 @@ export default function UsersManager() {
     } finally {
       setIsLoading(false)
     }
-  }
-
-  const filterUsers = () => {
-    if (!searchTerm) {
-      setFilteredUsers(users)
-      return
-    }
-
-    const filtered = users.filter(user => 
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (user.full_name && user.full_name.toLowerCase().includes(searchTerm.toLowerCase()))
-    )
-    setFilteredUsers(filtered)
   }
 
   const updateUserRole = async (userId: string, newRole: string) => {
@@ -200,10 +200,12 @@ export default function UsersManager() {
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                       {user.avatar_url ? (
-                        <img 
+                        <Image 
                           src={user.avatar_url} 
                           alt={user.full_name || user.email}
                           className="w-10 h-10 rounded-full object-cover"
+                          width={40}
+                          height={40}
                         />
                       ) : (
                         <Users className="w-5 h-5 text-blue-600" />

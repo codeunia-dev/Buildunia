@@ -24,16 +24,16 @@ interface UserProfile {
 }
 
 interface AuthContextType {
-  user: User | null
-  profile: UserProfile | null
-  loading: boolean
-  signIn: (email: string, password: string) => Promise<any>
-  signUp: (email: string, password: string, metadata?: any) => Promise<any>
-  signOut: () => Promise<any>
-  updateProfile: (updates: Partial<UserProfile>) => Promise<any>
-  refreshProfile: () => Promise<void>
-  hasRole: (role: string) => boolean
-  hasPlatformAccess: (platform: string) => boolean
+  user: User | null;
+  profile: UserProfile | null;
+  loading: boolean;
+  signIn: (email: string, password: string) => Promise<unknown>;
+  signUp: (email: string, password: string, metadata?: Record<string, unknown>) => Promise<unknown>;
+  signOut: () => Promise<unknown>;
+  updateProfile: (updates: Partial<UserProfile>) => Promise<unknown>;
+  refreshProfile: () => Promise<void>;
+  hasRole: (role: string) => boolean;
+  hasPlatformAccess: (platform: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -144,7 +144,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return result
   }
 
-  const signUp = async (email: string, password: string, metadata?: any) => {
+  const signUp = async (email: string, password: string, metadata?: Record<string, unknown>) => {
     const result = await supabase.auth.signUp({ 
       email, 
       password,

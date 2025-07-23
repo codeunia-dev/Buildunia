@@ -90,8 +90,8 @@ export default function ContactPage() {
             Get in Touch
           </h1>
           <p className="text-xl text-gray-600 mb-8">
-            Have questions about our projects or mentorship? We're here to help! 
-            Reach out to us and we'll get back to you as soon as possible.
+            Have questions about our projects or mentorship? We&apos;re here to help! 
+            Reach out to us and we&apos;ll get back to you as soon as possible.
           </p>
         </div>
       </section>
@@ -104,7 +104,7 @@ export default function ContactPage() {
               <CardHeader>
                 <CardTitle>Send us a message</CardTitle>
                 <CardDescription>
-                  Fill out the form below and we'll get back to you within 24 hours.
+                  Fill out the form below and we&apos;ll get back to you within 24 hours.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -115,7 +115,7 @@ export default function ContactPage() {
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">Message sent!</h3>
                     <p className="text-gray-600">
-                      Thank you for your message. We'll get back to you as soon as possible.
+                      Thank you for your message. We&apos;ll get back to you as soon as possible.
                     </p>
                   </div>
                 ) : (
@@ -153,7 +153,7 @@ export default function ContactPage() {
                         name="subject"
                         value={formData.subject}
                         onChange={handleInputChange}
-                        placeholder="What's this about?"
+                        placeholder="What&apos;s this about?"
                         required
                       />
                     </div>
