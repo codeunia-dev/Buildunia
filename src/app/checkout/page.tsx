@@ -4,27 +4,15 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Lock, ShoppingBag } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
-import { useAuth } from '@/contexts/AuthContext';
+
 import { formatPrice } from '@/lib/stripe';
-import { CreditCard, Lock, ShoppingBag } from 'lucide-react';
+
 export default function CheckoutPage() {
   const { state } = useCart();
-  const { user } = useAuth();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    email: user?.email || '',
-    firstName: '',
-    lastName: '',
-    address: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: 'US',
-  });
+
   const subtotal = state.items.reduce((sum, item) => sum + item.project.price, 0);
   const shipping = 9.99;
   const tax = subtotal * 0.08; // 8% tax
@@ -37,13 +25,6 @@ export default function CheckoutPage() {
     phone: '',
     notes: '',
   });
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const handleInquiryChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setInquiry({
