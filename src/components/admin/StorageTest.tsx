@@ -68,10 +68,16 @@ export default function StorageTest() {
     // Test 3: Check user profile and role
     updateTest('User Profile', 'pending', 'Checking user profile and role...')
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user?.id) {
+        updateTest('User Profile', 'error', 'No user ID available');
+        return;
+      }
+
       const { data: profile, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', (await supabase.auth.getUser()).data.user?.id)
+        .eq('id', user.id)
         .single()
 
       if (error) {

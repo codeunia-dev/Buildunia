@@ -41,7 +41,7 @@ export default function ProjectsManager() {
         .order('created_at', { ascending: false })
 
       if (error) throw error
-      setProjects(data || [])
+      setProjects((data as unknown as Project[]) || [])
     } catch (error) {
       console.error('Error fetching projects:', error)
     } finally {
