@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -33,11 +33,7 @@ export default function ProjectsManager() {
   })
   const [uploadError, setUploadError] = useState<string | null>(null)
 
-  useEffect(() => {
-    fetchProjects()
-  }, [])
-
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('projects')
@@ -51,7 +47,11 @@ export default function ProjectsManager() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [supabase, setProjects, setIsLoading])
+
+  useEffect(() => {
+    fetchProjects()
+  }, [fetchProjects])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

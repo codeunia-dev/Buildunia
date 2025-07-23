@@ -2,13 +2,17 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { User } from '@supabase/supabase-js'
+import { User, Session, AuthError } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase'
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   isAdmin: boolean;
+  signUp: (email: string, password: string) => Promise<{
+    data: { user: User | null; session: Session | null } | null;
+    error: AuthError | null;
+  }>
   signOut: () => Promise<void>;
 }
 
@@ -16,6 +20,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   isAdmin: false,
+  signUp: async () => ({ data: null, error: null }),
   signOut: async () => {},
 })
 
@@ -48,15 +53,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const isAdmin = user?.user_metadata?.role === 'admin'
 
+  const signUp = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    })
+    return { data, error }
+  }
+
   const signOut = async () => {
     await supabase.auth.signOut()
     setUser(null)
-    // Optionally, you can redirect to the sign-in page here if desired
-    // window.location.href = '/auth/signin';
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, isAdmin, signOut }}>
+    <AuthContext.Provider value={{ user, loading, isAdmin, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   )

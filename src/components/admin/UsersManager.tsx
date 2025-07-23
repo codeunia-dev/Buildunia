@@ -38,15 +38,7 @@ export default function UsersManager() {
     setFilteredUsers(filtered);
   }, [searchTerm, users]);
 
-  useEffect(() => {
-    fetchUsers()
-  }, [])
-
-  useEffect(() => {
-    filterUsers();
-  }, [filterUsers]);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -60,7 +52,15 @@ export default function UsersManager() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [supabase]);
+
+  useEffect(() => {
+    fetchUsers()
+  }, [fetchUsers]);
+
+  useEffect(() => {
+    filterUsers()
+  }, [filterUsers]);
 
   const updateUserRole = async (userId: string, newRole: string) => {
     try {

@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Logo } from '@/components/ui/logo'
 import { createClient } from '@/lib/supabase'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { AuthError } from '@supabase/supabase-js';
 
 export default function SignInPage() {

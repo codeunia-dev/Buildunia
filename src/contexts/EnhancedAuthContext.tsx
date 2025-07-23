@@ -1,7 +1,7 @@
 // Enhanced AuthContext for cross-platform support
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase'
 
@@ -12,7 +12,7 @@ interface UserProfile {
   avatar_url?: string
   role: 'user' | 'admin' | 'mentor' | string
   subscription_tier?: 'free' | 'premium' | 'enterprise' | string
-  preferences?: Record<string, any>
+  preferences?: Record<string, unknown>
   platform_access?: string[]
   last_active?: string
   created_at?: string
@@ -44,8 +44,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
 
-  // Fetch user profile
-  const fetchProfile = async (userId: string): Promise<UserProfile | null> => {
+  const fetchProfile = useCallback(async (userId: string): Promise<UserProfile | null> => {
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -59,7 +58,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
     } catch {
       return null
     }
-  }
+  }, [supabase])
 
   useEffect(() => {
     // Get initial session
@@ -87,7 +86,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
     })
 
     return () => subscription.unsubscribe()
-  }, [supabase.auth])
+  }, [supabase.auth, fetchProfile])
 
   const refreshProfile = async () => {
     if (!user) return
