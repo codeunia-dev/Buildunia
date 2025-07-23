@@ -54,7 +54,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
       if (error) {
         return null
       }
-      return data as UserProfile
+      return data as unknown as UserProfile
     } catch {
       return null
     }

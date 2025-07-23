@@ -1,10 +1,16 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
+// Create a singleton instance to avoid multiple GoTrueClient instances
+let supabaseInstance: ReturnType<typeof createSupabaseClient> | null = null;
+
 export function createClient() {
-  return createSupabaseClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  );
+  if (!supabaseInstance) {
+    supabaseInstance = createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    );
+  }
+  return supabaseInstance;
 }
 
 // Types for our database tables

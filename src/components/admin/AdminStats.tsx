@@ -61,10 +61,10 @@ export default function AdminStats() {
         .from('projects')
         .select('category')
 
-      const categoryCount = projects?.reduce((acc: Record<string, number>, project: { category: string }) => {
+      const categoryCount = (projects as { category: string }[] | null)?.reduce((acc: Record<string, number>, project: { category: string }) => {
         acc[project.category] = (acc[project.category] || 0) + 1;
         return acc;
-      }, {}) || {};
+      }, {} as Record<string, number>) || {};
 
       const popularCategories: CategoryCount[] = Object.entries(categoryCount)
         .map(([category, count]) => ({ category, count: count as number }))
@@ -76,7 +76,7 @@ export default function AdminStats() {
         totalUsers: userCount || 0,
         totalOrders: 0, // You can implement this when you have an orders table
         totalRevenue: 0, // You can implement this when you have an orders table
-        recentProjects: recentProjects || [],
+        recentProjects: (recentProjects as unknown as Project[]) || [],
         popularCategories
       })
     } catch (error) {

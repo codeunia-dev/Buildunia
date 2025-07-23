@@ -1,5 +1,4 @@
 import { createClient } from './supabase'
-const supabase = createClient();
 
 export interface ImageUploadResult {
   success: boolean
@@ -44,14 +43,8 @@ export const uploadProjectImage = async (
 
     console.log('📝 Generated file path:', filePath)
 
-    // Check if supabase is available
-    if (!supabase) {
-      console.error('❌ Supabase client not available')
-      return {
-        success: false,
-        error: 'Storage service not available. Please check your configuration.'
-      }
-    }
+    // Get supabase client
+    const supabase = createClient();
 
     console.log('☁️ Uploading to Supabase Storage...')
 
@@ -113,6 +106,7 @@ export const uploadProjectImage = async (
 
 export const deleteProjectImage = async (imagePath: string): Promise<boolean> => {
   try {
+    const supabase = createClient();
     const { error } = await supabase.storage
       .from('project-images')
       .remove([imagePath])
@@ -132,6 +126,7 @@ export const deleteProjectImage = async (imagePath: string): Promise<boolean> =>
 export const getImageUrl = (imagePath: string): string => {
   if (!imagePath) return ''
   
+  const supabase = createClient();
   const { data: { publicUrl } } = supabase.storage
     .from('project-images')
     .getPublicUrl(imagePath)

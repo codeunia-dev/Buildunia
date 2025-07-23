@@ -46,7 +46,7 @@ export default function UsersManager() {
         .order('created_at', { ascending: false })
 
       if (error) throw error
-      setUsers(data || [])
+      setUsers((data as unknown as UserProfile[]) || [])
     } catch (error) {
       console.error('Error fetching users:', error)
     } finally {
