@@ -6,7 +6,7 @@
 
 ## 🚀 What is Buildunia?
 
-**Buildunia** is a next-generation platform by Codeunia, designed to accelerate your journey in IoT, hardware, and project-based learning. Whether you are a student, hobbyist, or educator, Buildunia provides curated projects, mentorship, and resources to help you build, learn, and innovate.
+**Buildunia** is a next-generation platform by Codeunia, designed to accelerate your journey in IoT, hardware, and project-based learning. Whether you are a student, hobbyist, or educator, Buildunia provides curated projects, mentorship, and resources to help you build, learn, and innovate
 
 ---
 
