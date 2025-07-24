@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import Image from 'next/image';
 
 // Mock data - replace with real data from Supabase
 const allProjects = [
@@ -16,7 +17,14 @@ const allProjects = [
     name: 'Smart Home Automation',
     description: 'Build a complete IoT system to control lights, fans, and security systems using WiFi and mobile app.',
     price: 89.99,
-    image_url: '/placeholder-project.jpg',
+    prices: {
+      complete: 89.99,
+      hardware: 69.99,
+      mentorship: 49.99,
+      mentorship_hardware: 109.99,
+      other: 59.99,
+    },
+    image_url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80', // Smart home (living room with smart devices)
     difficulty: 'intermediate' as const,
     category: 'Arduino',
     skills: ['Arduino', 'WiFi', 'Sensors', 'Mobile App']
@@ -26,7 +34,14 @@ const allProjects = [
     name: 'Weather Station',
     description: 'Create a professional weather monitoring system with cloud data logging and real-time dashboard.',
     price: 69.99,
-    image_url: '/placeholder-project.jpg',
+    prices: {
+      complete: 69.99,
+      hardware: 49.99,
+      mentorship: 39.99,
+      mentorship_hardware: 89.99,
+      other: 29.99,
+    },
+    image_url: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80', // Weather station (weather instruments)
     difficulty: 'beginner' as const,
     category: 'ESP32',
     skills: ['ESP32', 'Sensors', 'Cloud', 'Dashboard']
@@ -36,7 +51,14 @@ const allProjects = [
     name: 'Smart Agriculture Monitor',
     description: 'Monitor soil moisture, temperature, humidity and automate irrigation systems with ML predictions.',
     price: 99.99,
-    image_url: '/placeholder-project.jpg',
+    prices: {
+      complete: 99.99,
+      hardware: 79.99,
+      mentorship: 59.99,
+      mentorship_hardware: 119.99,
+      other: 69.99,
+    },
+    image_url: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80', // Agriculture (field with sensors)
     difficulty: 'advanced' as const,
     category: 'Raspberry Pi',
     skills: ['Raspberry Pi', 'Python', 'Automation', 'ML']
@@ -46,7 +68,14 @@ const allProjects = [
     name: 'Security Camera System',
     description: 'Build an intelligent security system with motion detection, alerts, and live streaming.',
     price: 129.99,
-    image_url: '/placeholder-project.jpg',
+    prices: {
+      complete: 129.99,
+      hardware: 109.99,
+      mentorship: 69.99,
+      mentorship_hardware: 149.99,
+      other: 89.99,
+    },
+    image_url: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80', // Security camera (CCTV)
     difficulty: 'advanced' as const,
     category: 'Raspberry Pi',
     skills: ['Raspberry Pi', 'Camera', 'AI', 'Streaming']
@@ -56,7 +85,14 @@ const allProjects = [
     name: 'LED Matrix Display',
     description: 'Create colorful LED displays with animations, text scrolling, and app control.',
     price: 49.99,
-    image_url: '/placeholder-project.jpg',
+    prices: {
+      complete: 49.99,
+      hardware: 39.99,
+      mentorship: 29.99,
+      mentorship_hardware: 59.99,
+      other: 19.99,
+    },
+    image_url: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80', // LED display (LED wall)
     difficulty: 'beginner' as const,
     category: 'Arduino',
     skills: ['Arduino', 'LED', 'Animation', 'Bluetooth']
@@ -66,7 +102,14 @@ const allProjects = [
     name: 'Environmental Monitor',
     description: 'Track air quality, noise levels, and environmental conditions with data visualization.',
     price: 79.99,
-    image_url: '/placeholder-project.jpg',
+    prices: {
+      complete: 79.99,
+      hardware: 59.99,
+      mentorship: 39.99,
+      mentorship_hardware: 99.99,
+      other: 49.99,
+    },
+    image_url: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=600&q=80', // Environmental monitor (air quality sensor)
     difficulty: 'intermediate' as const,
     category: 'ESP32',
     skills: ['ESP32', 'Sensors', 'Data Viz', 'API']
@@ -75,15 +118,6 @@ const allProjects = [
 
 const categories = ['All', 'Arduino', 'ESP32', 'Raspberry Pi']
 const difficulties = ['All', 'beginner', 'intermediate', 'advanced']
-
-const getDifficultyColor = (difficulty: string) => {
-  switch (difficulty) {
-    case 'beginner': return 'bg-green-500/20 text-green-300 border border-green-600 shadow-sm rounded-full px-3 py-1 font-semibold tracking-wide backdrop-blur-sm'
-    case 'intermediate': return 'bg-yellow-400/20 text-yellow-200 border border-yellow-500 shadow-sm rounded-full px-3 py-1 font-semibold tracking-wide backdrop-blur-sm'
-    case 'advanced': return 'bg-red-500/20 text-red-300 border border-red-600 shadow-sm rounded-full px-3 py-1 font-semibold tracking-wide backdrop-blur-sm'
-    default: return 'bg-gray-700 text-gray-200 border border-gray-500 shadow-sm rounded-full px-3 py-1 font-semibold tracking-wide backdrop-blur-sm'
-  }
-}
 
 export default function ProjectsPage() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -187,13 +221,8 @@ export default function ProjectsPage() {
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {filteredProjects.map((project) => (
                   <Card key={project.id} className="hover:shadow-lg transition-shadow">
-                    <div className="aspect-video bg-gray-200 rounded-t-lg relative">
-                      <div className="absolute top-4 right-4">
-                        <Badge className={getDifficultyColor(project.difficulty)}>
-                          {project.difficulty}
-                        </Badge>
-                      </div>
-                    </div>
+                    <Image src={project.image_url} alt={project.name} width={600} height={338} className="aspect-video w-full object-cover rounded-t-lg" />
+                    <div className="aspect-video bg-gray-200 rounded-t-lg relative hidden" />
                     <CardHeader>
                       <div className="flex justify-between items-start">
                         <CardTitle className="text-xl">{project.name}</CardTitle>
@@ -213,7 +242,7 @@ export default function ProjectsPage() {
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-2xl font-bold text-blue-600">
-                          ${project.price}
+                          ₹{project.price}
                         </span>
                         <Button asChild>
                           <Link href={`/projects/${project.id}`}>View Details</Link>
@@ -225,6 +254,17 @@ export default function ProjectsPage() {
               </div>
             </>
           )}
+        </div>
+      </section>
+      {/* Custom Project CTA */}
+      <section className="py-12 text-center">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold text-white mb-4">Want a Custom Project?</h2>
+          <p className="text-lg text-gray-300 mb-4">
+            If you want to get or build any custom IoT project, feel free to contact us at
+            <a href="mailto:buildunia.codeunia@gmail.com" className="text-blue-400 underline ml-1">buildunia.codeunia@gmail.com</a>.
+            We love helping you bring your ideas to life!
+          </p>
         </div>
       </section>
     </div>

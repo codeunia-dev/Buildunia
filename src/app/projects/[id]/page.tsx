@@ -17,6 +17,13 @@ const projectData: { [key: string]: Project } = {
     name: 'Smart Home Automation',
     description: 'Build a complete IoT system to control lights, fans, and security systems using WiFi and mobile app. This comprehensive project teaches you the fundamentals of home automation while giving you hands-on experience with real IoT hardware.',
     price: 89.99,
+    prices: {
+      complete: 89.99,
+      hardware: 69.99,
+      mentorship: 49.99,
+      mentorship_hardware: 109.99,
+      other: 59.99,
+    },
     image_url: '/placeholder-project.jpg',
     difficulty: 'intermediate',
     category: 'Arduino',
@@ -41,6 +48,13 @@ const projectData: { [key: string]: Project } = {
     name: 'Weather Station',
     description: 'Create a professional weather monitoring system with cloud data logging and real-time dashboard.',
     price: 69.99,
+    prices: {
+      complete: 69.99,
+      hardware: 49.99,
+      mentorship: 39.99,
+      mentorship_hardware: 89.99,
+      other: 29.99,
+    },
     image_url: '/placeholder-project.jpg',
     difficulty: 'beginner',
     category: 'ESP32',
@@ -149,7 +163,7 @@ export default function ProjectDetailPage() {
 
             <div className="flex items-center gap-4 mb-6">
               <span className="text-3xl font-bold text-blue-600">
-                ${project.price}
+                ₹{project.price}
               </span>
               <div className="flex items-center">
                 {[...Array(5)].map((_, i) => (

@@ -1,30 +1,26 @@
 'use client'
 
-import { useState } from 'react'
-import { Mail, Phone, MapPin, Send, Clock } from 'lucide-react'
+import { Mail, Phone, MapPin, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const contactInfo = [
   {
     icon: Mail,
     title: 'Email',
-    value: 'hello@buildunia.com',
+    value: 'buildunia.codeunia@gmail.com',
     description: 'Send us an email anytime!'
   },
   {
     icon: Phone,
     title: 'Phone',
-    value: '+1 (555) 123-4567',
-    description: 'Mon-Fri from 8am to 6pm PST'
+    value: '+91 8699025107',
+    description: 'Mon-Fri from 8am to 6pm IST'
   },
   {
     icon: MapPin,
     title: 'Office',
-    value: 'San Francisco, CA',
+    value: 'Mohali, Punjab',
     description: 'Come say hello at our HQ'
   }
 ]
@@ -53,34 +49,6 @@ const faqs = [
 ]
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false)
-      setSubmitted(true)
-      setFormData({ name: '', email: '', subject: '', message: '' })
-    }, 1000)
-  }
-
   return (
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
@@ -96,143 +64,59 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid lg:grid-cols-3 gap-12">
-          {/* Contact Form */}
-          <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Send us a message</CardTitle>
-                <CardDescription>
-                  Fill out the form below and we&apos;ll get back to you within 24 hours.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {submitted ? (
-                  <div className="text-center py-8">
-                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Send className="h-8 w-8 text-green-600" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Message sent!</h3>
-                    <p className="text-gray-600">
-                      Thank you for your message. We&apos;ll get back to you as soon as possible.
-                    </p>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] py-16">
+        <div className="w-full max-w-2xl flex flex-col gap-8">
+          {/* Contact Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Contact Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {contactInfo.map((info, index) => (
+                <div key={index} className="flex items-start space-x-4">
+                  <div className="bg-blue-100 rounded-full p-2 flex-shrink-0">
+                    <info.icon className="h-5 w-5 text-blue-600" />
                   </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="name">Name</Label>
-                        <Input
-                          id="name"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleInputChange}
-                          placeholder="Your name"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          placeholder="your.email@example.com"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="subject">Subject</Label>
-                      <Input
-                        id="subject"
-                        name="subject"
-                        value={formData.subject}
-                        onChange={handleInputChange}
-                        placeholder="What&apos;s this about?"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="message">Message</Label>
-                      <Textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        placeholder="Tell us more about your question or how we can help..."
-                        rows={6}
-                        required
-                      />
-                    </div>
-
-                    <Button type="submit" className="w-full" disabled={isSubmitting}>
-                      {isSubmitting ? 'Sending...' : 'Send Message'}
-                    </Button>
-                  </form>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Contact Info & Response Time */}
-          <div className="space-y-8">
-            {/* Contact Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Contact Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {contactInfo.map((info, index) => (
-                  <div key={index} className="flex items-start space-x-4">
-                    <div className="bg-blue-100 rounded-full p-2 flex-shrink-0">
-                      <info.icon className="h-5 w-5 text-blue-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">{info.title}</h3>
-                      <p className="text-gray-600">{info.value}</p>
-                      <p className="text-sm text-gray-500">{info.description}</p>
-                    </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">{info.title}</h3>
+                    <p className="text-gray-600">{info.value}</p>
+                    <p className="text-sm text-gray-500">{info.description}</p>
                   </div>
-                ))}
-              </CardContent>
-            </Card>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
 
-            {/* Response Time */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5" />
-                  Response Time
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600 mb-4">
-                  We typically respond to messages within:
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex justify-between">
-                    <span>General inquiries:</span>
-                    <span className="font-semibold">24 hours</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Technical support:</span>
-                    <span className="font-semibold">12 hours</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Mentorship questions:</span>
-                    <span className="font-semibold">6 hours</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
+          {/* Response Time */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Clock className="h-5 w-5" />
+                Response Time
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 mb-4">
+                We typically respond to messages within:
+              </p>
+              <ul className="space-y-2 text-sm">
+                <li className="flex justify-between">
+                  <span>General inquiries:</span>
+                  <span className="font-semibold">24 hours</span>
+                </li>
+                <li className="flex justify-between">
+                  <span>Technical support:</span>
+                  <span className="font-semibold">12 hours</span>
+                </li>
+                <li className="flex justify-between">
+                  <span>Mentorship questions:</span>
+                  <span className="font-semibold">6 hours</span>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
         </div>
+      </div>
 
         {/* FAQ Section */}
         <div className="mt-20">
@@ -267,20 +151,18 @@ export default function ContactPage() {
                 Need immediate help?
               </h3>
               <p className="text-gray-600 mb-4">
-                Check out our documentation or join our community for quick answers.
+                Check out our community for quick answers.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button variant="outline">
-                  Browse Documentation
-                </Button>
-                <Button variant="outline">
-                  Join Community
+                <Button variant="outline" asChild>
+                  <a href="https://codeunia.com" target="_blank" rel="noopener noreferrer">
+                    Join Community
+                  </a>
                 </Button>
               </div>
             </CardContent>
           </Card>
         </div>
-      </div>
     </div>
   )
 }

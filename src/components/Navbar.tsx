@@ -24,17 +24,22 @@ export function Navbar() {
     { name: 'Mentorship', href: '/mentorship' },
     { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' },
-    { name: 'Blog', href: '/blog' },
   ]
 
   // Helper for sign out with redirect
   const handleSignOut = async () => {
-    await signOut()
-    router.push('/auth/signin')
+    console.log('Sign Out button clicked');
+    try {
+      await signOut();
+      console.log('Sign out successful, redirecting...');
+      router.push('/auth/signin');
+    } catch (error) {
+      console.error('Error during sign out:', error);
+    }
   }
 
   return (
-    <nav className="bg-black shadow-lg sticky top-0 z-50 border-b border-gray-800">
+    <nav className="bg-black shadow-lg sticky top-0 z-50 border-b border-gray-800 !pointer-events-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
@@ -57,7 +62,7 @@ export function Navbar() {
             </div>
           </div>
           
-          <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
+          <div className="sm:ml-6 flex items-center space-x-4">
             <Link href="/cart" className="relative p-2">
               <ShoppingCart className="h-6 w-6 text-gray-300" />
               {state.items.length > 0 && (
@@ -79,7 +84,15 @@ export function Navbar() {
                     </Link>
                   </Button>
                 )}
-                <Button variant="outline" size="sm" onClick={handleSignOut}>
+                <Button
+                  id="signout-btn"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSignOut}
+                  className="!opacity-100 !pointer-events-auto"
+                  title="Sign out of your account"
+                  disabled={false}
+                >
                   Sign Out
                 </Button>
               </div>
@@ -115,7 +128,7 @@ export function Navbar() {
       </div>
 
       {isOpen && (
-        <div className="sm:hidden">
+        <div className="sm:hidden fixed inset-0 z-[100] bg-black bg-opacity-90">
           <div className="pt-2 pb-3 space-y-1">
             {navigation.map((item) => (
               <Link
@@ -145,7 +158,7 @@ export function Navbar() {
                         </Link>
                       </Button>
                     )}
-                    <Button variant="outline" size="sm" onClick={handleSignOut}>
+                    <Button variant="outline" size="sm" onClick={handleSignOut} className="!opacity-100 !pointer-events-auto">
                       Sign Out
                     </Button>
                   </div>

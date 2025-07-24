@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useReducer, useEffect } from 'react'
 import { CartItem, Project } from '@/lib/supabase'
+import { useAuth } from '@/contexts/AuthContext'
+import { useRouter } from 'next/navigation'
 
 interface CartState {
   items: CartItem[]
@@ -85,6 +87,8 @@ export const useCart = () => {
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, { items: [], total: 0 })
+  const { user } = useAuth();
+  const router = useRouter();
 
   // Load cart from localStorage on mount
   useEffect(() => {
@@ -104,19 +108,31 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('cart', JSON.stringify(state.items))
   }, [state.items])
 
+  const requireAuth = () => {
+    if (!user && router) {
+      router.push('/auth/signin');
+      return false;
+    }
+    return true;
+  }
+
   const addItem = (project: Project) => {
+    if (!requireAuth()) return;
     dispatch({ type: 'ADD_ITEM', payload: project })
   }
 
   const removeItem = (id: string) => {
+    if (!requireAuth()) return;
     dispatch({ type: 'REMOVE_ITEM', payload: id })
   }
 
   const updateQuantity = (id: string, quantity: number) => {
+    if (!requireAuth()) return;
     dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } })
   }
 
   const clearCart = () => {
+    if (!requireAuth()) return;
     dispatch({ type: 'CLEAR_CART' })
   }
 

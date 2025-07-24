@@ -101,40 +101,22 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Story */}
-      <section className="py-20 bg-gray-900">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-white mb-4">Our Story</h2>
-          </div>
-          <div className="prose prose-lg mx-auto text-gray-300">
-            <p>
-              BuildUnia was born from a simple observation: while IoT technology was revolutionizing 
-              industries worldwide, there was a significant gap between academic theory and 
-              practical application for students and enthusiasts.
-            </p>
-            <p>
-              As an IoT engineer working at major tech companies, our founder Dr. Alex Chen 
-              noticed that many brilliant computer science and engineering students struggled 
-              to translate their theoretical knowledge into working IoT systems. The missing 
-              piece wasn&apos;t intelligence or motivation—it was access to proper guidance and 
-              real-world project experience.
-            </p>
-            <p>
-              In 2023, Alex decided to change that. He started by mentoring a few students 
-              personally, creating custom project kits that combined all the necessary hardware 
-              with detailed instructions and expert support. The results were remarkable—students 
-              who had been struggling with IoT concepts suddenly found themselves building 
-              sophisticated systems with confidence.
-            </p>
-            <p>
-              Word spread quickly, and what started as informal mentoring grew into BuildUnia—a 
-              comprehensive platform under the Codeunia umbrella that makes high-quality IoT education accessible to 
-              students and enthusiasts worldwide. Today, we continue to expand our offerings 
-              while staying true to our core mission: empowering learners through hands-on 
-              experience and expert guidance.
-            </p>
-          </div>
+      {/* Story / Mission Section */}
+      <section className="py-20 bg-black text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold mb-4">BuildUnia: Bridging the Gap Between Learning and Building</h2>
+          <p className="text-xl mb-8 opacity-90">
+            BuildUnia was born from a simple yet powerful insight: while IoT is transforming industries globally, students often lack the hands-on experience and practical exposure needed to truly grasp and implement these technologies.
+          </p>
+          <p className="mb-6">
+            In 2025, Deepak Pandey, the founder of Codeunia, recognized this gap while leading workshops and mentoring hundreds of engineering students across India. Despite having strong theoretical knowledge, many students found it difficult to apply IoT concepts to real-world projects. The issue wasn’t a lack of potential—it was the absence of structured guidance, accessible tools, and community-driven support.
+          </p>
+          <p className="mb-6">
+            Determined to change this, Deepak launched BuildUnia—a practical initiative under the Codeunia umbrella aimed at delivering end-to-end IoT learning experiences. It began with curated IoT project kits, live mentoring sessions, and an active support network. Students who once hesitated to even connect a sensor were soon building their own smart home systems, environmental monitors, and campus automation projects.
+          </p>
+          <p className="mb-6">
+            Today, BuildUnia continues to empower learners with industry-relevant IoT experiences, turning classrooms into innovation labs. With a growing community and partnerships in progress, our goal remains the same: to make hands-on IoT education accessible, engaging, and impactful for every student, everywhere.
+          </p>
         </div>
       </section>
 
