@@ -44,7 +44,7 @@ const faqs = [
   },
   {
     question: 'Do you offer refunds?',
-    answer: 'Yes! We offer a 30-day money-back guarantee on all project kits. If you are not satisfied with your purchase, contact us within 30 days for a full refund.'
+    answer: 'All sales are final. We do not offer refunds on any products or services.'
   }
 ]
 
