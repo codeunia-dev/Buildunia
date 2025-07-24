@@ -46,14 +46,33 @@ export function Footer() {
                       Mentorship
                     </Link>
                   </li>
+                </ul>
+              </div>
+              <div className="mt-12 md:mt-0">
+                <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">
+                  Legal
+                </h3>
+                <ul role="list" className="mt-4 space-y-4">
                   <li>
-                    <Link href="/blog" className="text-base text-gray-300 hover:text-white">
-                      Tutorials
+                    <Link href="/terms" className="text-base text-gray-300 hover:text-white">
+                      Terms & Conditions
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/privacy" className="text-base text-gray-300 hover:text-white">
+                      Privacy Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/refund" className="text-base text-gray-300 hover:text-white">
+                      Refund Policy
                     </Link>
                   </li>
                 </ul>
               </div>
-              <div className="mt-12 md:mt-0">
+            </div>
+            <div className="md:grid md:grid-cols-2 md:gap-8">
+              <div>
                 <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">
                   Support
                 </h3>
@@ -71,25 +90,6 @@ export function Footer() {
                   <li>
                     <a href="#" className="text-base text-gray-300 hover:text-white">
                       FAQ
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
-                <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">
-                  Company
-                </h3>
-                <ul role="list" className="mt-4 space-y-4">
-                  <li>
-                    <a href="#" className="text-base text-gray-300 hover:text-white">
-                      Privacy Policy
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-base text-gray-300 hover:text-white">
-                      Terms of Service
                     </a>
                   </li>
                 </ul>

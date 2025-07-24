@@ -24,6 +24,13 @@ export default function ProjectsManager() {
     name: '',
     description: '',
     price: '',
+    prices: {
+      complete: '',
+      hardware: '',
+      mentorship: '',
+      mentorship_hardware: '',
+      other: '',
+    },
     image_url: '',
     image_path: '',
     difficulty: 'beginner' as 'beginner' | 'intermediate' | 'advanced',
@@ -70,6 +77,13 @@ export default function ProjectsManager() {
         name: formData.name,
         description: formData.description,
         price: parseFloat(formData.price),
+        prices: {
+          complete: parseFloat(formData.prices.complete),
+          hardware: parseFloat(formData.prices.hardware),
+          mentorship: parseFloat(formData.prices.mentorship),
+          mentorship_hardware: parseFloat(formData.prices.mentorship_hardware),
+          other: parseFloat(formData.prices.other),
+        },
         image_url: formData.image_url,
         image_path: formData.image_path,
         difficulty: formData.difficulty,
@@ -129,6 +143,13 @@ export default function ProjectsManager() {
       name: project.name,
       description: project.description,
       price: project.price.toString(),
+      prices: {
+        complete: project.prices.complete.toString(),
+        hardware: project.prices.hardware.toString(),
+        mentorship: project.prices.mentorship.toString(),
+        mentorship_hardware: project.prices.mentorship_hardware.toString(),
+        other: project.prices.other.toString(),
+      },
       image_url: project.image_url,
       image_path: project.image_path || '',
       difficulty: project.difficulty,
@@ -172,6 +193,13 @@ export default function ProjectsManager() {
       name: '',
       description: '',
       price: '',
+      prices: {
+        complete: '',
+        hardware: '',
+        mentorship: '',
+        mentorship_hardware: '',
+        other: '',
+      },
       image_url: '',
       image_path: '',
       difficulty: 'beginner',
@@ -225,7 +253,7 @@ export default function ProjectsManager() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="price">Price ($)</Label>
+                  <Label htmlFor="price">Base Price (₹)</Label>
                   <Input
                     id="price"
                     type="number"
@@ -234,6 +262,44 @@ export default function ProjectsManager() {
                     onChange={(e) => setFormData({...formData, price: e.target.value})}
                     required
                   />
+                  <Label className="mt-2">Prices by Option (₹)</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input
+                      placeholder="Complete Project"
+                      type="number"
+                      step="0.01"
+                      value={formData.prices.complete}
+                      onChange={e => setFormData({...formData, prices: {...formData.prices, complete: e.target.value}})}
+                    />
+                    <Input
+                      placeholder="Hardware Only"
+                      type="number"
+                      step="0.01"
+                      value={formData.prices.hardware}
+                      onChange={e => setFormData({...formData, prices: {...formData.prices, hardware: e.target.value}})}
+                    />
+                    <Input
+                      placeholder="Mentorship"
+                      type="number"
+                      step="0.01"
+                      value={formData.prices.mentorship}
+                      onChange={e => setFormData({...formData, prices: {...formData.prices, mentorship: e.target.value}})}
+                    />
+                    <Input
+                      placeholder="Mentorship + Hardware"
+                      type="number"
+                      step="0.01"
+                      value={formData.prices.mentorship_hardware}
+                      onChange={e => setFormData({...formData, prices: {...formData.prices, mentorship_hardware: e.target.value}})}
+                    />
+                    <Input
+                      placeholder="Other"
+                      type="number"
+                      step="0.01"
+                      value={formData.prices.other}
+                      onChange={e => setFormData({...formData, prices: {...formData.prices, other: e.target.value}})}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -354,7 +420,7 @@ export default function ProjectsManager() {
                       </div>
                       <p className="text-gray-600 mb-3">{project.description}</p>
                       <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
-                        <span className="font-medium text-green-600">${project.price}</span>
+                        <span className="font-medium text-green-600">₹{project.price}</span>
                         <span>{project.components.length} components</span>
                         <span>{project.skills.length} skills</span>
                       </div>

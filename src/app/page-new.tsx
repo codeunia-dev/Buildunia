@@ -183,7 +183,7 @@ export default function HomePage() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-2xl font-bold text-blue-600">
-                      ${project.price}
+                      ₹{project.price}
                     </span>
                     <Button asChild>
                       <Link href={`/projects/${project.id}`}>View Details</Link>

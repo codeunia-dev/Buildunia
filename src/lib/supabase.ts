@@ -18,7 +18,14 @@ export interface Project {
   id: string
   name: string
   description: string
-  price: number
+  price: number // base price (for backward compatibility)
+  prices: {
+    complete: number
+    hardware: number
+    mentorship: number
+    mentorship_hardware: number
+    other: number
+  }
   image_url: string
   image_path?: string
   difficulty: 'beginner' | 'intermediate' | 'advanced'

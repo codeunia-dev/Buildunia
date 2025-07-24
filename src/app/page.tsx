@@ -1,8 +1,9 @@
 import Link from 'next/link'
-import { ArrowRight, Code, Cpu, Users, Star } from 'lucide-react'
+import { ArrowRight, Code, Cpu, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import Image from 'next/image';
 
 // Mock data - replace with real data from Supabase
 const featuredProjects = [
@@ -11,7 +12,14 @@ const featuredProjects = [
     name: 'Smart Home Automation',
     description: 'Build a complete IoT system to control lights, fans, and security',
     price: 89.99,
-    image_url: '/placeholder-project.jpg',
+    prices: {
+      complete: 89.99,
+      hardware: 69.99,
+      mentorship: 49.99,
+      mentorship_hardware: 109.99,
+      other: 59.99,
+    },
+    image_url: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80', // Smart home
     difficulty: 'intermediate' as const,
     category: 'Arduino',
     skills: ['Arduino', 'WiFi', 'Sensors', 'Mobile App']
@@ -21,7 +29,14 @@ const featuredProjects = [
     name: 'Weather Station',
     description: 'Create a professional weather monitoring system with cloud data',
     price: 69.99,
-    image_url: '/placeholder-project.jpg',
+    prices: {
+      complete: 69.99,
+      hardware: 49.99,
+      mentorship: 39.99,
+      mentorship_hardware: 89.99,
+      other: 29.99,
+    },
+    image_url: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80', // Weather station
     difficulty: 'beginner' as const,
     category: 'ESP32',
     skills: ['ESP32', 'Sensors', 'Cloud', 'Dashboard']
@@ -31,31 +46,17 @@ const featuredProjects = [
     name: 'Smart Agriculture Monitor',
     description: 'Monitor soil moisture, temperature, and automate irrigation',
     price: 99.99,
-    image_url: '/placeholder-project.jpg',
+    prices: {
+      complete: 99.99,
+      hardware: 79.99,
+      mentorship: 59.99,
+      mentorship_hardware: 119.99,
+      other: 69.99,
+    },
+    image_url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80', // Agriculture
     difficulty: 'advanced' as const,
     category: 'Raspberry Pi',
     skills: ['Raspberry Pi', 'Python', 'Automation', 'ML']
-  }
-]
-
-const testimonials = [
-  {
-    name: 'Sarah Chen',
-    role: 'Computer Science Student',
-    content: 'BuildUnia helped me understand IoT concepts through hands-on projects. The mentorship was invaluable for my career.',
-    rating: 5
-  },
-  {
-    name: 'Michael Rodriguez',
-    role: 'Engineering Student',
-    content: 'The project kits are well-designed and the instructions are clear. Perfect for learning while building real things.',
-    rating: 5
-  },
-  {
-    name: 'Emma Thompson',
-    role: 'Tech Enthusiast',
-    content: 'Amazing platform! I built my first IoT project in just a weekend. The community support is fantastic.',
-    rating: 5
   }
 ]
 
@@ -165,7 +166,7 @@ export default function HomePage() {
           <div className="grid md:grid-cols-3 gap-8">
             {featuredProjects.map((project) => (
               <Card key={project.id} className="hover:shadow-lg transition-shadow">
-                <div className="aspect-video bg-gray-200 rounded-t-lg"></div>
+                <Image src={project.image_url} alt={project.name} width={600} height={337} className="aspect-video w-full object-cover rounded-t-lg" />
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <CardTitle className="text-xl">{project.name}</CardTitle>
@@ -183,7 +184,7 @@ export default function HomePage() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-2xl font-bold text-blue-600">
-                      ${project.price}
+                      ₹{project.price}
                     </span>
                     <Button asChild>
                       <Link href={`/projects/${project.id}`}>View Details</Link>
@@ -245,38 +246,6 @@ export default function HomePage() {
             <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600" asChild>
               <Link href="/contact">Contact Us</Link>
             </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              What Students Say
-            </h2>
-            <p className="text-xl text-gray-100">
-              Join thousands of students who&apos;ve transformed their IoT skills
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index}>
-                <CardContent className="pt-6">
-                  <div className="flex mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-gray-600 mb-4">&quot;{testimonial.content}&quot;</p>
-                  <div>
-                    <p className="font-semibold">{testimonial.name}</p>
-                    <p className="text-sm text-gray-500">{testimonial.role}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>

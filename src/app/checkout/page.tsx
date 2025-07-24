@@ -12,11 +12,6 @@ import { formatPrice } from '@/lib/stripe';
 export default function CheckoutPage() {
   const { state } = useCart();
   const router = useRouter();
-
-  const subtotal = state.items.reduce((sum, item) => sum + item.project.price, 0);
-  const shipping = 9.99;
-  const tax = subtotal * 0.08; // 8% tax
-  const total = subtotal + shipping + tax;
   const [inquirySubmitted, setInquirySubmitted] = useState(false);
   const [inquiry, setInquiry] = useState({
     type: '',
@@ -25,6 +20,27 @@ export default function CheckoutPage() {
     phone: '',
     notes: '',
   });
+  // Track selected option for price
+  const [selectedOption, setSelectedOption] = useState('');
+
+  // Get the first cart item (assuming single project checkout for now)
+  const cartItem = state.items[0]?.project as (typeof state.items[0]['project']) & { prices?: { [key: string]: number } };
+  // Map select value to price key
+  const optionKeyMap: Record<string, string> = {
+    complete: 'complete',
+    hardware: 'hardware',
+    mentorship: 'mentorship',
+    mentorship_hardware: 'mentorship_hardware',
+    other: 'other',
+  };
+  // Determine price based on selected option
+  let price = cartItem?.price || 0;
+  if (cartItem?.prices && selectedOption && optionKeyMap[selectedOption]) {
+    price = cartItem.prices[optionKeyMap[selectedOption]] || price;
+  }
+  const shipping = 9.99;
+  const tax = price * 0.08;
+  const total = price + shipping + tax;
 
   const handleInquiryChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setInquiry({
@@ -77,8 +93,11 @@ export default function CheckoutPage() {
                 <select
                   id="type"
                   name="type"
-                  value={inquiry.type}
-                  onChange={handleInquiryChange}
+                  value={selectedOption}
+                  onChange={e => {
+                    setSelectedOption(e.target.value);
+                    setInquiry({ ...inquiry, type: e.target.value });
+                  }}
                   required
                   className="w-full p-2 rounded bg-gray-800 border border-gray-700 text-white"
                 >
@@ -170,7 +189,7 @@ export default function CheckoutPage() {
                         </p>
                       </div>
                       <div className="text-white font-medium">
-                        {formatPrice(item.project.price)}
+                        {formatPrice(price)}
                       </div>
                     </div>
                   ))}
@@ -179,7 +198,7 @@ export default function CheckoutPage() {
                 <div className="space-y-2 pt-4 border-t border-gray-700">
                   <div className="flex justify-between text-gray-300">
                     <span>Subtotal</span>
-                    <span>{formatPrice(subtotal)}</span>
+                    <span>{formatPrice(price)}</span>
                   </div>
                   <div className="flex justify-between text-gray-300">
                     <span>Shipping</span>

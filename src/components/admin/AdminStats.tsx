@@ -188,7 +188,7 @@ export default function AdminStats() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="font-medium text-green-600">${project.price}</div>
+                      <div className="font-medium text-green-600">₹{project.price}</div>
                       <div className="text-xs text-gray-500">
                         {new Date(project.created_at).toLocaleDateString()}
                       </div>
