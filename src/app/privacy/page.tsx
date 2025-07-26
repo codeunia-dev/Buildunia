@@ -2,23 +2,215 @@ import React from 'react';
 
 export default function PrivacyPage() {
   return (
-    <div className="max-w-3xl mx-auto py-16 px-4 text-gray-900 bg-white rounded-lg shadow-lg my-12">
-      <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
-      <p className="mb-4">Your privacy is important to us. This policy explains how BuildUnia collects, uses, and protects your information.</p>
-      <h2 className="text-xl font-semibold mt-8 mb-2">1. Information We Collect</h2>
-      <p className="mb-4">We collect information you provide when you register, make a purchase, or contact us. This may include your name, email, address, and payment details.</p>
-      <h2 className="text-xl font-semibold mt-8 mb-2">2. How We Use Your Information</h2>
-      <p className="mb-4">We use your information to provide and improve our services, process orders, and communicate with you. We do not sell your personal information to third parties.</p>
-      <h2 className="text-xl font-semibold mt-8 mb-2">3. Cookies</h2>
-      <p className="mb-4">We use cookies and similar technologies to enhance your experience and analyze site usage. You can control cookies through your browser settings.</p>
-      <h2 className="text-xl font-semibold mt-8 mb-2">4. Data Security</h2>
-      <p className="mb-4">We implement industry-standard security measures to protect your data. However, no method of transmission over the internet is 100% secure.</p>
-      <h2 className="text-xl font-semibold mt-8 mb-2">5. Your Rights</h2>
-      <p className="mb-4">You have the right to access, update, or delete your personal information. Contact us at buildunia.codeunia@gmail.com for assistance.</p>
-      <h2 className="text-xl font-semibold mt-8 mb-2">6. Changes to This Policy</h2>
-      <p className="mb-4">We may update this Privacy Policy from time to time. Changes will be posted on this page.</p>
-      <h2 className="text-xl font-semibold mt-8 mb-2">7. Contact</h2>
-      <p>If you have any questions about this Privacy Policy, please contact us at buildunia.codeunia@gmail.com.</p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header Section */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-6">
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+          </div>
+          <h1 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+            Codeunia Privacy Policy
+          </h1>
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            Last Updated: July 26, 2025
+          </p>
+        </div>
+
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 space-y-10">
+          {/* Introduction */}
+          <div>
+            <p className="text-gray-300 leading-relaxed mb-4">
+              The Codeunia services, including its community platform, courses, content, mentoring services, events, training platforms, and products such as BuildUnia (collectively, the &quot;Services&quot;), are provided through our website <a href="https://codeunia.com" className="text-blue-400 underline">https://codeunia.com</a> (and its subdomains like <a href="https://buildunia.codeunia.com" className="text-blue-400 underline">https://buildunia.codeunia.com</a>), and applications (collectively, the &quot;Platform&quot;), operated by Codeunia, a sole proprietorship registered in India under the ownership of Deepak (&quot;us,&quot; &quot;we,&quot; or &quot;the Company&quot;). In connection with your use of the Services, we may collect/receive, store, use, share, and/or process certain information (&quot;Information&quot;) about you when you use our Services.
+            </p>
+            <p className="text-gray-300 leading-relaxed mb-4">
+              We use your Information for providing and improving the Services. By using the Services, you agree to the collection and use of Information in accordance with this Privacy Policy. Unless otherwise defined in this Privacy Policy, terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, accessible on the website. We will not use or share your Information with anyone except as described in this Privacy Policy.
+            </p>
+          </div>
+
+          {/* Definitions */}
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4 flex items-center">
+              <svg className="w-6 h-6 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 01-8 0" />
+              </svg>
+              Definitions
+            </h2>
+            <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+              <li><strong>Service(s):</strong> Codeunia platform and its products, including BuildUnia, courses, content, instructor support, training platforms, and activities.</li>
+              <li><strong>Platform:</strong> Our websites (e.g., codeunia.com, buildunia.codeunia.com), applications, WhatsApp groups, Facebook groups, and social media presence.</li>
+              <li><strong>Information:</strong> Any data we collect, receive, store, use, share, and/or process about you in connection with your use of the Services, including Personal Information, Usage Data, and Sensitive Personal Information.</li>
+              <li><strong>Personal Information:</strong> Any information that relates to an identified or identifiable individual.</li>
+              <li><strong>Usage Data:</strong> Data collected automatically, either generated by the use of the Service or from the Service infrastructure itself.</li>
+              <li><strong>Sensitive Personal Information:</strong> Passwords and any other information classified as sensitive under Indian law.</li>
+            </ul>
+          </section>
+
+          {/* Sections 1-14 */}
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4 mt-8">1. Information Collection</h2>
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-lg font-semibold text-blue-300 mb-2">1.1. Personal Information</h3>
+                <p className="text-gray-300">We may ask you to provide us with certain personally identifiable Information that can be used to contact or identify you. Information may include, but is not limited to:</p>
+                <ul className="list-disc list-inside text-gray-400 space-y-1 ml-4 mt-2">
+                  <li>Your name, email address, phone number</li>
+                  <li>Your Account Data (profile, courses/projects opted, mentoring sessions booked, etc.)</li>
+                  <li>User Content shared via your Account</li>
+                  <li>Linked account data</li>
+                  <li>Promotions and survey data</li>
+                  <li>Support concerns (internal use)</li>
+                  <li>Device information</li>
+                  <li>Parts of our Services you use</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-blue-300 mb-2">1.2. Usage Data (Log Data)</h3>
+                <p className="text-gray-300">We may also collect Information that your browser sends whenever you visit our Platform (&quot;Log Data&quot;). This may include:</p>
+                <ul className="list-disc list-inside text-gray-400 space-y-1 ml-4 mt-2">
+                  <li>IP address, browser type/version, device type</li>
+                  <li>Pages visited, time/date, time spent, statistics</li>
+                  <li>Approximate geographic location</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-blue-300 mb-2">1.3. Financial Information</h3>
+                <p className="text-gray-300">To receive payments for Services, we may collect (directly or via payment partners) certain financial Information as required.</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-blue-300 mb-2">1.4. Third-Party Technologies (Cookies, Analytics, Online Advertising)</h3>
+                <ul className="list-disc list-inside text-gray-400 space-y-1 ml-4 mt-2">
+                  <li><strong>Cookies:</strong> Used for personalization, login, analytics. You may refuse cookies, but some features may not work.</li>
+                  <li><strong>Analytics:</strong> We use Google Analytics and similar services to analyze usage and improve our Services. You can opt out via browser add-ons.</li>
+                  <li><strong>Online Advertising:</strong> We use third-party ad services (e.g., Facebook, Google) for targeted ads. We may share aggregate, non-identifiable data with them.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4 mt-8">2. Use of Your Information</h2>
+            <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+              <li>Providing and improving our Services</li>
+              <li>Developing new products, services, and features</li>
+              <li>Analyzing trends, traffic, and usage</li>
+              <li>Learning more about users via analytics</li>
+              <li>Communicating with you</li>
+              <li>Troubleshooting and support</li>
+              <li>Fraud prevention and security</li>
+              <li>Updating Services based on feedback</li>
+              <li>Contacting you for service, product knowledge, and promotional offers (even if registered under DND/DNC/NCPR, for 180 days after registration)</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4 mt-8">3. Sharing Your Information</h2>
+            <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+              <li>With mentors, other users, companies running promotions/surveys, advertising companies</li>
+              <li>For security, legal compliance, or corporate restructuring</li>
+              <li>Aggregated/de-identified or with your consent</li>
+              <li>With service providers, contractors, and agents (e.g., payment, analytics, marketing, support)</li>
+              <li>With business partners and for promotions/surveys</li>
+              <li>For legal, security, or compliance reasons</li>
+              <li>During a change in control (e.g., merger, acquisition)</li>
+              <li>Within our corporate family</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4 mt-8">4. Data Security</h2>
+            <p className="text-gray-300">We use appropriate security based on the type and sensitivity of Information being stored. There is always a risk of unauthorized access with internet-enabled platforms. Please protect your password and contact us if you suspect unauthorized access.</p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4 mt-8">5. Information Review & Accuracy</h2>
+            <p className="text-gray-300">Please review your Information periodically to ensure accuracy. We are not responsible for the authenticity of Information supplied by you. Discrepancies and grievances will be addressed within 30 days by our Grievance Officer (see Section 13).</p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4 mt-8">6. Data Retention</h2>
+            <p className="text-gray-300">We do not retain Sensitive Personal Information longer than required. Public content may be retained indefinitely in cached/archived pages or if copied by others. We may retain Information for internal processing, analytics, fraud monitoring, or on an anonymized basis.</p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4 mt-8">7. Your Rights</h2>
+            <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+              <li>Opt out of promotional emails, cookies, and certain ad services</li>
+              <li>Update or terminate your Account</li>
+              <li>Request review, correction, or deletion of your Information</li>
+              <li>Revoke consent (may affect your use of the Platform)</li>
+              <li>Request deletion of your data (residual data may be retained in logs/backups for up to a year)</li>
+            </ul>
+            <p className="text-gray-400 mt-2">Contact us at <a href="mailto:connect@codeunia.com" className="text-blue-400 underline">connect@codeunia.com</a> for any rights requests. We require up to 30 days to comply.</p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4 mt-8">8. Third-Party Links</h2>
+            <p className="text-gray-300">Our Platform may contain links to third-party websites or apps. We are not responsible for their privacy policies. Please review their policies before submitting data.</p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4 mt-8">9. Third-Party Embeds</h2>
+            <p className="text-gray-300">Some content on the Platform is hosted by third parties (e.g., YouTube videos). These embeds are governed by the third party&apos;s privacy policy, not ours. Be careful when submitting Information to third-party embeds.</p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4 mt-8">10. Changes to Privacy Policy</h2>
+            <p className="text-gray-300">We may update this Privacy Policy periodically. We will post updates at this link and notify you of material changes. Continued use of the Services constitutes acceptance of the updated policy.</p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4 mt-8">11. Disclaimer</h2>
+            <p className="text-gray-300">We follow best practices and take security measures to protect your Information, but cannot guarantee its security. Any transmission is at your own risk.</p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4 mt-8">12. Communications From Us</h2>
+            <p className="text-gray-300">We may send you service-related announcements (e.g., maintenance, security, privacy, or administrative communications) via SMS, email, push notifications, WhatsApp, or other channels. You may not opt out of these non-promotional communications.</p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4 mt-8">13. Grievance Officer</h2>
+            <div className="bg-blue-500/10 rounded-xl p-6 border border-blue-500/20">
+              <p className="text-gray-300 mb-2">The Company has a Grievance Officer to address your concerns regarding data safety, privacy, discrepancies, and the usage of Platform. We will resolve issues within 30 days of receiving them.</p>
+              <p className="text-blue-200"><strong>Email:</strong> <a href="mailto:connect@codeunia.com" className="text-blue-400 underline">connect@codeunia.com</a></p>
+              <p className="text-blue-200 text-xs mt-2">(A physical address and office hours can be added for full compliance.)</p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4 mt-8">14. Contact Us</h2>
+            <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700/50">
+              <p className="text-gray-300 mb-2">If you have any questions about this Privacy Policy, please contact us:</p>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-3">
+                  <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <span className="text-gray-300">Email: <a href="mailto:connect@codeunia.com" className="text-blue-400 underline">connect@codeunia.com</a></span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9" />
+                  </svg>
+                  <span className="text-gray-300">Website: <a href="https://codeunia.com" className="text-blue-400 underline">codeunia.com</a></span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Footer Note */}
+          <div className="mt-12 text-center">
+            <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-700/30 max-w-2xl mx-auto">
+              <p className="text-gray-400 text-sm">
+                <strong className="text-white">Note:</strong> This Privacy Policy constitutes a legally binding agreement between you and Codeunia regarding your use of the Platform and Services. By using our services, you acknowledge that you have read, understood, and agreed to this policy.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 } 
