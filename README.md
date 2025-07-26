@@ -7,7 +7,7 @@ BuildUnia is an innovative platform under **CodeUnia** that empowers students an
 - 🧠 Hands-on IoT and software projects
 - 📦 End-to-end project templates with documentation
 - 🎓 Industry mentorship from professionals
-- 🌐 Community support via CodeUnia
+- 🌐 Community support via Codeunia
 - 📡 Real-time data simulation and dashboards
 - 🛠️ Open-source starter kits
 
