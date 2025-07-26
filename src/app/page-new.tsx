@@ -4,6 +4,14 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
+// Function to convert title to slug
+const titleToSlug = (title: string) => {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
+
 // Mock data - replace with real data from Supabase
 const featuredProjects = [
   {
@@ -186,7 +194,7 @@ export default function HomePage() {
                       ₹{project.price}
                     </span>
                     <Button asChild>
-                      <Link href={`/projects/${project.id}`}>View Details</Link>
+                      <Link href={`/projects/${titleToSlug(project.name)}`}>View Details</Link>
                     </Button>
                   </div>
                 </CardContent>
