@@ -104,24 +104,24 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen !bg-black">
+    <div className="min-h-screen !bg-black w-full overflow-x-hidden">
       {/* Hero Section */}
-      <section className="!bg-black py-20">
+      <section className="!bg-black py-12 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight">
               From Idea to IoT:
-              <span className="text-blue-400"> Build Your Future, Today</span>
+              <span className="text-blue-400 block sm:inline"> Build Your Future, Today</span>
             </h1>
-            <p className="text-xl text-gray-100 mb-8 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-gray-100 mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
               Master IoT development with hands-on projects, expert mentorship, and a supportive community. 
               Build real-world solutions that matter.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="text-lg px-8 py-4" asChild>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
+              <Button size="lg" className="text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 w-full sm:w-auto" asChild>
                 <Link href="/projects">Explore Projects</Link>
               </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-black" asChild>
+              <Button size="lg" variant="outline" className="text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 border-white text-white hover:bg-white hover:text-black w-full sm:w-auto" asChild>
                 <Link href="/mentorship">Get Mentorship</Link>
               </Button>
             </div>
@@ -130,13 +130,13 @@ export default function HomePage() {
       </section>
 
       {/* Featured Projects */}
-      <section className="py-20 !bg-black">
+      <section className="py-12 sm:py-20 !bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4">
               Featured IoT Projects
             </h2>
-            <p className="text-xl text-gray-100">
+            <p className="text-lg sm:text-xl text-gray-100 px-4">
               Start your IoT journey with these popular projects
             </p>
           </div>
@@ -145,7 +145,7 @@ export default function HomePage() {
               <div className="text-white text-xl">Loading featured projects...</div>
             </div>
           ) : (
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
               {featuredProjects.map((project) => (
                 <Card key={project.id} className="bg-gray-900 border-gray-700 hover:scale-105 transition-transform">
                   <CardHeader>
@@ -176,16 +176,16 @@ export default function HomePage() {
                   <CardContent>
                     <div className="flex flex-wrap gap-2 mb-4">
                       {project.features?.slice(0, 3).map((feature: string) => (
-                        <Badge key={feature} variant="secondary" className="bg-gray-800 text-gray-300">
+                        <Badge key={feature} variant="secondary" className="bg-gray-800 text-gray-300 text-xs sm:text-sm">
                           {feature}
                         </Badge>
                       ))}
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold text-white">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                      <span className="text-xl sm:text-2xl font-bold text-white">
                         {formatPrice(getProductPrice(project))}
                       </span>
-                      <Button asChild>
+                      <Button asChild className="w-full sm:w-auto">
                         <Link href={`/projects/${titleToSlug(project.title)}`}>View Details</Link>
                       </Button>
                     </div>

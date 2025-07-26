@@ -37,39 +37,39 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-gray-900 to-blue-900 py-20">
+      <section className="bg-gradient-to-br from-gray-900 to-blue-900 py-12 sm:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
             About BuildUnia
           </h1>
-          <p className="text-xl text-gray-300">
+          <p className="text-lg sm:text-xl text-gray-300">
             We&apos;re passionate about making IoT accessible to everyone.
           </p>
         </div>
       </section>
 
       {/* Mission Statement */}
-      <section className="py-20 bg-black">
+      <section className="py-12 sm:py-20 bg-black">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-8">Our Mission</h2>
-          <p className="text-lg text-gray-300 leading-relaxed">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">Our Mission</h2>
+          <p className="text-base sm:text-lg text-gray-300 leading-relaxed">
             At BuildUnia, a Codeunia product, we believe that the best way to learn IoT is through hands-on experience. We create comprehensive project kits that combine carefully selected hardware with expert guidance, making it easy for students and enthusiasts to build real IoT solutions. Our goal is to empower the next generation of innovators with the skills and confidence to shape the connected world of tomorrow.
           </p>
         </div>
       </section>
 
       {/* Stats */}
-      <section className="py-20 bg-gray-900">
+      <section className="py-12 sm:py-20 bg-gray-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-white mb-4">Our Impact</h2>
-            <p className="text-xl text-gray-300">Making a difference in IoT education worldwide</p>
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Our Impact</h2>
+            <p className="text-lg sm:text-xl text-gray-300">Making a difference in IoT education worldwide</p>
           </div>
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-4xl font-bold text-blue-400 mb-2">{stat.number}</div>
-                <div className="text-gray-300">{stat.label}</div>
+                <div className="text-3xl sm:text-4xl font-bold text-blue-400 mb-2">{stat.number}</div>
+                <div className="text-gray-300 text-sm sm:text-base">{stat.label}</div>
               </div>
             ))}
           </div>

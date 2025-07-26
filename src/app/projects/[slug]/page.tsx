@@ -154,19 +154,19 @@ export default function ProjectDetailPage() {
   const currentTypeCount = limits.typeCounts[itemType] || 0
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black w-full overflow-x-hidden">
       {/* Header */}
       <div className="bg-gray-900 border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Button variant="ghost" size="sm" asChild className="text-white hover:bg-gray-800">
-            <Link href="/projects">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <Link href="/projects">
+                <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Products
-            </Link>
-          </Button>
-            <div className="flex-1">
-              <h1 className="text-2xl font-bold text-white">{product.title}</h1>
+              </Link>
+            </Button>
+            <div className="flex-1 min-w-0">
+              <h1 className="text-lg sm:text-2xl font-bold text-white truncate">{product.title}</h1>
               <p className="text-gray-400">{product.category} • {product.difficulty}</p>
             </div>
           </div>
@@ -228,32 +228,32 @@ export default function ProjectDetailPage() {
             </div>
             
             {/* Pricing */}
-            <div className="bg-gray-900 rounded-lg p-6 border border-gray-800">
+            <div className="bg-gray-900 rounded-lg p-4 sm:p-6 border border-gray-800">
               {/* For Hardware Projects */}
               {['iot', 'arduino', 'esp32', 'raspberry pi', 'hardware'].includes(product.category?.toLowerCase() || '') ? (
                 <>
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className="text-3xl font-bold text-green-400">
+                    <span className="text-2xl sm:text-3xl font-bold text-green-400">
                       {formatPrice(getProductPrice(product, 'full'))}
                     </span>
-                    <span className="text-gray-400">Full Kit</span>
+                    <span className="text-gray-400 text-sm sm:text-base">Full Kit</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
+                    <div className="flex justify-between sm:block">
                       <span className="text-gray-400">Hardware Only:</span>
-                      <span className="font-medium ml-2 text-white">{formatPrice(getProductPrice(product, 'hardware'))}</span>
+                      <span className="font-medium sm:ml-2 text-white">{formatPrice(getProductPrice(product, 'hardware'))}</span>
                     </div>
-                    <div>
+                    <div className="flex justify-between sm:block">
                       <span className="text-gray-400">Code Only:</span>
-                      <span className="font-medium ml-2 text-white">{formatPrice(getProductPrice(product, 'code'))}</span>
+                      <span className="font-medium sm:ml-2 text-white">{formatPrice(getProductPrice(product, 'code'))}</span>
                     </div>
-                    <div>
+                    <div className="flex justify-between sm:block">
                       <span className="text-gray-400">Mentorship:</span>
-                      <span className="font-medium ml-2 text-white">{formatPrice(getProductPrice(product, 'mentorship'))}</span>
+                      <span className="font-medium sm:ml-2 text-white">{formatPrice(getProductPrice(product, 'mentorship'))}</span>
                     </div>
-                    <div>
+                    <div className="flex justify-between sm:block">
                       <span className="text-gray-400">Hardware + Mentor:</span>
-                      <span className="font-medium ml-2 text-white">{formatPrice(getProductPrice(product, 'hardware_mentorship'))}</span>
+                      <span className="font-medium sm:ml-2 text-white">{formatPrice(getProductPrice(product, 'hardware_mentorship'))}</span>
                     </div>
                   </div>
                 </>
@@ -261,19 +261,19 @@ export default function ProjectDetailPage() {
                 /* For Software Projects (Gaming, Data, AI/ML, Wearable, Web Development, etc.) */
                 <>
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className="text-3xl font-bold text-green-400">
+                    <span className="text-2xl sm:text-3xl font-bold text-green-400">
                       {formatPrice(getProductPrice(product, 'code'))}
                     </span>
-                    <span className="text-gray-400">Code Only</span>
+                    <span className="text-gray-400 text-sm sm:text-base">Code Only</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
+                    <div className="flex justify-between sm:block">
                       <span className="text-gray-400">Code + Mentorship:</span>
-                      <span className="font-medium ml-2 text-white">{formatPrice(getProductPrice(product, 'code_mentorship'))}</span>
+                      <span className="font-medium sm:ml-2 text-white">{formatPrice(getProductPrice(product, 'code_mentorship'))}</span>
                     </div>
-                    <div>
+                    <div className="flex justify-between sm:block">
                       <span className="text-gray-400">Mentorship Only:</span>
-                      <span className="font-medium ml-2 text-white">{formatPrice(getProductPrice(product, 'mentorship'))}</span>
+                      <span className="font-medium sm:ml-2 text-white">{formatPrice(getProductPrice(product, 'mentorship'))}</span>
                     </div>
                   </div>
                 </>
@@ -281,7 +281,7 @@ export default function ProjectDetailPage() {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Button 
                 onClick={handleAddToCart}
                 className="flex-1"
