@@ -133,7 +133,7 @@ export default function MentorshipPage() {
       id: `mentorship-${pkg.id}`,
       title: `${pkg.name} - IoT Mentorship`,
       description: pkg.description,
-      image_url: '/images/mentorship.jpg',
+      image_url: '/images/mentorship.svg',
       platform: 'buildunia' as const,
       category: 'Mentorship',
       difficulty: 'all-levels',
