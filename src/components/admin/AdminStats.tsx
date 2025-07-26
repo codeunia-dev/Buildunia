@@ -179,7 +179,7 @@ export default function AdminStats() {
                 {stats.recentProjects.map((project) => (
                   <div key={project.id} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex-1">
-                      <h4 className="font-medium">{project.name}</h4>
+                      <h4 className="font-medium">{(project as { title?: string; name?: string }).title || (project as { title?: string; name?: string }).name}</h4>
                       <div className="flex items-center gap-2 mt-1">
                         <Badge className={getDifficultyColor(project.difficulty)}>
                           {project.difficulty}

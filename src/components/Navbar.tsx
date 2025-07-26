@@ -5,14 +5,14 @@ import { useState } from 'react'
 import { Menu, X, ShoppingCart, User, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/logo'
-import { useAuth } from '@/contexts/AuthContext'
+import { useBuilduniaAuth } from '@/contexts/BuilduniaAuthContext'
 import { useCart } from '@/contexts/CartContext'
 import { useRouter } from 'next/navigation'
 
-export function Navbar() {
+export default function Navbar() {
   // NOTE: In the future, admin/auth should be handled by Codeunia SSO/auth.
   const [isOpen, setIsOpen] = useState(false)
-  const { user, signOut } = useAuth()
+  const { user, loading, signOut, hasCodeuniaAccess } = useBuilduniaAuth()
   const { state } = useCart()
   const router = useRouter()
   // Only codeunia@gmail.com is admin
@@ -72,10 +72,18 @@ export function Navbar() {
               )}
             </Link>
             
+            {hasCodeuniaAccess && (
+              <div className="hidden sm:flex items-center space-x-2">
+                <span className="text-xs text-green-400 bg-green-900/20 px-2 py-1 rounded">
+                  Codeunia Access
+                </span>
+              </div>
+            )}
+            
             {user ? (
               <div className="flex items-center space-x-3">
                 <User className="h-6 w-6 text-gray-500" />
-                <span className="text-sm text-gray-700">{user.email}</span>
+                <span className="text-sm text-gray-700">{user?.email || 'Guest'}</span>
                 {isAdmin && (
                   <Button variant="outline" size="sm" asChild>
                     <Link href="/admin" className="flex items-center gap-1">
@@ -148,7 +156,7 @@ export function Navbar() {
                   <User className="h-8 w-8 text-gray-500" />
                 </div>
                 <div className="ml-3">
-                  <div className="text-base font-medium text-gray-800">{user.email}</div>
+                  <div className="text-base font-medium text-gray-800">{user?.email || 'Guest'}</div>
                   <div className="flex gap-2 mt-2">
                     {isAdmin && (
                       <Button variant="outline" size="sm" asChild>

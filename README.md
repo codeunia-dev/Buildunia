@@ -1,62 +1,110 @@
-# Buildunia
+# BuildUnia - IoT Learning Platform
 
-> **An official product of Codeunia**
+BuildUnia is a comprehensive IoT learning platform that provides hands-on project kits, expert mentorship, and a supportive community for students and enthusiasts worldwide.
 
----
+## Features
 
-## 🚀 What is Buildunia?
+- **IoT Project Kits**: Curated hardware and software packages for hands-on learning
+- **Expert Mentorship**: One-on-one guidance from industry professionals
+- **Community Support**: Active community of learners and mentors
+- **Payment Integration**: Secure payment processing with Stripe
+- **Admin Dashboard**: Comprehensive management tools for administrators
 
-**Buildunia** is a next-generation platform by Codeunia, designed to accelerate your journey in IoT, hardware, and project-based learning. Whether you are a student, hobbyist, or educator, Buildunia provides curated projects, mentorship, and resources to help you build, learn, and innovate
+## Tech Stack
 
----
+- **Frontend**: Next.js 15, React, TypeScript
+- **Styling**: Tailwind CSS, shadcn/ui components
+- **Backend**: Next.js API Routes
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: Supabase Auth
+- **Payments**: Stripe
+- **File Storage**: Supabase Storage
 
-## 🌟 Key Features
+## Getting Started
 
-- **Curated IoT & Hardware Projects**
-- **Expert Mentorship & Guidance**
-- **Project Inquiry & Customization**
-- **Modern, Responsive UI/UX**
-- **Secure, Scalable, and Reliable**
+### Prerequisites
 
----
+- Node.js 18+ 
+- npm or yarn
+- Supabase account
+- Stripe account (for payments)
 
-## 💡 Why Buildunia?
+### Installation
 
-- **Trusted by Codeunia**: Built and maintained by the Codeunia team, ensuring quality and innovation.
-- **Community-Driven**: Open to contributions, feedback, and collaboration (non-commercial use only).
-- **Educational Focus**: Empowering the next generation of makers and innovators.
+1. Clone the repository
+```bash
+git clone <repository-url>
+cd kharido
+```
 
----
+2. Install dependencies
+```bash
+npm install
+```
 
-## 🛡️ License & Usage
+3. Set up environment variables
+```bash
+cp .env.example .env.local
+```
 
-Codeunia © 2025 by Deepak Pandey and the Codeunia Team is licensed under the
-Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0).
+4. Configure your environment variables:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+STRIPE_SECRET_KEY=your_stripe_secret_key
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+```
 
-💡 Buildunia is an official product of Codeunia.
-All associated code, assets, and materials are owned by Codeunia. Unauthorized use, duplication, or rebranding is strictly prohibited.
+5. Run the development server
+```bash
+npm run dev
+```
 
-You are free to:
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-✅ Share — copy and redistribute the material in any medium or format
-✅ Adapt — remix, transform, and build upon the material
-✅ Contribute — fork and contribute via pull requests
+## Project Structure
 
-Under the following terms:
-	1. 📌 Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.
-	2. 🚫 NonCommercial — You may not use the material for commercial purposes.
-	3. 🛑 No Derivatives for Resale — You cannot resell forks, copies, or modified versions as paid products/platforms.
+```
+src/
+├── app/                 # Next.js App Router pages
+│   ├── api/            # API routes
+│   ├── admin/          # Admin dashboard
+│   ├── auth/           # Authentication pages
+│   ├── cart/           # Shopping cart
+│   ├── checkout/       # Checkout process
+│   ├── mentorship/     # Mentorship booking
+│   └── projects/       # Project listings
+├── components/         # Reusable UI components
+│   ├── admin/          # Admin-specific components
+│   └── ui/             # Base UI components
+├── contexts/           # React contexts
+└── lib/                # Utility functions and configurations
+```
 
-This license applies to all code, media, and digital assets in this repository unless stated otherwise.
+## Available Scripts
 
-🔗 License details: https://creativecommons.org/licenses/by-nc/4.0
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
----
+## Contributing
 
-## 👥 About Codeunia
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-**Codeunia** is dedicated to empowering learners, makers, and innovators through technology, education, and community. Learn more at [codeunia.com](https://codeunia.com).
+## License
 
----
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-> For partnership, support, or business inquiries, contact the Codeunia team via [codeunia.com/contact](https://codeunia.com/contact).
+## Support
+
+For support, email support@buildunia.com or visit our [contact page](https://buildunia.com/contact).
+
+## About
+
+BuildUnia is a product of Codeunia, dedicated to making IoT education accessible and engaging for everyone.

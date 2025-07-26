@@ -40,12 +40,23 @@ export default function UsersManager() {
 
   const fetchUsers = useCallback(async () => {
     try {
+      console.log('Fetching users from profiles table...')
+      
+      // Get users from profiles table
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .order('created_at', { ascending: false })
 
-      if (error) throw error
+      if (error) {
+        console.error('Error fetching users:', error)
+        throw error
+      }
+
+      console.log('Fetched users:', data?.length || 0, 'users')
+      console.log('Sample user data:', data?.[0])
+      console.log('All user IDs:', data?.map(u => u.id).slice(0, 5))
+      
       setUsers((data as unknown as UserProfile[]) || [])
     } catch (error) {
       console.error('Error fetching users:', error)
@@ -203,7 +214,7 @@ export default function UsersManager() {
                       {user.avatar_url ? (
                         <Image 
                           src={user.avatar_url} 
-                          alt={user.full_name || user.email}
+                          alt={user.full_name || user.email || 'User'}
                           className="w-10 h-10 rounded-full object-cover"
                           width={40}
                           height={40}
@@ -215,7 +226,7 @@ export default function UsersManager() {
                     <div>
                       <div className="flex items-center gap-2">
                         <h4 className="font-medium">
-                          {user.full_name || user.email.split('@')[0]}
+                          {user.full_name || (user.email ? user.email.split('@')[0] : 'Unknown User')}
                         </h4>
                         <Badge className={getRoleColor(user.role)}>
                           <div className="flex items-center gap-1">
@@ -224,9 +235,9 @@ export default function UsersManager() {
                           </div>
                         </Badge>
                       </div>
-                      <p className="text-sm text-gray-600">{user.email}</p>
+                      <p className="text-sm text-gray-600">{user.email || 'No email'}</p>
                       <p className="text-xs text-gray-500">
-                        Joined {new Date(user.created_at).toLocaleDateString()}
+                        Joined {user.created_at ? new Date(user.created_at).toLocaleDateString() : 'Unknown date'}
                         {user.last_sign_in_at && (
                           <span className="ml-2">
                             • Last active {new Date(user.last_sign_in_at).toLocaleDateString()}

@@ -1,11 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { CheckCircle, Clock, Users, Video, MessageCircle, Calendar } from 'lucide-react'
+import { CheckCircle, Users, Video, MessageCircle, Calendar, X, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { useState } from 'react';
+import { useState } from 'react'
+import { useCart } from '@/contexts/CartContext'
+import { useBuilduniaAuth } from '@/contexts/BuilduniaAuthContext'
+import { useRouter } from 'next/navigation'
 
 const mentorshipPackages = [
   {
@@ -62,30 +65,13 @@ const mentorshipPackages = [
 
 const mentors = [
   {
-    name: 'Deepak Pandey',
-    title: 'Founder, Codeunia | IoT & Embedded Systems Mentor',
-    experience: '3+ years in tech education & product development',
-    students: '600+ learners across India',
-    rating: 4.9,
-    highlights: [
-      'Led national workshops on IoT, AI, and automation',
-      'Built and mentored 50+ real-world IoT + AI student projects',
-      'Founder of Codeunia, India’s fastest-growing tech student community',
-      'Featured in university innovation showcases and tech meetups',
-    ],
-    expertise: ['IoT Architecture', 'Embedded Systems', 'Firebase & Cloud', 'Automation', 'AI/ML Integration'],
-    avatar: 'DP',
-    bio: `Deepak combines deep technical knowledge with a passion for mentorship. As the driving force behind Codeunia and BuildUnia, he’s helped hundreds of students overcome technical blocks and build projects they’re proud to show off. His approach is simple: learn by doing, fail fast, and build with purpose.`
-  },
-  {
     name: 'Aayush Bhardwaj',
     title: 'Core Team Member, Codeunia | IoT & Java Backend Mentor',
     experience: '2+ years in tech education, backend development, and community leadership',
     students: '400+ learners through technical workshops, community sessions, and project guidance',
     rating: 4.8,
     highlights: [
-      'Organized and led national-level hackathons and tech events',
-      'Key contributor at Codeunia, one of India’s fastest-growing student tech communities',
+      'Key contributor at Codeunia, one of India\'s fastest-growing student tech communities',
       'Guided 30+ real-world IoT and Java backend projects',
       'Hosted sessions on IoT systems, REST APIs, and real-world backend development',
       'Collaborated with GeeksforGeeks, Unstop, and university innovation platforms',
@@ -95,24 +81,83 @@ const mentors = [
     bio: `Aayush believes in learning by building. From late-night coding sessions to mentoring student teams on real-world projects, he thrives on sharing knowledge and solving problems together. As a passionate contributor to Codeunia and the broader student tech ecosystem, Aayush inspires others to build with confidence and purpose.`
   },
   {
+    name: 'Deepak Pandey',
+    title: 'Founder, Codeunia | IoT & Embedded Systems Mentor',
+    experience: '3+ years in tech education & product development',
+    students: '600+ learners across India',
+    rating: 4.9,
+    highlights: [
+      'Led national workshops on IoT, AI, and automation',
+      'Built and mentored 50+ real-world IoT + AI student projects',
+      'Founder of Codeunia, India\'s fastest-growing tech student community',
+      'Featured in university innovation showcases and tech meetups',
+    ],
+    expertise: ['IoT Architecture', 'Embedded Systems', 'Firebase & Cloud', 'Automation', 'AI/ML Integration'],
+    avatar: 'DP',
+    bio: `Deepak combines deep technical knowledge with a passion for mentorship. As the driving force behind Codeunia and BuildUnia, he's helped hundreds of students overcome technical blocks and build projects they're proud to show off. His approach is simple: learn by doing, fail fast, and build with purpose.`
+  },
+  {
     name: 'Akshay Kumar',
     title: 'Full Stack Developer | Web Dev Lead at Codeunia | AI & Web Development Mentor',
     experience: '4+ years in full-stack development, AI integration & product innovation',
-    students: '800+ learners across India',
+    students: '500+ learners through workshops, hackathons, and project guidance',
     rating: 4.9,
     highlights: [
-      'Mentored 100+ full-stack, AI, and cybersecurity student projects',
-      'Web Dev Lead at Codeunia – one of India’s fastest-growing developer communities',
-      'Led initiatives across MERN stack, digital marketing, and scalable cloud applications',
-      'Collaborated with startups to deliver AI-driven web products',
+      'Led 20+ national hackathons and tech events',
+      'Built and deployed 15+ production web applications',
+      'Key contributor at Codeunia, mentoring 100+ student projects',
+      'Expert in AI integration and modern web technologies',
+      'Collaborated with major tech platforms and universities',
     ],
-    expertise: ['MERN Stack', 'JavaScript', 'AI/ML', 'Node.js & Express', 'Cybersecurity', 'SQL & NoSQL', 'Firebase', 'Digital Strategy'],
+    expertise: ['Full Stack Development', 'AI/ML Integration', 'React & Next.js', 'Node.js & Python', 'Product Development'],
     avatar: 'AK',
-    bio: `Akshay blends strong technical expertise with an eye for scalable product thinking. As a self-taught full stack developer and Web Dev Lead at Codeunia, he empowers aspiring tech enthusiasts to build, iterate, and launch real-world projects that matter. His motto? "Don’t just learn—ship it, share it, and scale it."`
+    bio: `Akshay is passionate about bridging the gap between theory and practice. With extensive experience in full-stack development and AI integration, he helps students build real-world applications that solve actual problems. His mentorship focuses on practical skills and industry best practices.`
   }
-];
+]
 
 export default function MentorshipPage() {
+  const { user } = useBuilduniaAuth()
+  const { addItem } = useCart()
+  const router = useRouter()
+  const [selectedMentor, setSelectedMentor] = useState<typeof mentors[0] | null>(null)
+
+  const handleBookSession = (pkg: typeof mentorshipPackages[0]) => {
+    if (!user) {
+      // Redirect to sign in if not authenticated
+      router.push('/auth/signin')
+      return
+    }
+
+    // Create a mentorship product object
+    const mentorshipProduct = {
+      id: `mentorship-${pkg.id}`,
+      title: `${pkg.name} - IoT Mentorship`,
+      description: pkg.description,
+      image_url: '/images/mentorship.jpg',
+      platform: 'buildunia' as const,
+      category: 'Mentorship',
+      difficulty: 'all-levels',
+      duration: pkg.duration,
+      price: pkg.price,
+      prices: {
+        full: pkg.price,
+        hardware: 0,
+        code: 0,
+        mentorship: pkg.price,
+        hardware_mentorship: 0,
+        code_mentorship: 0
+      },
+      features: pkg.features,
+      requirements: ['Basic programming knowledge', 'Computer with internet', 'Video calling capability'],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+
+    // Add to cart and redirect to checkout
+    addItem(mentorshipProduct)
+    router.push('/checkout')
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-950 to-gray-900 w-screen max-w-none overflow-x-hidden">
       {/* Hero Section */}
@@ -137,9 +182,9 @@ export default function MentorshipPage() {
         <div className="w-full px-4 md:max-w-6xl md:mx-auto">
           <div className="text-center mb-10 md:mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 md:mb-4 tracking-tight">Meet Your Mentors</h2>
-            <p className="text-base md:text-xl text-gray-400 font-light">Learn from real-world builders leading India’s next-gen IoT movement</p>
+            <p className="text-base md:text-xl text-gray-400 font-light">Learn from real-world builders leading India&apos;s next-gen IoT movement</p>
           </div>
-          <MentorCards />
+          <MentorCards onMentorClick={setSelectedMentor} />
         </div>
       </section>
 
@@ -175,7 +220,11 @@ export default function MentorshipPage() {
                       </li>
                     ))}
                   </ul>
-                  <Button className="w-full py-3 text-lg font-semibold shadow-md hover:scale-[1.03] transition-transform" variant={pkg.popular ? "default" : "outline"}>
+                  <Button 
+                    className="w-full py-3 text-lg font-semibold shadow-md hover:scale-[1.03] transition-transform" 
+                    variant={pkg.popular ? "default" : "outline"}
+                    onClick={() => handleBookSession(pkg)}
+                  >
                     {pkg.id === 'single' ? 'Book Session' : 'Get Started'}
                   </Button>
                 </CardContent>
@@ -216,160 +265,197 @@ export default function MentorshipPage() {
             </div>
             <div className="text-center group">
               <div className="bg-gradient-to-br from-blue-900 to-gray-800 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform">
-                <CheckCircle className="h-10 w-10 text-blue-400 group-hover:animate-bounce" />
+                <Users className="h-10 w-10 text-blue-400 group-hover:animate-bounce" />
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">4. Apply</h3>
-              <p className="text-gray-400 font-light">Implement what you learned in your projects</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* What You Get */}
-      <section className="py-24 bg-gradient-to-b from-gray-900 to-gray-950">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4 tracking-tight">What You Get</h2>
-            <p className="text-xl text-gray-300 font-light">Comprehensive support for your IoT journey</p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-            <div className="text-center group">
-              <div className="bg-gradient-to-br from-blue-900 to-gray-800 rounded-2xl w-24 h-24 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-105 transition-transform">
-                <Video className="h-12 w-12 text-blue-400 group-hover:animate-bounce" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">Live Video Sessions</h3>
-              <p className="text-gray-300 font-light">Face-to-face guidance with screen sharing and interactive problem solving</p>
-            </div>
-            <div className="text-center group">
-              <div className="bg-gradient-to-br from-blue-900 to-gray-800 rounded-2xl w-24 h-24 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-105 transition-transform">
-                <CheckCircle className="h-12 w-12 text-blue-400 group-hover:animate-bounce" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">Code Reviews</h3>
-              <p className="text-gray-300 font-light">Get your code reviewed by experts and learn best practices</p>
-            </div>
-            <div className="text-center group">
-              <div className="bg-gradient-to-br from-blue-900 to-gray-800 rounded-2xl w-24 h-24 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-105 transition-transform">
-                <Users className="h-12 w-12 text-blue-400 group-hover:animate-bounce" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">Career Guidance</h3>
-              <p className="text-gray-300 font-light">Resume reviews, interview prep, and industry networking</p>
-            </div>
-            <div className="text-center group">
-              <div className="bg-gradient-to-br from-blue-900 to-gray-800 rounded-2xl w-24 h-24 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-105 transition-transform">
-                <MessageCircle className="h-12 w-12 text-blue-400 group-hover:animate-bounce" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">Ongoing Support</h3>
-              <p className="text-gray-300 font-light">Message your mentor between sessions for quick questions</p>
-            </div>
-            <div className="text-center group">
-              <div className="bg-gradient-to-br from-blue-900 to-gray-800 rounded-2xl w-24 h-24 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-105 transition-transform">
-                <Clock className="h-12 w-12 text-blue-400 group-hover:animate-bounce" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">Flexible Scheduling</h3>
-              <p className="text-gray-300 font-light">Book sessions at times that work with your schedule</p>
-            </div>
-            <div className="text-center group">
-              <div className="bg-gradient-to-br from-blue-900 to-gray-800 rounded-2xl w-24 h-24 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-105 transition-transform">
-                <Badge className="h-12 w-12 text-blue-400 group-hover:animate-bounce" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">Resources & Tools</h3>
-              <p className="text-gray-300 font-light">Access to exclusive learning materials and development tools like &quot;IoT Starter Kit&quot; and &quot;Mentor Q&amp;A&quot;.</p>
+              <h3 className="text-xl font-semibold mb-2 text-white">4. Grow</h3>
+              <p className="text-gray-400 font-light">Apply your learning and continue building</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-8 md:py-20 bg-gradient-to-b from-black to-blue-950 text-white sticky bottom-0 z-40 w-screen max-w-none px-0">
-        <div className="w-full px-4 md:max-w-4xl md:mx-auto text-center">
-          <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 tracking-tight">Ready to Start Your Mentorship Journey?</h2>
-          <p className="text-base md:text-xl mb-4 md:mb-8 opacity-90 font-light">
-            Join hundreds of students who have accelerated their IoT careers with expert guidance.
+      <section className="py-24 bg-gradient-to-b from-black to-gray-950">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-bold text-white mb-6 tracking-tight">Ready to Accelerate Your Learning?</h2>
+          <p className="text-xl text-gray-300 mb-8 font-light">
+            Join hundreds of students who have transformed their IoT skills through expert mentorship.
           </p>
-          <div className="flex flex-col sm:flex-row gap-2 md:gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-3 md:py-4 shadow-xl hover:scale-105 transition-transform">
-              Book a Free Consultation
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="text-lg px-8 py-4 shadow-xl hover:scale-105 transition-transform" asChild>
+              <Link href="#packages">View Packages</Link>
             </Button>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-blue-600 text-base md:text-lg px-6 md:px-8 py-3 md:py-4 shadow-xl hover:scale-105 transition-transform">
-              View All Packages
+            <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-gray-900 transition-all" asChild>
+              <Link href="/projects">Browse Projects</Link>
             </Button>
           </div>
         </div>
       </section>
+
+      {/* Mentor Modal */}
+      {selectedMentor && (
+        <MentorModal mentor={selectedMentor} onClose={() => setSelectedMentor(null)} />
+      )}
     </div>
   )
 }
 
-function MentorCards() {
-  const [openMentor, setOpenMentor] = useState<number | null>(null);
+function MentorCards({ onMentorClick }: { onMentorClick: (mentor: typeof mentors[0]) => void }) {
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-start justify-center">
-        {mentors.map((mentor, idx) => (
-          <div
-            key={mentor.name}
-            className="relative bg-gradient-to-br from-blue-900/40 to-gray-800/80 rounded-2xl shadow-2xl p-4 md:p-6 flex flex-col items-center border border-blue-800 cursor-pointer hover:shadow-blue-700/30 transition-all duration-300 min-h-[120px] max-h-[120px] h-[120px] md:min-h-[256px] md:max-h-[256px] md:h-[256px] w-full mb-4"
-            style={{ maxWidth: 380 }}
-            onClick={() => setOpenMentor(idx)}
-            tabIndex={0}
-            role="button"
-            aria-expanded={openMentor === idx}
-          >
-            <h3 className="text-base md:text-xl font-bold text-white mb-1 text-center">{mentor.name}</h3>
-            <p className="text-blue-400 font-medium mb-2 text-center text-xs md:text-base">{mentor.title}</p>
-            <span className="mt-2 text-blue-300 text-xs font-semibold flex items-center gap-1">Click to learn more
-              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
-            </span>
-          </div>
-        ))}
-      </div>
-      {/* Modal Overlay */}
-      {openMentor !== null && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm transition-all">
-          <div className="relative bg-gradient-to-br from-blue-900/80 to-gray-900/90 rounded-3xl shadow-2xl p-4 md:p-10 w-full max-w-sm md:max-w-xl min-h-[80vh] max-h-[95vh] overflow-y-auto flex flex-col justify-center animate-fadeIn">
-            <button
-              className="sticky top-2 right-2 float-right text-gray-300 hover:text-white text-2xl font-bold focus:outline-none z-10"
-              onClick={() => setOpenMentor(null)}
-              aria-label="Close"
-            >
-              &times;
-            </button>
-            <h3 className="text-xl md:text-2xl font-bold text-white mb-1 text-center mt-2">{mentors[openMentor].name}</h3>
-            <p className="text-blue-400 font-medium mb-2 text-center text-sm md:text-base">{mentors[openMentor].title}</p>
-            <div className="grid grid-cols-2 gap-4 mb-4 w-full max-w-xs mx-auto">
-              <div>
-                <p className="text-xs text-gray-400">Experience</p>
-                <p className="font-semibold text-white text-xs md:text-sm">{mentors[openMentor].experience}</p>
+    <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      {mentors.map((mentor, index) => (
+        <Card 
+          key={index} 
+          className="bg-gradient-to-br from-gray-800 to-gray-900 border-0 shadow-xl rounded-xl overflow-hidden hover:scale-105 transition-transform cursor-pointer group max-w-sm mx-auto"
+          onClick={() => onMentorClick(mentor)}
+        >
+          <CardHeader className="text-center pb-3">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:scale-110 transition-transform">
+              <span className="text-white font-bold text-lg">{mentor.avatar}</span>
+            </div>
+            <CardTitle className="text-xl text-white font-bold mb-1">{mentor.name}</CardTitle>
+            <CardDescription className="text-gray-300 text-xs font-medium line-clamp-2">{mentor.title}</CardDescription>
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <div className="flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star 
+                    key={i} 
+                    className={`w-3 h-3 ${i < Math.floor(mentor.rating) ? 'text-yellow-400 fill-current' : 'text-gray-600'}`}
+                  />
+                ))}
               </div>
-              <div>
-                <p className="text-xs text-gray-400">Students Mentored</p>
-                <p className="font-semibold text-white text-xs md:text-sm">{mentors[openMentor].students}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-400">Rating</p>
-                <p className="font-semibold text-white text-xs md:text-sm flex items-center">{mentors[openMentor].rating} <span className="ml-1">⭐</span></p>
+              <span className="text-gray-400 text-xs">({mentor.rating})</span>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-3 px-4 pb-4">
+            <div className="text-center">
+              <p className="text-gray-300 text-xs mb-2 line-clamp-2">{mentor.bio}</p>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold text-sm mb-1">Experience</h4>
+              <p className="text-gray-400 text-xs mb-1">{mentor.experience}</p>
+              <p className="text-gray-400 text-xs">{mentor.students} students mentored</p>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold text-sm mb-1">Expertise</h4>
+              <div className="flex flex-wrap gap-1">
+                {mentor.expertise.slice(0, 2).map((skill, skillIndex) => (
+                  <Badge key={skillIndex} variant="outline" className="text-xs bg-blue-900/20 border-blue-500/30 text-blue-300 px-1 py-0">
+                    {skill}
+                  </Badge>
+                ))}
+                {mentor.expertise.length > 2 && (
+                  <Badge variant="outline" className="text-xs bg-gray-700/20 border-gray-500/30 text-gray-300 px-1 py-0">
+                    +{mentor.expertise.length - 2} more
+                  </Badge>
+                )}
               </div>
             </div>
-            <div className="mb-4 w-full max-w-xs mx-auto">
-              <p className="text-xs text-gray-400 mb-1">Highlights</p>
-              <ul className="list-disc list-inside text-gray-200 text-left text-xs md:text-sm">
-                {mentors[openMentor].highlights.map((item, i) => (
-                  <li key={i}>{item}</li>
+            <div className="text-center pt-1">
+              <Button variant="outline" size="sm" className="text-blue-400 border-blue-400 hover:bg-blue-400 hover:text-white text-xs px-3 py-1">
+                View Full Profile
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )
+}
+
+function MentorModal({ mentor, onClose }: { mentor: typeof mentors[0]; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div className="p-6">
+          <div className="flex justify-between items-start mb-6">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-lg">{mentor.avatar}</span>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">{mentor.name}</h2>
+                <p className="text-gray-300 text-sm">{mentor.title}</p>
+                <div className="flex items-center gap-2 mt-1">
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star 
+                        key={i} 
+                        className={`w-4 h-4 ${i < Math.floor(mentor.rating) ? 'text-yellow-400 fill-current' : 'text-gray-600'}`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-gray-400 text-sm">({mentor.rating})</span>
+                </div>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="text-gray-400 hover:text-white hover:bg-gray-700"
+            >
+              <X className="h-6 w-6" />
+            </Button>
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">About</h3>
+              <p className="text-gray-300 leading-relaxed">{mentor.bio}</p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">Experience</h3>
+              <p className="text-gray-300 mb-2">{mentor.experience}</p>
+              <p className="text-gray-300">{mentor.students} students mentored</p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">Expertise</h3>
+              <div className="flex flex-wrap gap-2">
+                {mentor.expertise.map((skill, skillIndex) => (
+                  <Badge key={skillIndex} variant="outline" className="bg-blue-900/20 border-blue-500/30 text-blue-300">
+                    {skill}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">Highlights & Achievements</h3>
+              <ul className="space-y-2">
+                {mentor.highlights.map((highlight, highlightIndex) => (
+                  <li key={highlightIndex} className="text-gray-300 flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span>{highlight}</span>
+                  </li>
                 ))}
               </ul>
             </div>
-            <div className="mb-4 w-full max-w-xs mx-auto">
-              <p className="text-xs text-gray-400 mb-1">Expertise</p>
-              <div className="flex flex-wrap gap-2">
-                {mentors[openMentor].expertise.map((skill) => (
-                  <Badge key={skill} variant="secondary" className="bg-blue-800 text-white px-3 py-1 rounded-full text-xs font-medium">{skill}</Badge>
-                ))}
-              </div>
-            </div>
-            <p className="text-gray-300 text-xs md:text-sm font-light mt-2 mb-2 text-center">{mentors[openMentor].bio}</p>
+          </div>
+
+          <div className="flex gap-4 mt-8 pt-6 border-t border-gray-700">
+            <Button 
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+              onClick={() => {
+                onClose()
+                // Scroll to packages section
+                document.getElementById('packages')?.scrollIntoView({ behavior: 'smooth' })
+              }}
+            >
+              Book Session with {mentor.name}
+            </Button>
+            <Button 
+              variant="outline" 
+              className="border-gray-600 text-gray-300 hover:bg-gray-700"
+              onClick={onClose}
+            >
+              Close
+            </Button>
           </div>
         </div>
-      )}
-    </>
-  );
+      </div>
+    </div>
+  )
 }

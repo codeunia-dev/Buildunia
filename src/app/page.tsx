@@ -3,7 +3,6 @@ import { ArrowRight, Code, Cpu, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import Image from 'next/image';
 
 // Mock data - replace with real data from Supabase
 const featuredProjects = [
@@ -12,14 +11,7 @@ const featuredProjects = [
     name: 'Smart Home Automation',
     description: 'Build a complete IoT system to control lights, fans, and security',
     price: 89.99,
-    prices: {
-      complete: 89.99,
-      hardware: 69.99,
-      mentorship: 49.99,
-      mentorship_hardware: 109.99,
-      other: 59.99,
-    },
-    image_url: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80', // Smart home
+    image_url: '/placeholder-project.jpg',
     difficulty: 'intermediate' as const,
     category: 'Arduino',
     skills: ['Arduino', 'WiFi', 'Sensors', 'Mobile App']
@@ -29,14 +21,7 @@ const featuredProjects = [
     name: 'Weather Station',
     description: 'Create a professional weather monitoring system with cloud data',
     price: 69.99,
-    prices: {
-      complete: 69.99,
-      hardware: 49.99,
-      mentorship: 39.99,
-      mentorship_hardware: 89.99,
-      other: 29.99,
-    },
-    image_url: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80', // Weather station
+    image_url: '/placeholder-project.jpg',
     difficulty: 'beginner' as const,
     category: 'ESP32',
     skills: ['ESP32', 'Sensors', 'Cloud', 'Dashboard']
@@ -46,14 +31,7 @@ const featuredProjects = [
     name: 'Smart Agriculture Monitor',
     description: 'Monitor soil moisture, temperature, and automate irrigation',
     price: 99.99,
-    prices: {
-      complete: 99.99,
-      hardware: 79.99,
-      mentorship: 59.99,
-      mentorship_hardware: 119.99,
-      other: 69.99,
-    },
-    image_url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80', // Agriculture
+    image_url: '/placeholder-project.jpg',
     difficulty: 'advanced' as const,
     category: 'Raspberry Pi',
     skills: ['Raspberry Pi', 'Python', 'Automation', 'ML']
@@ -99,65 +77,27 @@ export default function HomePage() {
               <span className="text-blue-400"> Build Your Future, Today</span>
             </h1>
             <p className="text-xl text-gray-100 mb-8 max-w-3xl mx-auto">
-              Unlock the world of Internet of Things through hands-on project kits designed for college students and tech enthusiasts. Learn, build, and get mentored by experts.
+              Master IoT development with hands-on projects, expert mentorship, and a supportive community. 
+              Build real-world solutions that matter.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild>
-                <Link href="/projects">
-                  Explore Projects <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
+              <Button size="lg" className="text-lg px-8 py-4" asChild>
+                <Link href="/projects">Explore Projects</Link>
               </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link href="/mentorship">Learn About Mentorship</Link>
+              <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-black" asChild>
+                <Link href="/mentorship">Get Mentorship</Link>
               </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-20 !bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              How It Works
-            </h2>
-            <p className="text-xl text-gray-100">
-              Your journey to IoT mastery in three simple steps
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-white">1</span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">Pick a Project</h3>
-              <p className="text-gray-200">Choose from our curated collection of IoT projects designed for different skill levels.</p>
-            </div>
-            <div className="text-center">
-              <div className="bg-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-white">2</span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">Build & Learn</h3>
-              <p className="text-gray-200">Follow our detailed guides and build real IoT solutions with all components included.</p>
-            </div>
-            <div className="text-center">
-              <div className="bg-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-white">3</span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">Get Mentorship</h3>
-              <p className="text-gray-200">Connect with IoT experts for personalized guidance and career advice.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Featured Projects */}
-      <section className="py-20 bg-black">
+      <section className="py-20 !bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Featured Projects
+              Featured IoT Projects
             </h2>
             <p className="text-xl text-gray-100">
               Start your IoT journey with these popular projects
@@ -165,25 +105,34 @@ export default function HomePage() {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {featuredProjects.map((project) => (
-              <Card key={project.id} className="hover:shadow-lg transition-shadow">
-                <Image src={project.image_url} alt={project.name} width={600} height={337} className="aspect-video w-full object-cover rounded-t-lg" />
+              <Card key={project.id} className="bg-gray-900 border-gray-700 hover:scale-105 transition-transform">
                 <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <CardTitle className="text-xl">{project.name}</CardTitle>
-                    <Badge className={getDifficultyColor(project.difficulty)}>
-                      {project.difficulty}
-                    </Badge>
+                  <div className="aspect-video bg-gray-800 rounded-lg mb-4 flex items-center justify-center">
+                    <span className="text-gray-400">Project Image</span>
                   </div>
-                  <CardDescription>{project.description}</CardDescription>
+                  <div className="flex items-center justify-between mb-2">
+                    <Badge variant="outline" className="border-blue-500 text-blue-300">
+                      {project.category}
+                    </Badge>
+                    <span className={getDifficultyColor(project.difficulty)}>
+                      {project.difficulty}
+                    </span>
+                  </div>
+                  <CardTitle className="text-white">{project.name}</CardTitle>
+                  <CardDescription className="text-gray-300">
+                    {project.description}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {project.skills.slice(0, 3).map((skill) => (
-                      <Badge key={skill} variant="secondary">{skill}</Badge>
+                    {project.skills.map((skill) => (
+                      <Badge key={skill} variant="secondary" className="bg-gray-800 text-gray-300">
+                        {skill}
+                      </Badge>
                     ))}
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-blue-600">
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl font-bold text-white">
                       ₹{project.price}
                     </span>
                     <Button asChild>
@@ -195,7 +144,7 @@ export default function HomePage() {
             ))}
           </div>
           <div className="text-center mt-12">
-            <Button variant="outline" size="lg" asChild>
+            <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-black" asChild>
               <Link href="/projects">View All Projects</Link>
             </Button>
           </div>

@@ -3,10 +3,11 @@
 import { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Package, Users, BarChart3, Settings } from 'lucide-react'
+import { Package, Users, BarChart3, Settings, ShoppingCart } from 'lucide-react'
 import ProjectsManager from './ProjectsManager'
 import AdminStats from './AdminStats'
 import UsersManager from './UsersManager'
+import OrdersManager from './OrdersManager'
 import StorageTest from './StorageTest'
 
 export default function AdminDashboard() {
@@ -22,7 +23,7 @@ export default function AdminDashboard() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="projects" className="flex items-center gap-2">
             <Package className="w-4 h-4" />
             Projects
@@ -30,6 +31,10 @@ export default function AdminDashboard() {
           <TabsTrigger value="users" className="flex items-center gap-2">
             <Users className="w-4 h-4" />
             Users
+          </TabsTrigger>
+          <TabsTrigger value="orders" className="flex items-center gap-2">
+            <ShoppingCart className="w-4 h-4" />
+            Orders
           </TabsTrigger>
           <TabsTrigger value="analytics" className="flex items-center gap-2">
             <BarChart3 className="w-4 h-4" />
@@ -51,6 +56,10 @@ export default function AdminDashboard() {
 
         <TabsContent value="users">
           <UsersManager />
+        </TabsContent>
+
+        <TabsContent value="orders">
+          <OrdersManager />
         </TabsContent>
 
         <TabsContent value="analytics">

@@ -39,3 +39,24 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Production security - ignore sensitive setup files
+/docs/setup/
+/docs/database/
+*.sql
+supabase-setup-commands.sql
+buildunia-setup-only.sql
+codeunia-supabase-setup.sql
+enhanced-buildunia-setup.sql
+integrate-buildunia.sh
+buildunia.config.ts
+
+# Admin and internal documentation
+ADMIN_README.md
+SHARED_AUTH_README.md
+INTEGRATION_GUIDE.md
+IMAGE_UPLOAD_TROUBLESHOOTING.md
+STORAGE_SETUP_MANUAL.md
+STRIPE_INTEGRATION_GUIDE.md
+ARCHITECTURE_RECOMMENDATIONS.md
+MODULE_STRUCTURE.md

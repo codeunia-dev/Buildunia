@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Github, Linkedin, Mail } from 'lucide-react'
+import { Github, Linkedin, Mail, ExternalLink } from 'lucide-react'
 import { Logo } from '@/components/ui/logo'
 
 export function Footer() {
@@ -18,13 +18,13 @@ export function Footer() {
               </p>
             </div>
             <div className="flex space-x-6">
-              <a href="#" className="text-gray-400 hover:text-gray-300">
+              <a href="https://github.com/codeunia" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-300">
                 <Github className="h-6 w-6" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-gray-300">
+              <a href="https://linkedin.com/company/codeunia" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-300">
                 <Linkedin className="h-6 w-6" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-gray-300">
+              <a href="mailto:contact@codeunia.com" className="text-gray-400 hover:text-gray-300">
                 <Mail className="h-6 w-6" />
               </a>
             </div>
@@ -50,23 +50,20 @@ export function Footer() {
               </div>
               <div className="mt-12 md:mt-0">
                 <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">
-                  Legal
+                  Resources
                 </h3>
                 <ul role="list" className="mt-4 space-y-4">
                   <li>
-                    <Link href="/terms" className="text-base text-gray-300 hover:text-white">
-                      Terms & Conditions
-                    </Link>
+                    <a href="https://www.codeunia.com/opportunities" target="_blank" rel="noopener noreferrer" className="text-base text-gray-300 hover:text-white flex items-center gap-1">
+                      Opportunities
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
                   </li>
                   <li>
-                    <Link href="/privacy" className="text-base text-gray-300 hover:text-white">
-                      Privacy Policy
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/refund" className="text-base text-gray-300 hover:text-white">
-                      Refund Policy
-                    </Link>
+                    <a href="https://www.codeunia.com" target="_blank" rel="noopener noreferrer" className="text-base text-gray-300 hover:text-white flex items-center gap-1">
+                      Codeunia
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
                   </li>
                 </ul>
               </div>
@@ -87,10 +84,27 @@ export function Footer() {
                       About
                     </Link>
                   </li>
+                </ul>
+              </div>
+              <div className="mt-12 md:mt-0">
+                <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">
+                  Legal
+                </h3>
+                <ul role="list" className="mt-4 space-y-4">
                   <li>
-                    <a href="#" className="text-base text-gray-300 hover:text-white">
-                      FAQ
-                    </a>
+                    <Link href="/terms" className="text-base text-gray-300 hover:text-white">
+                      Terms & Conditions
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/privacy" className="text-base text-gray-300 hover:text-white">
+                      Privacy Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/refund" className="text-base text-gray-300 hover:text-white">
+                      Refund Policy
+                    </Link>
                   </li>
                 </ul>
               </div>

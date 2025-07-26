@@ -1,79 +1,67 @@
 'use client'
 
 import React from 'react'
+import { cn } from '@/lib/utils'
 
 interface LogoProps {
-  size?: 'sm' | 'md' | 'lg'
   className?: string
+  size?: 'sm' | 'md' | 'lg'
 }
 
-export function Logo({ size = 'md', className = '' }: LogoProps) {
-  const sizeMap = {
-    sm: { container: 'w-8 h-8', svg: 'w-8 h-8' },
-    md: { container: 'w-12 h-12', svg: 'w-12 h-12' },
-    lg: { container: 'w-16 h-16', svg: 'w-16 h-16' }
+export function Logo({ className, size = 'md' }: LogoProps) {
+  const sizeClasses = {
+    sm: 'w-6 h-6',
+    md: 'w-8 h-8',
+    lg: 'w-12 h-12'
   }
 
-  const { container, svg } = sizeMap[size]
-
   return (
-    <div 
-      className={`terminal-ghost-logo relative flex items-center justify-center ${container} ${className}`}
+    <svg 
+      viewBox="0 0 200 200" 
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn(sizeClasses[size], className, 'text-black dark:text-white')}
     >
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          .terminal-ghost-logo .body-shape {
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-          }
-          
-          .terminal-ghost-logo .face-element {
-            transition: transform 0.4s ease-out;
-            transform-origin: center;
-          }
+      {/* The Body/Ghost Shape */}
+      <path 
+        d="M100,20 C40,20 40,120 40,120 L40,180 L160,180 L160,120 C160,120 160,20 100,20 Z" 
+        fill="currentColor"
+        className="ghost-body"
+      />
 
-          .terminal-ghost-logo:hover .body-shape {
-            transform: scale(1.05);
-          }
-          
-          .terminal-ghost-logo:hover .face-element {
-            transform: scale(1.1) rotate(5deg);
-          }
-        `
-      }} />
-      
-      <svg 
-        className={`terminal-ghost-svg ${svg}`} 
-        viewBox="0 0 200 200" 
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {/* The Body/Ghost Shape */}
+      {/* The Face - Terminal prompt >_ */}
+      <g className="ghost-face">
+        {/* The > symbol - same as favicon */}
         <path 
-          className="body-shape" 
-          d="M100,20 C40,20 40,120 40,120 L40,180 L160,180 L160,120 C160,120 160,20 100,20 Z" 
-          fill="#FFFFFF"
+          d="M65 85 L95 105 L65 125" 
+          stroke="#000000" 
+          strokeWidth="25" 
+          fill="none" 
+          strokeLinecap="round" 
+          strokeLinejoin="round"
         />
+        {/* The _ symbol - same as favicon */}
+        <line 
+          x1="85" 
+          y1="125" 
+          x2="135" 
+          y2="125" 
+          stroke="#000000" 
+          strokeWidth="25" 
+          strokeLinecap="round"
+        />
+      </g>
 
-        {/* The Face, constructed from the terminal prompt >_ */}
-        <g className="face-element">
-          <path 
-            d="M80 85 L100 105 L80 125" 
-            stroke="#000000" 
-            strokeWidth="15" 
-            fill="none" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          />
-          <line 
-            x1="110" 
-            y1="125" 
-            x2="140" 
-            y2="125" 
-            stroke="#000000" 
-            strokeWidth="15" 
-            strokeLinecap="round"
-          />
-        </g>
-      </svg>
-    </div>
+      <style jsx>{`
+        .ghost-body { color: #000000; }
+        .ghost-face { color: #000000; }
+        
+        @media (prefers-color-scheme: dark) {
+          .ghost-body { color: #FFFFFF; }
+          .ghost-face { color: #000000; }
+          .ghost-face path { stroke: #000000 !important; }
+          .ghost-face line { stroke: #000000 !important; }
+        }
+      `}</style>
+    </svg>
   )
 }

@@ -1,70 +1,37 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Eye, EyeOff } from 'lucide-react'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Logo } from '@/components/ui/logo'
-import { createClient } from '@/lib/supabase'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { AuthError } from '@supabase/supabase-js';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useBuilduniaAuth } from '@/contexts/BuilduniaAuthContext'
 
 export default function SignInPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
+  const { signIn } = useBuilduniaAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError('')
-    const supabase = createClient();
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) {
-        setError(error.message)
-        console.error('Sign in error:', error)
-      } else if (data?.user) {
-        router.push('/')
-      } else {
-        setError('Unknown error occurred')
-      }
-    } catch (err) {
-      setError('An unexpected error occurred')
-      console.error('Unexpected sign in error:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
 
-  const handleGitHubSignIn = async () => {
-    setLoading(true)
-    setError('')
-    const supabase = createClient();
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'github',
-        options: {
-          redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined,
-        },
-      });
+      const { error } = await signIn(email, password)
+      
       if (error) {
         setError(error.message)
-        console.error('GitHub sign in error:', error)
+      } else {
+        router.push('/')
       }
-    } catch (err) {
-      setError('An unexpected error occurred')
-      console.error('Unexpected GitHub sign in error:', err)
+    } catch (err: any) {
+      setError(err.message || 'An error occurred')
     } finally {
       setLoading(false)
     }
@@ -72,124 +39,82 @@ export default function SignInPage() {
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md">
-        {/* Logo/Brand Section */}
-        <div className="text-center mb-8">
-          <div className="mx-auto w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-4">
-            <Logo size="md" />
+      <div className="max-w-md w-full space-y-8">
+        <div className="text-center">
+          <div className="flex justify-center">
+            <div className="terminal-ghost-logo relative flex items-center justify-center w-16 h-16">
+              <svg className="terminal-ghost-svg w-16 h-16" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <path className="body-shape" d="M100,20 C40,20 40,120 40,120 L40,180 L160,180 L160,120 C160,120 160,20 100,20 Z" fill="#FFFFFF"></path>
+                <g className="face-element">
+                  <path d="M80 85 L100 105 L80 125" stroke="#000000" strokeWidth="15" fill="none" strokeLinecap="round" strokeLinejoin="round"></path>
+                  <line x1="110" y1="125" x2="140" y2="125" stroke="#000000" strokeWidth="15" strokeLinecap="round"></line>
+                </g>
+              </svg>
+            </div>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-          <p className="text-gray-400">Sign in to continue to BuildUnia</p>
+          <h2 className="mt-6 text-3xl font-bold text-white">
+            Welcome to BuildUnia
+          </h2>
+          <p className="mt-2 text-sm text-gray-400">
+            Sign in to your account to continue
+          </p>
         </div>
 
-        <Card className="w-full border-gray-700 bg-gray-900/50 backdrop-blur-sm shadow-2xl">
-          <CardHeader className="text-center pb-4">
-            <CardTitle className="text-xl font-semibold text-white">Sign In</CardTitle>
+        <Card className="bg-gray-900 border-gray-700">
+          <CardHeader>
+            <CardTitle className="text-white text-center">Sign In</CardTitle>
           </CardHeader>
-        <CardContent className="pt-4">
-          <Button
-            type="button"
-            onClick={handleGitHubSignIn}
-            className="w-full mb-6 bg-gray-800 hover:bg-gray-700 text-white font-medium py-3 flex items-center justify-center gap-2"
-            disabled={loading}
-          >
-            <svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor" className="inline-block mr-2"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-            Sign in with GitHub
-          </Button>
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-700"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-gray-900 text-gray-400">or sign in with email</span>
-            </div>
-          </div>
+          <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-lg text-sm backdrop-blur-sm">
+                <div className="bg-red-900/20 border border-red-500 text-red-400 px-4 py-3 rounded">
                 {error}
               </div>
             )}
             
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-200 font-medium">Email</Label>
+                <Label htmlFor="email" className="text-gray-300">Email</Label>
               <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="bg-gray-800 border-gray-600 text-white"
                 placeholder="Enter your email"
-                className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500/20 transition-colors"
-                required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-gray-200 font-medium">Password</Label>
-              <div className="relative">
+                <Label htmlFor="password" className="text-gray-300">Password</Label>
                 <Input
                   id="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500/20 transition-colors pr-12"
                   required
+                  className="bg-gray-800 border-gray-600 text-white"
+                  placeholder="Enter your password"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors p-1"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
             </div>
 
             <Button 
               type="submit" 
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 transition-all duration-200 transform hover:scale-[1.02]" 
               disabled={loading}
-            >
-              {loading ? (
-                <div className="flex items-center justify-center space-x-2">
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  <span>Signing In...</span>
-                </div>
-              ) : (
-                'Sign In'
-              )}
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+              >
+                {loading ? 'Signing in...' : 'Sign In'}
             </Button>
-          </form>
-
-          <div className="mt-8 space-y-4">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-700"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-gray-900 text-gray-400">New to BuildUnia?</span>
-              </div>
-            </div>
             
             <div className="text-center">
-              <Link 
-                href="/auth/signup" 
-                className="inline-flex items-center justify-center w-full px-4 py-3 border border-gray-600 rounded-lg text-gray-200 hover:bg-gray-800/50 hover:border-gray-500 transition-all duration-200 font-medium"
-              >
-                Create an account
+                <p className="text-gray-400 text-sm">
+                  Don't have an account?{' '}
+                  <Link href="/auth/signup" className="text-blue-400 hover:text-blue-300">
+                    Sign up
               </Link>
+                </p>
             </div>
-          </div>
-
-          <div className="mt-6 text-center">
-            <Link 
-              href="/auth/forgot-password" 
-              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
-            >
-              Forgot your password?
-            </Link>
-          </div>
+            </form>
         </CardContent>
       </Card>
       </div>

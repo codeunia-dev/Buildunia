@@ -1,14 +1,25 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
-import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react'
+import { Minus, Plus, Trash2, ShoppingBag, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useCart } from '@/contexts/CartContext'
 import { formatPrice } from '@/lib/stripe'
 
 export default function CartPage() {
-  const { state, updateQuantity, removeItem } = useCart()
+  const { state, updateQuantity, removeItem, getCartLimits } = useCart()
+  const [error, setError] = useState<string | null>(null)
+
+  const handleUpdateQuantity = (id: string, newQuantity: number) => {
+    setError(null)
+    const result = updateQuantity(id, newQuantity)
+    
+    if (!result.success) {
+      setError(result.error || 'Failed to update quantity')
+    }
+  }
 
   if (state.items.length === 0) {
     return (
@@ -27,64 +38,99 @@ export default function CartPage() {
     )
   }
 
+  const limits = getCartLimits()
+
   return (
     <div className="min-h-screen bg-black">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Shopping Cart</h1>
         <p className="text-gray-500 mb-8">You&apos;re almost there! Review your items and proceed to checkout.</p>
         
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+            <div className="flex items-center gap-2 text-red-800">
+              <AlertCircle className="h-5 w-5" />
+              <span className="font-medium">Cannot update cart</span>
+            </div>
+            <p className="text-red-700 mt-1">{error}</p>
+          </div>
+        )}
+
+        {/* Cart Limits Info */}
+        <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-center gap-2 text-blue-800 mb-2">
+            <ShoppingBag className="h-4 w-4" />
+            <span className="font-medium">Cart Limits</span>
+          </div>
+          <div className="text-sm text-blue-700 space-y-1">
+            <p>• Total items: {limits.totalItems}/{limits.maxTotalItems}</p>
+            {Object.entries(limits.typeCounts).map(([type, count]) => (
+              <p key={type}>• {type} items: {count}/{limits.maxSameType}</p>
+            ))}
+          </div>
+        </div>
+        
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
-            {state.items.map((item) => (
-              <Card key={item.project.id}>
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-20 h-20 bg-gray-200 rounded-lg flex-shrink-0"></div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">
-                        {item.project.name}
-                      </h3>
-                      <p className="text-sm text-gray-500 mt-1">
-                        {item.project.category} • {item.project.difficulty}
-                      </p>
-                      <p className="text-lg font-semibold text-blue-600 mt-2">
-                        {formatPrice(item.project.price)}
-                      </p>
-                    </div>
+            {state.items.map((item) => {
+              const itemType = item.project.category || 'unknown'
+              const currentTypeCount = limits.typeCounts[itemType] || 0
+              const canIncrease = limits.totalItems < limits.maxTotalItems && currentTypeCount < limits.maxSameType
+              
+              return (
+                <Card key={item.project.id}>
+                  <CardContent className="p-6">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-20 h-20 bg-gray-200 rounded-lg flex-shrink-0"></div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg font-semibold text-gray-900 truncate">
+                          {(item.project as { title?: string; name?: string }).title || (item.project as { title?: string; name?: string }).name}
+                        </h3>
+                        <p className="text-sm text-gray-500 mt-1">
+                          {item.project.category} • {item.project.difficulty}
+                        </p>
+                        <p className="text-lg font-semibold text-blue-600 mt-2">
+                          {formatPrice(item.project.price)}
+                        </p>
+                      </div>
 
-                    <div className="flex items-center space-x-3">
-                      <div className="flex items-center border rounded-md">
+                      <div className="flex items-center space-x-3">
+                        <div className="flex items-center border rounded-md">
+                          <button
+                            onClick={() => handleUpdateQuantity(item.project.id, item.quantity - 1)}
+                            className="p-2 hover:bg-gray-100"
+                            disabled={item.quantity <= 1}
+                          >
+                            <Minus className="h-4 w-4" />
+                          </button>
+                          <span className="px-4 py-2 text-center min-w-[3rem]">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() => handleUpdateQuantity(item.project.id, item.quantity + 1)}
+                            className="p-2 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={!canIncrease}
+                            title={!canIncrease ? `Cannot add more ${itemType} items` : ''}
+                          >
+                            <Plus className="h-4 w-4" />
+                          </button>
+                        </div>
+                        
                         <button
-                          onClick={() => updateQuantity(item.project.id, item.quantity - 1)}
-                          className="p-2 hover:bg-gray-100"
-                          disabled={item.quantity <= 1}
+                          onClick={() => removeItem(item.project.id)}
+                          className="p-2 text-red-500 hover:bg-red-50 rounded-md"
                         >
-                          <Minus className="h-4 w-4" />
-                        </button>
-                        <span className="px-4 py-2 text-center min-w-[3rem]">
-                          {item.quantity}
-                        </span>
-                        <button
-                          onClick={() => updateQuantity(item.project.id, item.quantity + 1)}
-                          className="p-2 hover:bg-gray-100"
-                        >
-                          <Plus className="h-4 w-4" />
+                          <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
-                      
-                      <button
-                        onClick={() => removeItem(item.project.id)}
-                        className="p-2 text-red-500 hover:bg-red-50 rounded-md"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              )
+            })}
           </div>
 
           {/* Order Summary */}

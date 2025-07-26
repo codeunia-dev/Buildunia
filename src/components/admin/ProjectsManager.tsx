@@ -21,30 +21,32 @@ export default function ProjectsManager() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<Project | null>(null)
   const [formData, setFormData] = useState({
-    name: '',
+    title: '',
     description: '',
     price: '',
     prices: {
-      complete: '',
+      full: '',
       hardware: '',
+      code: '',
       mentorship: '',
-      mentorship_hardware: '',
-      other: '',
+      hardware_mentorship: '',
+      code_mentorship: '',
     },
     image_url: '',
-    image_path: '',
     difficulty: 'beginner' as 'beginner' | 'intermediate' | 'advanced',
     category: '',
-    components: '',
-    skills: ''
+    duration: '',
+    features: '',
+    requirements: ''
   })
   const [uploadError, setUploadError] = useState<string | null>(null)
 
   const fetchProjects = useCallback(async () => {
     try {
       const { data, error } = await supabase
-        .from('projects')
+        .from('products')
         .select('*')
+        .eq('platform', 'buildunia')
         .order('created_at', { ascending: false })
 
       if (error) throw error
@@ -74,40 +76,42 @@ export default function ProjectsManager() {
 
     try {
       const projectData = {
-        name: formData.name,
+        title: formData.title,
         description: formData.description,
         price: parseFloat(formData.price),
         prices: {
-          complete: parseFloat(formData.prices.complete),
+          full: parseFloat(formData.prices.full),
           hardware: parseFloat(formData.prices.hardware),
+          code: parseFloat(formData.prices.code),
           mentorship: parseFloat(formData.prices.mentorship),
-          mentorship_hardware: parseFloat(formData.prices.mentorship_hardware),
-          other: parseFloat(formData.prices.other),
+          hardware_mentorship: parseFloat(formData.prices.hardware_mentorship),
+          code_mentorship: parseFloat(formData.prices.code_mentorship),
         },
         image_url: formData.image_url,
-        image_path: formData.image_path,
         difficulty: formData.difficulty,
         category: formData.category,
-        components: formData.components.split(',').map(item => item.trim()),
-        skills: formData.skills.split(',').map(item => item.trim())
+        duration: formData.duration,
+        features: formData.features.split(',').map((item: string) => item.trim()),
+        requirements: formData.requirements.split(',').map((item: string) => item.trim()),
+        platform: 'buildunia'
       }
 
       if (editingProject) {
-        // If editing and there's an old image path, delete it if the image changed
-        const oldImagePath = editingProject?.image_path;
-        if (oldImagePath && oldImagePath !== formData.image_path && formData.image_path) {
-          await deleteProjectImage(oldImagePath)
+        // If editing and there's an old image, handle it appropriately
+        const oldImageUrl = editingProject.image_url;
+        if (oldImageUrl && oldImageUrl !== formData.image_url) {
+          // Handle image replacement if needed
         }
 
         const { error } = await supabase
-          .from('projects')
+          .from('products')
           .update(projectData)
           .eq('id', editingProject.id)
 
         if (error) throw error
       } else {
         const { error } = await supabase
-          .from('projects')
+          .from('products')
           .insert([projectData])
 
         if (error) throw error
@@ -128,8 +132,7 @@ export default function ProjectsManager() {
     if (result.success) {
       setFormData({
         ...formData,
-        image_url: result.url || '',
-        image_path: result.path || ''
+        image_url: result.url || ''
       })
       setUploadError(null)
     } else {
@@ -140,22 +143,23 @@ export default function ProjectsManager() {
   const handleEdit = (project: Project) => {
     setEditingProject(project)
     setFormData({
-      name: project.name,
+      title: project.title,
       description: project.description,
       price: project.price.toString(),
       prices: {
-        complete: project.prices.complete.toString(),
+        full: project.prices.full.toString(),
         hardware: project.prices.hardware.toString(),
+        code: project.prices.code.toString(),
         mentorship: project.prices.mentorship.toString(),
-        mentorship_hardware: project.prices.mentorship_hardware.toString(),
-        other: project.prices.other.toString(),
+        hardware_mentorship: project.prices.hardware_mentorship.toString(),
+        code_mentorship: project.prices.code_mentorship.toString(),
       },
       image_url: project.image_url,
-      image_path: project.image_path || '',
-      difficulty: project.difficulty,
+      difficulty: (project.difficulty as 'beginner' | 'intermediate' | 'advanced') || 'beginner',
       category: project.category,
-      components: project.components.join(', '),
-      skills: project.skills.join(', ')
+      duration: project.duration,
+      features: Array.isArray(project.features) ? project.features.join(', ') : '',
+      requirements: Array.isArray(project.requirements) ? project.requirements.join(', ') : ''
     })
     setUploadError(null)
     setIsDialogOpen(true)
@@ -165,22 +169,13 @@ export default function ProjectsManager() {
     if (!confirm('Are you sure you want to delete this project?')) return
 
     try {
-      // Get the project to find the image path
-      const project = projects.find(p => p.id === id)
-      const imagePath = project?.image_path;
-
       // Delete the project from database
       const { error } = await supabase
-        .from('projects')
+        .from('products')
         .delete()
         .eq('id', id)
 
       if (error) throw error
-
-      // Delete the image from storage if it exists
-      if (imagePath) {
-        await deleteProjectImage(imagePath)
-      }
 
       await fetchProjects()
     } catch (error) {
@@ -190,22 +185,23 @@ export default function ProjectsManager() {
 
   const resetForm = () => {
     setFormData({
-      name: '',
+      title: '',
       description: '',
       price: '',
       prices: {
-        complete: '',
+        full: '',
         hardware: '',
+        code: '',
         mentorship: '',
-        mentorship_hardware: '',
-        other: '',
+        hardware_mentorship: '',
+        code_mentorship: '',
       },
       image_url: '',
-      image_path: '',
       difficulty: 'beginner',
       category: '',
-      components: '',
-      skills: ''
+      duration: '',
+      features: '',
+      requirements: ''
     })
     setEditingProject(null)
     setUploadError(null)
@@ -244,11 +240,11 @@ export default function ProjectsManager() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Project Name</Label>
+                  <Label htmlFor="title">Project Name</Label>
                   <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    id="title"
+                    value={formData.title}
+                    onChange={(e) => setFormData({...formData, title: e.target.value})}
                     required
                   />
                 </div>
@@ -265,11 +261,11 @@ export default function ProjectsManager() {
                   <Label className="mt-2">Prices by Option (₹)</Label>
                   <div className="grid grid-cols-2 gap-2">
                     <Input
-                      placeholder="Complete Project"
+                      placeholder="Full Kit"
                       type="number"
                       step="0.01"
-                      value={formData.prices.complete}
-                      onChange={e => setFormData({...formData, prices: {...formData.prices, complete: e.target.value}})}
+                      value={formData.prices.full}
+                      onChange={e => setFormData({...formData, prices: {...formData.prices, full: e.target.value}})}
                     />
                     <Input
                       placeholder="Hardware Only"
@@ -279,6 +275,13 @@ export default function ProjectsManager() {
                       onChange={e => setFormData({...formData, prices: {...formData.prices, hardware: e.target.value}})}
                     />
                     <Input
+                      placeholder="Code Only"
+                      type="number"
+                      step="0.01"
+                      value={formData.prices.code}
+                      onChange={e => setFormData({...formData, prices: {...formData.prices, code: e.target.value}})}
+                    />
+                    <Input
                       placeholder="Mentorship"
                       type="number"
                       step="0.01"
@@ -286,18 +289,18 @@ export default function ProjectsManager() {
                       onChange={e => setFormData({...formData, prices: {...formData.prices, mentorship: e.target.value}})}
                     />
                     <Input
-                      placeholder="Mentorship + Hardware"
+                      placeholder="Hardware + Mentorship"
                       type="number"
                       step="0.01"
-                      value={formData.prices.mentorship_hardware}
-                      onChange={e => setFormData({...formData, prices: {...formData.prices, mentorship_hardware: e.target.value}})}
+                      value={formData.prices.hardware_mentorship}
+                      onChange={e => setFormData({...formData, prices: {...formData.prices, hardware_mentorship: e.target.value}})}
                     />
                     <Input
-                      placeholder="Other"
+                      placeholder="Code + Mentorship"
                       type="number"
                       step="0.01"
-                      value={formData.prices.other}
-                      onChange={e => setFormData({...formData, prices: {...formData.prices, other: e.target.value}})}
+                      value={formData.prices.code_mentorship}
+                      onChange={e => setFormData({...formData, prices: {...formData.prices, code_mentorship: e.target.value}})}
                     />
                   </div>
                 </div>
@@ -353,23 +356,34 @@ export default function ProjectsManager() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="components">Components (comma-separated)</Label>
+                <Label htmlFor="duration">Duration</Label>
                 <Input
-                  id="components"
-                  value={formData.components}
-                  onChange={(e) => setFormData({...formData, components: e.target.value})}
-                  placeholder="Arduino Uno, LED, Resistor, etc."
+                  id="duration"
+                  value={formData.duration}
+                  onChange={(e) => setFormData({...formData, duration: e.target.value})}
+                  placeholder="e.g., 4-6 weeks"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="skills">Skills (comma-separated)</Label>
+                <Label htmlFor="features">Features (comma-separated)</Label>
                 <Input
-                  id="skills"
-                  value={formData.skills}
-                  onChange={(e) => setFormData({...formData, skills: e.target.value})}
-                  placeholder="Programming, Electronics, Soldering, etc."
+                  id="features"
+                  value={formData.features}
+                  onChange={(e) => setFormData({...formData, features: e.target.value})}
+                  placeholder="Voice control, Mobile app, Sensor integration, etc."
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="requirements">Requirements (comma-separated)</Label>
+                <Input
+                  id="requirements"
+                  value={formData.requirements}
+                  onChange={(e) => setFormData({...formData, requirements: e.target.value})}
+                  placeholder="Basic electronics, Arduino, JavaScript, etc."
                   required
                 />
               </div>
@@ -393,7 +407,7 @@ export default function ProjectsManager() {
         </div>
       ) : (
         <div className="grid gap-6">
-          {projects.length === 0 ? (
+          {!projects || projects.length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <Package className="w-12 h-12 text-gray-400 mb-4" />
@@ -412,7 +426,7 @@ export default function ProjectsManager() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-semibold">{project.name}</h3>
+                        <h3 className="text-xl font-semibold">{project.title}</h3>
                         <Badge className={getDifficultyColor(project.difficulty)}>
                           {project.difficulty}
                         </Badge>
@@ -421,24 +435,24 @@ export default function ProjectsManager() {
                       <p className="text-gray-600 mb-3">{project.description}</p>
                       <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
                         <span className="font-medium text-green-600">₹{project.price}</span>
-                        <span>{project.components.length} components</span>
-                        <span>{project.skills.length} skills</span>
+                        <span>{project.duration}</span>
+                        <span>{Array.isArray(project.features) ? project.features.length : 0} features</span>
                       </div>
                       <div className="flex flex-wrap gap-1">
-                        {project.skills.slice(0, 3).map((skill, index) => (
+                        {Array.isArray(project.features) && project.features.slice(0, 3).map((feature, index) => (
                           <Badge key={index} variant="secondary" className="text-xs">
-                            {skill}
+                            {feature}
                           </Badge>
                         ))}
-                        {project.skills.length > 3 && (
+                        {Array.isArray(project.features) && project.features.length > 3 && (
                           <Badge variant="secondary" className="text-xs">
-                            +{project.skills.length - 3} more
+                            +{project.features.length - 3} more
                           </Badge>
                         )}
                       </div>
                     </div>
                     <div className="flex items-center gap-2 ml-4">
-                      <Button variant="outline" size="sm" onClick={() => window.open(`/projects/${project.id}`, '_blank')}>
+                      <Button variant="outline" size="sm" onClick={() => window.open(`/projects/${project.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`, '_blank')}>
                         <Eye className="w-4 h-4" />
                       </Button>
                       <Button variant="outline" size="sm" onClick={() => handleEdit(project)}>
