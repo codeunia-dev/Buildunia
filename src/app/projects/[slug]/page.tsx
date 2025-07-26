@@ -154,7 +154,7 @@ export default function ProjectDetailPage() {
   const currentTypeCount = limits.typeCounts[itemType] || 0
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black w-full overflow-x-hidden">
       {/* Header */}
       <div className="bg-gray-900 border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">

@@ -115,7 +115,7 @@ export default function ProjectsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black w-full overflow-x-hidden">
       {/* Header */}
       <section className="bg-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

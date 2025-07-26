@@ -39,22 +39,22 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-black shadow-lg sticky top-0 z-50 border-b border-gray-800 !pointer-events-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex">
+    <nav className="bg-black shadow-lg sticky top-0 z-50 border-b border-gray-800 !pointer-events-auto w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="flex justify-between h-16 w-full">
+          <div className="flex items-center min-w-0">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="flex items-center space-x-3">
+              <Link href="/" className="flex items-center space-x-2 sm:space-x-3">
                 <Logo size="md" />
-                <span className="text-2xl font-bold text-white">BuildUnia</span>
+                <span className="text-xl sm:text-2xl font-bold text-white truncate">BuildUnia</span>
               </Link>
             </div>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <div className="hidden lg:ml-6 lg:flex lg:space-x-6 xl:space-x-8">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="border-transparent text-gray-300 hover:border-gray-400 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors"
+                  className="border-transparent text-gray-300 hover:border-gray-400 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors whitespace-nowrap"
                 >
                   {item.name}
                 </Link>
@@ -62,8 +62,8 @@ export default function Navbar() {
             </div>
           </div>
           
-          <div className="sm:ml-6 flex items-center space-x-4">
-            <Link href="/cart" className="relative p-2">
+          <div className="hidden lg:flex items-center space-x-3 xl:space-x-4 min-w-0">
+            <Link href="/cart" className="relative p-2 flex-shrink-0">
               <ShoppingCart className="h-6 w-6 text-gray-300" />
               {state.items.length > 0 && (
                 <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -73,22 +73,22 @@ export default function Navbar() {
             </Link>
             
             {hasCodeuniaAccess && (
-              <div className="hidden sm:flex items-center space-x-2">
-                <span className="text-xs text-green-400 bg-green-900/20 px-2 py-1 rounded">
+              <div className="hidden xl:flex items-center space-x-2 flex-shrink-0">
+                <span className="text-xs text-green-400 bg-green-900/20 px-2 py-1 rounded whitespace-nowrap">
                   Codeunia Access
                 </span>
               </div>
             )}
             
             {user ? (
-              <div className="flex items-center space-x-3">
-                <User className="h-6 w-6 text-gray-500" />
-                <span className="text-sm text-gray-700">{user?.email || 'Guest'}</span>
+              <div className="flex items-center space-x-2 xl:space-x-3 min-w-0">
+                <User className="h-6 w-6 text-gray-500 flex-shrink-0" />
+                <span className="text-sm text-gray-700 truncate max-w-32 xl:max-w-48">{user?.email || 'Guest'}</span>
                 {isAdmin && (
-                  <Button variant="outline" size="sm" asChild>
+                  <Button variant="outline" size="sm" asChild className="flex-shrink-0">
                     <Link href="/admin" className="flex items-center gap-1">
                       <Settings className="h-4 w-4" />
-                      Admin
+                      <span className="hidden xl:inline">Admin</span>
                     </Link>
                   </Button>
                 )}
@@ -97,15 +97,16 @@ export default function Navbar() {
                   variant="outline"
                   size="sm"
                   onClick={handleSignOut}
-                  className="!opacity-100 !pointer-events-auto"
+                  className="!opacity-100 !pointer-events-auto flex-shrink-0"
                   title="Sign out of your account"
                   disabled={false}
                 >
-                  Sign Out
+                  <span className="hidden xl:inline">Sign Out</span>
+                  <span className="xl:hidden">Logout</span>
                 </Button>
               </div>
             ) : (
-              <div className="flex space-x-2">
+              <div className="flex space-x-2 flex-shrink-0">
                 <Button variant="outline" size="sm" asChild>
                   <Link href="/auth/signin">Sign In</Link>
                 </Button>
@@ -116,8 +117,8 @@ export default function Navbar() {
             )}
           </div>
 
-          <div className="sm:hidden flex items-center">
-            <Link href="/cart" className="relative p-2 mr-2">
+          <div className="lg:hidden flex items-center space-x-2">
+            <Link href="/cart" className="relative p-2">
               <ShoppingCart className="h-6 w-6 text-gray-500" />
               {state.items.length > 0 && (
                 <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
