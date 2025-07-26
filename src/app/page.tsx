@@ -1,42 +1,21 @@
+'use client'
+
 import Link from 'next/link'
 import { ArrowRight, Code, Cpu, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase'
+import { Product } from '@/lib/supabase'
 
-// Mock data - replace with real data from Supabase
-const featuredProjects = [
-  {
-    id: '1',
-    name: 'Smart Home Automation',
-    description: 'Build a complete IoT system to control lights, fans, and security',
-    price: 89.99,
-    image_url: '/placeholder-project.jpg',
-    difficulty: 'intermediate' as const,
-    category: 'Arduino',
-    skills: ['Arduino', 'WiFi', 'Sensors', 'Mobile App']
-  },
-  {
-    id: '2',
-    name: 'Weather Station',
-    description: 'Create a professional weather monitoring system with cloud data',
-    price: 69.99,
-    image_url: '/placeholder-project.jpg',
-    difficulty: 'beginner' as const,
-    category: 'ESP32',
-    skills: ['ESP32', 'Sensors', 'Cloud', 'Dashboard']
-  },
-  {
-    id: '3',
-    name: 'Smart Agriculture Monitor',
-    description: 'Monitor soil moisture, temperature, and automate irrigation',
-    price: 99.99,
-    image_url: '/placeholder-project.jpg',
-    difficulty: 'advanced' as const,
-    category: 'Raspberry Pi',
-    skills: ['Raspberry Pi', 'Python', 'Automation', 'ML']
-  }
-]
+// Function to convert title to slug
+const titleToSlug = (title: string) => {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
 
 const features = [
   {
@@ -66,6 +45,64 @@ const getDifficultyColor = (difficulty: string) => {
 }
 
 export default function HomePage() {
+  const [featuredProjects, setFeaturedProjects] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchFeaturedProjects()
+  }, [])
+
+  const fetchFeaturedProjects = async () => {
+    try {
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('platform', 'buildunia')
+        .order('created_at', { ascending: false })
+        .limit(3)
+
+      if (error) {
+        console.error('Error fetching featured projects:', error)
+        return
+      }
+
+      // Parse the prices JSON for each product
+      const parsedProducts = data?.map(product => ({
+        ...product,
+        prices: typeof product.prices === 'string' ? JSON.parse(product.prices) : product.prices
+      })) || []
+      
+      setFeaturedProjects((parsedProducts as unknown as Product[]) || [])
+    } catch (error) {
+      console.error('Error fetching featured projects:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const getProductPrice = (product: Product) => {
+    try {
+      const prices = typeof product.prices === 'string' 
+        ? JSON.parse(product.prices) 
+        : product.prices
+      
+      return prices.full || product.price || 0
+    } catch (error) {
+      return product.price || 0
+    }
+  }
+
+  const formatPrice = (price: number) => {
+    if (!price || isNaN(price)) return '₹0'
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price)
+  }
+
   return (
     <div className="min-h-screen !bg-black">
       {/* Hero Section */}
@@ -103,46 +140,60 @@ export default function HomePage() {
               Start your IoT journey with these popular projects
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {featuredProjects.map((project) => (
-              <Card key={project.id} className="bg-gray-900 border-gray-700 hover:scale-105 transition-transform">
-                <CardHeader>
-                  <div className="aspect-video bg-gray-800 rounded-lg mb-4 flex items-center justify-center">
-                    <span className="text-gray-400">Project Image</span>
-                  </div>
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="outline" className="border-blue-500 text-blue-300">
-                      {project.category}
-                    </Badge>
-                    <span className={getDifficultyColor(project.difficulty)}>
-                      {project.difficulty}
-                    </span>
-                  </div>
-                  <CardTitle className="text-white">{project.name}</CardTitle>
-                  <CardDescription className="text-gray-300">
-                    {project.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.skills.map((skill) => (
-                      <Badge key={skill} variant="secondary" className="bg-gray-800 text-gray-300">
-                        {skill}
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="text-white text-xl">Loading featured projects...</div>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-3 gap-8">
+              {featuredProjects.map((project) => (
+                <Card key={project.id} className="bg-gray-900 border-gray-700 hover:scale-105 transition-transform">
+                  <CardHeader>
+                    <div className="aspect-video bg-gray-800 rounded-lg mb-4 flex items-center justify-center">
+                      {project.image_url ? (
+                        <img 
+                          src={project.image_url} 
+                          alt={project.title}
+                          className="w-full h-full object-cover rounded-lg"
+                        />
+                      ) : (
+                        <span className="text-gray-400">Project Image</span>
+                      )}
+                    </div>
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge variant="outline" className="border-blue-500 text-blue-300">
+                        {project.category}
                       </Badge>
-                    ))}
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-white">
-                      ₹{project.price}
-                    </span>
-                    <Button asChild>
-                      <Link href={`/projects/${project.id}`}>View Details</Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                      <span className={getDifficultyColor(project.difficulty)}>
+                        {project.difficulty}
+                      </span>
+                    </div>
+                    <CardTitle className="text-white">{project.title}</CardTitle>
+                    <CardDescription className="text-gray-300">
+                      {project.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.features?.slice(0, 3).map((feature: string) => (
+                        <Badge key={feature} variant="secondary" className="bg-gray-800 text-gray-300">
+                          {feature}
+                        </Badge>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl font-bold text-white">
+                        {formatPrice(getProductPrice(project))}
+                      </span>
+                      <Button asChild>
+                        <Link href={`/projects/${titleToSlug(project.title)}`}>View Details</Link>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
           <div className="text-center mt-12">
             <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-black" asChild>
               <Link href="/projects">View All Projects</Link>
