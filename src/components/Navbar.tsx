@@ -137,72 +137,82 @@ export default function Navbar() {
       </div>
 
       {isOpen && (
-        <div className="sm:hidden fixed inset-0 z-[100] bg-black bg-opacity-95">
-          <div className="flex flex-col h-full">
-            <div className="flex justify-between items-center p-4 border-b border-gray-700">
-              <span className="text-white font-semibold">Menu</span>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-gray-400 hover:text-white"
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-            <div className="flex-1 pt-2 pb-3 space-y-1">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="border-transparent text-gray-300 hover:bg-gray-800 hover:border-gray-600 hover:text-white block pl-4 pr-4 py-3 border-l-4 text-base font-medium transition-colors"
+        <>
+          {/* Backdrop */}
+          <div className="sm:hidden fixed inset-0 z-[99] bg-black bg-opacity-75" onClick={() => setIsOpen(false)} />
+          {/* Centered Menu Modal */}
+          <div className="sm:hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <div className="bg-gray-900 rounded-lg shadow-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto border border-gray-700">
+              {/* Header */}
+              <div className="flex justify-between items-center p-4 border-b border-gray-700">
+                <span className="text-white font-semibold text-lg">Menu</span>
+                <button
                   onClick={() => setIsOpen(false)}
+                  className="text-gray-400 hover:text-white p-2 rounded-md hover:bg-gray-800"
                 >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-            <div className="pt-4 pb-6 border-t border-gray-700 px-4">
-              {user ? (
-                <div className="space-y-4">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <User className="h-8 w-8 text-gray-400" />
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+              
+              {/* Navigation Links */}
+              <div className="py-2">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="text-gray-300 hover:bg-gray-800 hover:text-white block px-4 py-3 text-base font-medium transition-colors border-l-4 border-transparent hover:border-blue-500"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+              
+              {/* User Section */}
+              <div className="border-t border-gray-700 px-4 py-4">
+                {user ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0">
+                        <User className="h-8 w-8 text-gray-400" />
+                      </div>
+                      <div className="ml-3">
+                        <div className="text-base font-medium text-white">{user?.email || 'Guest'}</div>
+                        {hasCodeuniaAccess && (
+                          <div className="text-xs text-green-400 bg-green-900/20 px-2 py-1 rounded mt-1 w-fit">
+                            Codeunia Access
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <div className="ml-3">
-                      <div className="text-base font-medium text-white">{user?.email || 'Guest'}</div>
-                      {hasCodeuniaAccess && (
-                        <div className="text-xs text-green-400 bg-green-900/20 px-2 py-1 rounded mt-1 w-fit">
-                          Codeunia Access
-                        </div>
+                    <div className="flex flex-col gap-2">
+                      {isAdmin && (
+                        <Button variant="outline" size="sm" asChild className="w-full">
+                          <Link href="/admin" className="flex items-center justify-center gap-2">
+                            <Settings className="h-4 w-4" />
+                            Admin
+                          </Link>
+                        </Button>
                       )}
+                      <Button variant="outline" size="sm" onClick={handleSignOut} className="w-full !opacity-100 !pointer-events-auto">
+                        Sign Out
+                      </Button>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    {isAdmin && (
-                      <Button variant="outline" size="sm" asChild className="w-full">
-                        <Link href="/admin" className="flex items-center justify-center gap-2">
-                          <Settings className="h-4 w-4" />
-                          Admin
-                        </Link>
-                      </Button>
-                    )}
-                    <Button variant="outline" size="sm" onClick={handleSignOut} className="w-full !opacity-100 !pointer-events-auto">
-                      Sign Out
+                ) : (
+                  <div className="space-y-3">
+                    <Button variant="outline" size="sm" asChild className="w-full">
+                      <Link href="/auth/signin">Sign In</Link>
+                    </Button>
+                    <Button size="sm" asChild className="w-full">
+                      <Link href="/auth/signup">Sign Up</Link>
                     </Button>
                   </div>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <Button variant="outline" size="sm" asChild className="w-full">
-                    <Link href="/auth/signin">Sign In</Link>
-                  </Button>
-                  <Button size="sm" asChild className="w-full">
-                    <Link href="/auth/signup">Sign Up</Link>
-                  </Button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
     </nav>
   )
