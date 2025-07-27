@@ -1,5 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
+import { uploadRateLimit } from '@/lib/rateLimit'
+import { csrfMiddleware } from '@/lib/csrf'
+import { validateFileUpload, sanitizeFileName } from '@/lib/sanitize'
 
 // Create admin client with service role
 const createAdminClient = () => {
@@ -17,6 +20,18 @@ const createAdminClient = () => {
 
 export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting
+    const rateLimitResult = uploadRateLimit(request);
+    if (rateLimitResult) {
+      return rateLimitResult;
+    }
+
+    // Apply CSRF protection
+    const csrfResult = await csrfMiddleware(request);
+    if (csrfResult) {
+      return csrfResult;
+    }
+
     console.log('🔄 API: Starting image upload...')
     
     const formData = await request.formData()
@@ -38,26 +53,19 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
-    if (!allowedTypes.includes(file.type)) {
+    // Enhanced file validation using sanitization utility
+    try {
+      validateFileUpload(file);
+    } catch (validationError) {
       return NextResponse.json(
-        { success: false, error: 'Please upload a valid image file (JPEG, PNG, WebP, or GIF)' },
+        { success: false, error: validationError instanceof Error ? validationError.message : 'Invalid file' },
         { status: 400 }
       )
     }
 
-    // Validate file size (5MB limit)
-    const maxSize = 5 * 1024 * 1024 // 5MB in bytes
-    if (file.size > maxSize) {
-      return NextResponse.json(
-        { success: false, error: 'Image file must be smaller than 5MB' },
-        { status: 400 }
-      )
-    }
-
-    // Generate unique filename
+    // Generate unique filename with sanitization
     const fileExt = file.name.split('.').pop()
+    const sanitizedFileName = sanitizeFileName(file.name)
     const fileName = `${projectId || Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
     const filePath = `projects/${fileName}`
 

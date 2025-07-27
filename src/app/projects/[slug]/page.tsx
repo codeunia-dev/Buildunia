@@ -1,13 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ShoppingCart, Star, CheckCircle, Cpu, Wrench, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useCart } from '@/contexts/CartContext'
+import { useBuilduniaAuth } from '@/contexts/BuilduniaAuthContext'
 import { Product } from '@/lib/supabase'
 import { createClient } from '@/lib/supabase'
 
@@ -30,10 +31,12 @@ const titleToSlug = (title: string) => {
 
 export default function ProjectDetailPage() {
   const params = useParams()
+  const router = useRouter()
   const { addItem, clearCart, getCartLimits } = useCart()
+  const { user, loading } = useBuilduniaAuth()
   const [addedToCart, setAddedToCart] = useState(false)
   const [product, setProduct] = useState<Product | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loadingProduct, setLoadingProduct] = useState(true)
   const [error, setError] = useState<string | null>(null)
   
   const productSlug = params.slug as string
@@ -69,11 +72,11 @@ export default function ProjectDetailPage() {
     } catch (error) {
       console.error('Error fetching product:', error)
     } finally {
-      setLoading(false)
+      setLoadingProduct(false)
     }
   }
 
-  if (loading) {
+  if (loadingProduct) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
@@ -114,15 +117,22 @@ export default function ProjectDetailPage() {
   const handleBuyNow = async () => {
     console.log('Buy now clicked for product:', product.title)
     setError(null)
+    
+    // Add item to cart first (this works regardless of auth state)
     clearCart()
     const result = addItem(product)
     console.log('Buy now result:', result)
     
-    if (result.success) {
-      window.location.href = '/checkout'
-    } else {
+    if (!result.success) {
       setError(result.error || 'Failed to add item to cart')
+      return
     }
+    
+    // Wait a moment for cart state to update
+    await new Promise(resolve => setTimeout(resolve, 100))
+    
+    // Now redirect to checkout - let checkout page handle auth
+    router.push('/checkout')
   }
 
   const formatPrice = (price: number) => {

@@ -32,21 +32,21 @@ export function Logo({ className, size = 'md' }: LogoProps) {
       <g className="ghost-face">
         {/* The > symbol - same as favicon */}
         <path 
-          d="M65 85 L95 105 L65 125" 
+          d="M80 85 L100 105 L80 125" 
           stroke="#000000" 
-          strokeWidth="25" 
+          strokeWidth="15" 
           fill="none" 
           strokeLinecap="round" 
           strokeLinejoin="round"
         />
         {/* The _ symbol - same as favicon */}
         <line 
-          x1="85" 
+          x1="110" 
           y1="125" 
-          x2="135" 
+          x2="140" 
           y2="125" 
           stroke="#000000" 
-          strokeWidth="25" 
+          strokeWidth="15" 
           strokeLinecap="round"
         />
       </g>

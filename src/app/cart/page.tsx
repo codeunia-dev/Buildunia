@@ -6,7 +6,7 @@ import { Minus, Plus, Trash2, ShoppingBag, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useCart } from '@/contexts/CartContext'
-import { formatPrice } from '@/lib/stripe'
+import { formatPrice } from '@/lib/utils'
 
 export default function CartPage() {
   const { state, updateQuantity, removeItem, getCartLimits } = useCart()

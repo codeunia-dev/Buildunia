@@ -159,10 +159,10 @@ export default function MentorshipPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-gray-950 to-gray-900 w-screen max-w-none overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-black via-gray-950 to-gray-900 relative">
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-black via-gray-950 to-gray-900 py-24 w-screen max-w-none px-0 sm:px-6 lg:px-8">
-        <div className="w-full px-4 md:max-w-4xl md:mx-auto text-center">
+      <section className="bg-gradient-to-b from-black via-gray-950 to-gray-900 py-24 relative z-10">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-lg">
             Accelerate Your IoT Journey with
             <span className="text-blue-500"> Expert Mentorship</span>
@@ -178,32 +178,32 @@ export default function MentorshipPage() {
       </section>
 
       {/* Mentor Profile */}
-      <section className="py-24 md:py-24 py-12 bg-gradient-to-b from-gray-950 to-black border-b border-blue-900/30 w-screen max-w-none px-0">
-        <div className="w-full px-4 md:max-w-6xl md:mx-auto">
-          <div className="text-center mb-10 md:mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 md:mb-4 tracking-tight">Meet Your Mentors</h2>
-            <p className="text-base md:text-xl text-gray-400 font-light">Learn from real-world builders leading India&apos;s next-gen IoT movement</p>
+      <section className="py-24 bg-gradient-to-b from-gray-950 to-black border-b border-blue-900/30 relative z-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">Meet Your Mentors</h2>
+            <p className="text-xl text-gray-400 font-light">Learn from real-world builders leading India&apos;s next-gen IoT movement</p>
           </div>
           <MentorCards onMentorClick={setSelectedMentor} />
         </div>
       </section>
 
       {/* Mentorship Packages */}
-      <section id="packages" className="py-24 bg-gradient-to-b from-gray-900 to-gray-950">
+      <section id="packages" className="py-24 bg-gradient-to-b from-gray-900 to-gray-950 relative z-30 mt-0 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4 tracking-tight">Choose Your Mentorship Package</h2>
             <p className="text-xl text-gray-300 font-light">Flexible options to fit your learning style and budget</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-10">
+          <div className="grid md:grid-cols-3 gap-10 relative overflow-visible mb-8">
             {mentorshipPackages.map((pkg) => (
-              <Card key={pkg.id} className={`relative bg-gradient-to-br from-gray-800 to-gray-900 border-0 shadow-xl rounded-2xl transition-transform hover:scale-105 ${pkg.popular ? 'ring-4 ring-blue-500' : ''}`}>
+              <Card key={pkg.id} className={`relative bg-gradient-to-br from-gray-800 to-gray-900 border-0 shadow-xl rounded-2xl transition-transform hover:scale-105 z-10 overflow-hidden min-h-[600px] ${pkg.popular ? 'ring-4 ring-blue-500' : ''}`}>
                 {pkg.popular && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-20">
                     <Badge className="bg-blue-500 text-white px-4 py-1 rounded-full shadow-lg">Most Popular</Badge>
                   </div>
                 )}
-                <CardHeader className="text-center">
+                <CardHeader className="text-center pb-4 pt-6">
                   <CardTitle className="text-3xl text-white font-bold mb-2">{pkg.name}</CardTitle>
                   <CardDescription className="text-gray-300 text-lg mb-2 font-light">{pkg.description}</CardDescription>
                   <div className="mt-4">
@@ -211,8 +211,8 @@ export default function MentorshipPage() {
                     <span className="text-gray-400 text-lg">/{pkg.duration}</span>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3 mb-8">
+                <CardContent className="pb-6 flex flex-col h-full">
+                  <ul className="space-y-3 mb-8 flex-grow">
                     {pkg.features.map((feature, index) => (
                       <li key={index} className="flex items-start gap-3">
                         <CheckCircle className="h-6 w-6 text-green-400 flex-shrink-0 mt-0.5 transition-transform hover:scale-110" />
@@ -221,7 +221,7 @@ export default function MentorshipPage() {
                     ))}
                   </ul>
                   <Button 
-                    className="w-full py-3 text-lg font-semibold shadow-md hover:scale-[1.03] transition-transform" 
+                    className="w-full py-3 text-lg font-semibold shadow-md hover:scale-[1.03] transition-transform mt-auto" 
                     variant={pkg.popular ? "default" : "outline"}
                     onClick={() => handleBookSession(pkg)}
                   >
@@ -235,7 +235,7 @@ export default function MentorshipPage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-24 bg-gradient-to-b from-gray-950 to-black">
+      <section className="py-24 bg-gradient-to-b from-gray-950 to-black relative z-40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4 tracking-tight">How Mentorship Works</h2>
@@ -275,7 +275,7 @@ export default function MentorshipPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-b from-black to-gray-950">
+      <section className="py-24 bg-gradient-to-b from-black to-gray-950 relative z-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-white mb-6 tracking-tight">Ready to Accelerate Your Learning?</h2>
           <p className="text-xl text-gray-300 mb-8 font-light">

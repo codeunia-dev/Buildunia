@@ -62,7 +62,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     // Get initial session
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }: { data: { session: any } }) => {
       const currentUser = session?.user ?? null
       setUser(currentUser)
       if (currentUser) {
@@ -70,10 +70,13 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
         setProfile(userProfile)
       }
       setLoading(false)
+    }).catch((error: any) => {
+      console.error('Error getting initial session:', error);
+      setLoading(false);
     })
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event: any, session: any) => {
       const currentUser = session?.user ?? null
       setUser(currentUser)
       if (currentUser) {

@@ -5,8 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { ShoppingCart, Search, DollarSign, Package, Calendar, User } from 'lucide-react'
-import { createClient } from '@/lib/supabase'
+import { ShoppingCart, Search, DollarSign, Package, Calendar, User, Eye } from 'lucide-react'
+import { useBuilduniaAuth } from '@/contexts/BuilduniaAuthContext'
 
 interface Order {
   id: string
@@ -14,14 +14,19 @@ interface Order {
   total: number
   status: string
   platform: string
-  shipping_address: any
+  shipping_address: {
+    name: string
+    email: string
+    phone: string
+    address: string
+    city: string
+    state: string
+    pincode: string
+    country: string
+  }
   digipin?: string
   created_at: string
   updated_at: string
-  user?: {
-    email?: string
-    full_name?: string
-  }
   items?: OrderItem[]
 }
 
@@ -40,7 +45,7 @@ interface OrderItem {
 }
 
 export default function OrdersManager() {
-  const supabase = createClient();
+  const { user } = useBuilduniaAuth();
   const [orders, setOrders] = useState<Order[]>([])
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -55,8 +60,8 @@ export default function OrdersManager() {
     if (searchTerm) {
       filtered = filtered.filter(order => 
         order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (order.user?.email && order.user.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (order.user?.full_name && order.user.full_name.toLowerCase().includes(searchTerm.toLowerCase()))
+        (order.shipping_address?.email && order.shipping_address.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (order.shipping_address?.name && order.shipping_address.name.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
 
@@ -77,46 +82,25 @@ export default function OrdersManager() {
     try {
       console.log('Fetching orders...')
       
-      // Fetch orders with user information
-      const { data: ordersData, error: ordersError } = await supabase
-        .from('orders')
-        .select(`
-          *,
-          user:profiles!orders_user_id_fkey(email, full_name)
-        `)
-        .order('created_at', { ascending: false })
+      // Use API endpoint to fetch orders
+      const response = await fetch('/api/orders/admin', {
+        credentials: 'include'
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch orders')
+      }
 
-      if (ordersError) throw ordersError
-
-      console.log('Fetched orders:', ordersData?.length || 0, 'orders')
-
-      // Fetch order items for each order
-      const ordersWithItems = await Promise.all(
-        (ordersData || []).map(async (order) => {
-          const { data: itemsData, error: itemsError } = await supabase
-            .from('order_items')
-            .select(`
-              *,
-              product:products(title, category)
-            `)
-            .eq('order_id', order.id as string)
-
-          if (itemsError) {
-            console.error('Error fetching items for order', order.id, itemsError)
-            return { ...order, items: [] }
-          }
-
-          return { ...order, items: itemsData || [] }
-        })
-      )
-
-      setOrders(ordersWithItems as unknown as Order[])
+      const data = await response.json()
+      console.log('Fetched orders:', data.orders?.length || 0, 'orders')
+      
+      setOrders(data.orders || [])
     } catch (error) {
       console.error('Error fetching orders:', error)
     } finally {
       setIsLoading(false)
     }
-  }, [supabase]);
+  }, []);
 
   useEffect(() => {
     fetchOrders()
@@ -128,12 +112,19 @@ export default function OrdersManager() {
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
-      const { error } = await supabase
-        .from('orders')
-        .update({ status: newStatus })
-        .eq('id', orderId)
+      const response = await fetch(`/api/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+        credentials: 'include'
+      })
 
-      if (error) throw error
+      if (!response.ok) {
+        throw new Error('Failed to update order status')
+      }
+
       await fetchOrders()
     } catch (error) {
       console.error('Error updating order status:', error)
@@ -300,8 +291,8 @@ export default function OrdersManager() {
                           </Badge>
                         </div>
                         <p className="text-sm text-gray-600">
-                          {order.user?.email || 'Guest User'}
-                          {order.user?.full_name && ` (${order.user.full_name})`}
+                          {order.shipping_address?.email || 'Guest User'}
+                          {order.shipping_address?.name && ` (${order.shipping_address.name})`}
                         </p>
                         <p className="text-xs text-gray-500">
                           {new Date(order.created_at).toLocaleDateString()} at {new Date(order.created_at).toLocaleTimeString()}
@@ -325,7 +316,7 @@ export default function OrdersManager() {
                         {order.items.map((item) => (
                           <div key={item.id} className="flex justify-between text-sm">
                             <span>
-                              {item.product?.title || `Product ${item.product_id.slice(0, 8)}`}
+                              {item.product?.title || `Product ${item.product_id ? item.product_id.slice(0, 8) : 'Unknown'}`}
                               {item.option_selected && item.option_selected !== 'full' && (
                                 <span className="text-gray-500 ml-1">({item.option_selected})</span>
                               )}
@@ -357,6 +348,16 @@ export default function OrdersManager() {
 
                   {/* Action Buttons */}
                   <div className="flex gap-2 mt-3 pt-3 border-t">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      asChild
+                    >
+                      <a href={`/receipt/${order.id}`} target="_blank" rel="noopener noreferrer">
+                        <Eye className="h-4 w-4 mr-1" />
+                        View Receipt
+                      </a>
+                    </Button>
                     {order.status === 'pending' && (
                       <Button
                         size="sm"

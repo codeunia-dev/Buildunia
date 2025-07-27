@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase';
+import { createServerClient } from '@/lib/supabase-server';
+import { csrfMiddleware } from '@/lib/csrf';
 
 export async function POST(req: NextRequest) {
-  const supabase = createClient();
+  // Apply CSRF protection
+  const csrfResult = await csrfMiddleware(req);
+  if (csrfResult) {
+    return csrfResult;
+  }
+
+  const supabase = await createServerClient();
   const data = await req.json();
 
   const { user_id, package_id, package_name, price, mentor_preference, preferred_time, notes } = data;
