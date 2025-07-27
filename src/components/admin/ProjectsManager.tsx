@@ -33,6 +33,7 @@ export default function ProjectsManager() {
       code_mentorship: '',
     },
     image_url: '',
+    image_path: '', // Add support for storage bucket path
     difficulty: 'beginner' as 'beginner' | 'intermediate' | 'advanced',
     category: '',
     duration: '',
@@ -88,6 +89,7 @@ export default function ProjectsManager() {
           code_mentorship: parseFloat(formData.prices.code_mentorship),
         },
         image_url: formData.image_url,
+        image_path: formData.image_path, // Include storage bucket path
         difficulty: formData.difficulty,
         category: formData.category,
         duration: formData.duration,
@@ -132,7 +134,8 @@ export default function ProjectsManager() {
     if (result.success) {
       setFormData({
         ...formData,
-        image_url: result.url || ''
+        image_url: result.url || '',
+        image_path: result.path || '' // Store the storage bucket path
       })
       setUploadError(null)
     } else {
@@ -154,7 +157,8 @@ export default function ProjectsManager() {
         hardware_mentorship: project.prices.hardware_mentorship.toString(),
         code_mentorship: project.prices.code_mentorship.toString(),
       },
-      image_url: project.image_url,
+      image_url: project.image_url || '',
+      image_path: project.image_path || '', // Add missing image_path field
       difficulty: (project.difficulty as 'beginner' | 'intermediate' | 'advanced') || 'beginner',
       category: project.category,
       duration: project.duration,
@@ -197,6 +201,7 @@ export default function ProjectsManager() {
         code_mentorship: '',
       },
       image_url: '',
+      image_path: '', // Add missing image_path field
       difficulty: 'beginner',
       category: '',
       duration: '',
