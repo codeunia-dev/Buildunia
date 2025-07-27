@@ -20,74 +20,38 @@ export const uploadProjectImage = async (
       lastModified: file.lastModified
     })
 
-    // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
-    if (!allowedTypes.includes(file.type)) {
-      const error = 'Please upload a valid image file (JPEG, PNG, WebP, or GIF)'
-      console.error('❌ File type validation failed:', file.type)
-      return { success: false, error }
+    // Create FormData for the API request
+    const formData = new FormData()
+    formData.append('file', file)
+    if (projectId) {
+      formData.append('projectId', projectId)
     }
 
-    // Validate file size (5MB limit)
-    const maxSize = 5 * 1024 * 1024 // 5MB in bytes
-    if (file.size > maxSize) {
-      const error = 'Image file must be smaller than 5MB'
-      console.error('❌ File size validation failed:', `${(file.size / 1024 / 1024).toFixed(2)}MB`)
-      return { success: false, error }
-    }
+    console.log('☁️ Uploading to server API...')
 
-    // Generate unique filename
-    const fileExt = file.name.split('.').pop()
-    const fileName = `${projectId || Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
-    const filePath = `projects/${fileName}`
+    // Upload via our secure API route
+    const response = await fetch('/api/upload-image', {
+      method: 'POST',
+      body: formData,
+    })
 
-    console.log('📝 Generated file path:', filePath)
+    const result = await response.json()
 
-    // Get supabase client
-    const supabase = createClient();
-
-    console.log('☁️ Uploading to Supabase Storage...')
-
-    // Upload file to Supabase Storage
-    const { data, error } = await supabase.storage
-      .from('project-images')
-      .upload(filePath, file, {
-        cacheControl: '3600',
-        upsert: false
-      })
-
-    if (error) {
-      console.error('❌ Upload error:', error)
-      
-      // Provide more specific error messages
-      let userFriendlyError = error.message
-      if (error.message.includes('Bucket not found')) {
-        userFriendlyError = 'Storage bucket not found. Please contact administrator to set up image storage.'
-      } else if (error.message.includes('Row Level Security')) {
-        userFriendlyError = 'You do not have permission to upload images. Please ensure you have admin privileges.'
-      } else if (error.message.includes('policies')) {
-        userFriendlyError = 'Storage permissions not configured. Please contact administrator.'
-      }
-      
+    if (!response.ok || !result.success) {
+      console.error('❌ Upload error:', result.error)
       return {
         success: false,
-        error: userFriendlyError
+        error: result.error || 'Failed to upload image'
       }
     }
 
-    console.log('✅ Upload successful:', data)
-
-    // Get public URL
-    const { data: { publicUrl } } = supabase.storage
-      .from('project-images')
-      .getPublicUrl(filePath)
-
-    console.log('🔗 Generated public URL:', publicUrl)
+    console.log('✅ Upload successful:', result)
+    console.log('🔗 Generated public URL:', result.url)
 
     return {
       success: true,
-      url: publicUrl,
-      path: filePath
+      url: result.url,
+      path: result.path
     }
   } catch (error) {
     console.error('💥 Unexpected upload error:', error)
@@ -108,7 +72,7 @@ export const deleteProjectImage = async (imagePath: string): Promise<boolean> =>
   try {
     const supabase = createClient();
     const { error } = await supabase.storage
-      .from('project-images')
+      .from('buildunia.project.pic')
       .remove([imagePath])
 
     if (error) {
@@ -128,7 +92,7 @@ export const getImageUrl = (imagePath: string): string => {
   
   const supabase = createClient();
   const { data: { publicUrl } } = supabase.storage
-    .from('project-images')
+    .from('buildunia.project.pic')
     .getPublicUrl(imagePath)
   
   return publicUrl

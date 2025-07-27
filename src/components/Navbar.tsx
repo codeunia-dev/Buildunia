@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Menu, X, ShoppingCart, User, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/logo'
@@ -10,12 +11,10 @@ import { useCart } from '@/contexts/CartContext'
 import { useRouter } from 'next/navigation'
 
 export default function Navbar() {
-  // NOTE: In the future, admin/auth should be handled by Codeunia SSO/auth.
   const [isOpen, setIsOpen] = useState(false)
   const { user, loading, signOut, hasCodeuniaAccess } = useBuilduniaAuth()
   const { state } = useCart()
   const router = useRouter()
-  // Only codeunia@gmail.com is admin
   const isAdmin = user?.email === 'codeunia@gmail.com';
 
   const navigation = [
@@ -26,44 +25,51 @@ export default function Navbar() {
     { name: 'Contact', href: '/contact' },
   ]
 
-  // Helper for sign out with redirect
   const handleSignOut = async () => {
-    console.log('Sign Out button clicked');
     try {
       await signOut();
-      console.log('Sign out successful, redirecting...');
       router.push('/auth/signin');
     } catch (error) {
       console.error('Error during sign out:', error);
     }
   }
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
+    return () => {
+      document.body.classList.remove('overflow-hidden');
+    };
+  }, [isOpen]);
+
   return (
-    <nav className="bg-black shadow-lg sticky top-0 z-50 border-b border-gray-800 !pointer-events-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex">
+    <nav className="bg-black shadow-lg sticky top-0 z-50 border-b border-gray-800 !pointer-events-auto w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="flex justify-between h-16 w-full">
+          <div className="flex items-center min-w-0">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="flex items-center space-x-3">
+              <Link href="/" className="flex items-center space-x-2 sm:space-x-3">
                 <Logo size="md" />
-                <span className="text-2xl font-bold text-white">BuildUnia</span>
+                <span className="text-xl sm:text-2xl font-bold text-white truncate">BuildUnia</span>
               </Link>
             </div>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <div className="hidden lg:ml-6 lg:flex lg:space-x-6 xl:space-x-8">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="border-transparent text-gray-300 hover:border-gray-400 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors"
+                  className="border-transparent text-gray-300 hover:border-gray-400 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors whitespace-nowrap"
                 >
                   {item.name}
                 </Link>
               ))}
             </div>
           </div>
-          
-          <div className="sm:ml-6 flex items-center space-x-4">
-            <Link href="/cart" className="relative p-2">
+          <div className="hidden lg:flex items-center space-x-3 xl:space-x-4 min-w-0">
+            <Link href="/cart" className="relative p-2 flex-shrink-0">
               <ShoppingCart className="h-6 w-6 text-gray-300" />
               {state.items.length > 0 && (
                 <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -71,24 +77,22 @@ export default function Navbar() {
                 </span>
               )}
             </Link>
-            
             {hasCodeuniaAccess && (
-              <div className="hidden sm:flex items-center space-x-2">
-                <span className="text-xs text-green-400 bg-green-900/20 px-2 py-1 rounded">
+              <div className="hidden xl:flex items-center space-x-2 flex-shrink-0">
+                <span className="text-xs text-green-400 bg-green-900/20 px-2 py-1 rounded whitespace-nowrap">
                   Codeunia Access
                 </span>
               </div>
             )}
-            
             {user ? (
-              <div className="flex items-center space-x-3">
-                <User className="h-6 w-6 text-gray-500" />
-                <span className="text-sm text-gray-700">{user?.email || 'Guest'}</span>
+              <div className="flex items-center space-x-2 xl:space-x-3 min-w-0">
+                <User className="h-6 w-6 text-gray-500 flex-shrink-0" />
+                <span className="text-sm text-gray-700 truncate max-w-32 xl:max-w-48">{user?.email || 'Guest'}</span>
                 {isAdmin && (
-                  <Button variant="outline" size="sm" asChild>
+                  <Button variant="outline" size="sm" asChild className="flex-shrink-0">
                     <Link href="/admin" className="flex items-center gap-1">
                       <Settings className="h-4 w-4" />
-                      Admin
+                      <span className="hidden xl:inline">Admin</span>
                     </Link>
                   </Button>
                 )}
@@ -97,15 +101,16 @@ export default function Navbar() {
                   variant="outline"
                   size="sm"
                   onClick={handleSignOut}
-                  className="!opacity-100 !pointer-events-auto"
+                  className="!opacity-100 !pointer-events-auto flex-shrink-0"
                   title="Sign out of your account"
                   disabled={false}
                 >
-                  Sign Out
+                  <span className="hidden xl:inline">Sign Out</span>
+                  <span className="xl:hidden">Logout</span>
                 </Button>
               </div>
             ) : (
-              <div className="flex space-x-2">
+              <div className="flex space-x-2 flex-shrink-0">
                 <Button variant="outline" size="sm" asChild>
                   <Link href="/auth/signin">Sign In</Link>
                 </Button>
@@ -115,9 +120,8 @@ export default function Navbar() {
               </div>
             )}
           </div>
-
-          <div className="sm:hidden flex items-center">
-            <Link href="/cart" className="relative p-2 mr-2">
+          <div className="lg:hidden flex items-center space-x-2">
+            <Link href="/cart" className="relative p-2">
               <ShoppingCart className="h-6 w-6 text-gray-500" />
               {state.items.length > 0 && (
                 <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -134,57 +138,71 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-
-      {isOpen && (
-        <div className="sm:hidden fixed inset-0 z-[100] bg-black bg-opacity-90">
-          <div className="pt-2 pb-3 space-y-1">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="border-transparent text-gray-300 hover:bg-gray-800 hover:border-gray-600 hover:text-white block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-                onClick={() => setIsOpen(false)}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-          <div className="pt-4 pb-3 border-t border-gray-700">
-            {user ? (
-              <div className="flex items-center px-4">
-                <div className="flex-shrink-0">
-                  <User className="h-8 w-8 text-gray-500" />
-                </div>
-                <div className="ml-3">
-                  <div className="text-base font-medium text-gray-800">{user?.email || 'Guest'}</div>
-                  <div className="flex gap-2 mt-2">
+      {isOpen && createPortal(
+        <div className="fixed inset-0 z-[99999] bg-black/95 flex items-center justify-center">
+          <div className="relative w-full max-w-sm mx-auto bg-gray-900 rounded-xl shadow-2xl border border-gray-700 flex flex-col">
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none"
+              aria-label="Close menu"
+            >
+              <X className="h-6 w-6" />
+            </button>
+            <div className="flex flex-col gap-2 py-8 px-6">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-200 hover:bg-gray-800 hover:text-white rounded-md px-4 py-3 text-base font-medium transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+            <div className="border-t border-gray-700 px-6 py-6">
+              {user ? (
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center">
+                    <User className="h-8 w-8 text-gray-400" />
+                    <div className="ml-3">
+                      <div className="text-base font-medium text-white">{user?.email || 'Guest'}</div>
+                      {hasCodeuniaAccess && (
+                        <div className="text-xs text-green-400 bg-green-900/20 px-2 py-1 rounded mt-1 w-fit">
+                          Codeunia Access
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
                     {isAdmin && (
-                      <Button variant="outline" size="sm" asChild>
-                        <Link href="/admin" className="flex items-center gap-1">
-                          <Settings className="h-3 w-3" />
+                      <Button variant="outline" size="sm" asChild className="w-full">
+                        <Link href="/admin" className="flex items-center justify-center gap-2">
+                          <Settings className="h-4 w-4" />
                           Admin
                         </Link>
                       </Button>
                     )}
-                    <Button variant="outline" size="sm" onClick={handleSignOut} className="!opacity-100 !pointer-events-auto">
+                    <Button variant="outline" size="sm" onClick={handleSignOut} className="w-full !opacity-100 !pointer-events-auto">
                       Sign Out
                     </Button>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div className="px-4 space-y-2">
-                <Button variant="outline" size="sm" asChild className="w-full">
-                  <Link href="/auth/signin">Sign In</Link>
-                </Button>
-                <Button size="sm" asChild className="w-full">
-                  <Link href="/auth/signup">Sign Up</Link>
-                </Button>
-              </div>
-            )}
+              ) : (
+                <div className="flex flex-col gap-3">
+                  <Button variant="outline" size="sm" asChild className="w-full">
+                    <Link href="/auth/signin">Sign In</Link>
+                  </Button>
+                  <Button size="sm" asChild className="w-full">
+                    <Link href="/auth/signup">Sign Up</Link>
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </nav>
   )
-}
+} 

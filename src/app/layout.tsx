@@ -46,8 +46,10 @@ export default function RootLayout({
         <BuilduniaAuthProvider>
           <CartProvider>
             <Navbar />
-            <main className="flex-1 !bg-black">
-              {children}
+            <main className="flex-1 !bg-black w-full overflow-x-hidden">
+              <div className="w-full max-w-full">
+                {children}
+              </div>
             </main>
             <Footer />
           </CartProvider>

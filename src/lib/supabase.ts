@@ -19,6 +19,7 @@ export interface Project {
   title: string
   description: string
   image_url: string
+  image_path?: string // Add support for storage bucket path
   platform: 'codeunia' | 'buildunia'
   category: string
   difficulty: string
@@ -43,7 +44,8 @@ export interface Product {
   id: string
   title: string
   description: string
-  image_url: string
+  image_url?: string // Keep for backward compatibility
+  image_path?: string // New field for storage bucket path
   platform: 'buildunia' // always 'buildunia'
   category: string
   difficulty: string
