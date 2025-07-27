@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase'
 import { Product } from '@/lib/supabase'
+import { getImageUrl } from '@/lib/imageUpload'
 
 const categories = ['All', 'IoT', 'Arduino', 'ESP32', 'Raspberry Pi']
 const difficulties = ['All', 'beginner', 'intermediate', 'advanced']
@@ -184,18 +185,25 @@ export default function ProjectsPage() {
               {filteredProducts.map((product) => (
                 <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                   <div className="relative h-48 bg-gray-100">
-                    {product.image_url ? (
-                      <Image
-                        src={product.image_url}
-                        alt={product.title}
-                        fill
-                        className="object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        No Image
-                      </div>
-                    )}
+                    {(() => {
+                      // Priority: use image_path from storage bucket, fallback to image_url
+                      const imageUrl = product.image_path 
+                        ? getImageUrl(product.image_path) 
+                        : product.image_url
+                      
+                      return imageUrl ? (
+                        <Image
+                          src={imageUrl}
+                          alt={product.title}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-400">
+                          No Image
+                        </div>
+                      )
+                    })()}
                     <Badge className="absolute top-2 right-2">
                       {product.difficulty}
                     </Badge>
