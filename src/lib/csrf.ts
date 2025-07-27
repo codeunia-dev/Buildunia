@@ -97,4 +97,4 @@ export function addCSRFTokenToHeaders(headers: Headers, sessionId: string): Head
   const token = getCSRFToken(sessionId)
   headers.set('x-csrf-token', token)
   return headers
-} 
+}
