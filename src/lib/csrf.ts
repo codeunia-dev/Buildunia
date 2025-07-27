@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
+import { createServerClient } from '@/lib/supabase-server'
 
 // CSRF token store (use Redis in production)
 const csrfTokens = new Map<string, { token: string; expires: number }>()
@@ -44,31 +45,44 @@ export function getCSRFToken(sessionId: string): string {
   return generateCSRFToken(sessionId)
 }
 
-export function csrfMiddleware(req: NextRequest) {
+export async function csrfMiddleware(req: NextRequest) {
   // Skip CSRF for GET requests
   if (req.method === 'GET') {
     return null
   }
   
-  const sessionId = req.cookies.get('session')?.value || req.headers.get('x-session-id')
-  
-  if (!sessionId) {
+  try {
+    // Get user from Supabase session
+    const supabase = await createServerClient();
+    const { data: { user }, error } = await supabase.auth.getUser();
+    
+    if (error || !user) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+    
+    // Use user ID as session ID for CSRF token
+    const sessionId = user.id
+    
+    const token = req.headers.get('x-csrf-token') || req.nextUrl.searchParams.get('csrf_token')
+    
+    if (!token || !validateCSRFToken(sessionId, token)) {
+      return NextResponse.json(
+        { error: 'Invalid CSRF token' },
+        { status: 403 }
+      )
+    }
+    
+    return null // Allow request
+  } catch (error) {
+    console.error('CSRF middleware error:', error)
     return NextResponse.json(
-      { error: 'CSRF token required' },
-      { status: 403 }
+      { error: 'CSRF validation failed' },
+      { status: 500 }
     )
   }
-  
-  const token = req.headers.get('x-csrf-token') || req.nextUrl.searchParams.get('csrf_token')
-  
-  if (!token || !validateCSRFToken(sessionId, token)) {
-    return NextResponse.json(
-      { error: 'Invalid CSRF token' },
-      { status: 403 }
-    )
-  }
-  
-  return null // Allow request
 }
 
 // Helper function to add CSRF token to forms
@@ -83,4 +97,4 @@ export function addCSRFTokenToHeaders(headers: Headers, sessionId: string): Head
   const token = getCSRFToken(sessionId)
   headers.set('x-csrf-token', token)
   return headers
-} 
+}
