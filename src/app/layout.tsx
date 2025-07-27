@@ -41,8 +41,10 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)" />
         <link rel="icon" href="/favicon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />
+        {/* Temporarily disabled CSP for development - will be re-enabled with proper values */}
+        {/* <meta httpEquiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com; frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com; connect-src 'self' https://*.razorpay.com https://api.razorpay.com https://lumberjack.razorpay.com https://*.supabase.co;" /> */}
       </head>
-      <body className="antialiased min-h-screen flex flex-col !bg-black text-white">
+      <body className="antialiased min-h-screen flex flex-col !bg-black text-white" suppressHydrationWarning>
         <BuilduniaAuthProvider>
           <CartProvider>
             <Navbar />

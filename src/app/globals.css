@@ -46,37 +46,37 @@
 :root {
   --radius: 0.625rem;
   /* Force dark theme as default - Pure Black Theme */
-  --background: oklch(0 0 0); /* Pure black background */
-  --foreground: oklch(0.98 0 0); /* Almost white text */
-  --card: oklch(0.08 0 0); /* Very dark gray cards for better visibility */
-  --card-foreground: oklch(0.98 0 0); /* Almost white text on cards */
-  --popover: oklch(0.03 0 0); /* Dark popover */
-  --popover-foreground: oklch(0.95 0 0); /* Light popover text */
-  --primary: oklch(0.55 0.15 240); /* Blue primary */
-  --primary-foreground: oklch(0.98 0 0); /* White on primary */
-  --secondary: oklch(0.15 0 0); /* Slightly lighter dark secondary */
-  --secondary-foreground: oklch(0.95 0 0); /* Very light secondary text */
-  --muted: oklch(0.12 0 0); /* Lighter muted background */
-  --muted-foreground: oklch(0.8 0 0); /* Much lighter muted text */
-  --accent: oklch(0.12 0 0); /* Accent dark */
-  --accent-foreground: oklch(0.9 0 0); /* Accent text */
-  --destructive: oklch(0.65 0.25 25); /* Red destructive */
-  --border: oklch(0.3 0 0); /* More visible border for black background */
-  --input: oklch(0.12 0 0); /* Darker input background */
-  --ring: oklch(0.3 0 0); /* More visible focus ring */
-  --chart-1: oklch(0.55 0.15 240); /* Blue */
-  --chart-2: oklch(0.55 0.15 120); /* Green */
-  --chart-3: oklch(0.55 0.15 60); /* Yellow */
-  --chart-4: oklch(0.55 0.15 300); /* Purple */
-  --chart-5: oklch(0.55 0.15 180); /* Cyan */
-  --sidebar: oklch(0.02 0 0); /* Almost black sidebar */
-  --sidebar-foreground: oklch(0.9 0 0); /* Light sidebar text */
-  --sidebar-primary: oklch(0.55 0.15 240); /* Blue sidebar primary */
-  --sidebar-primary-foreground: oklch(0.98 0 0); /* White sidebar primary text */
-  --sidebar-accent: oklch(0.08 0 0); /* Dark sidebar accent */
-  --sidebar-accent-foreground: oklch(0.9 0 0); /* Light sidebar accent text */
-  --sidebar-border: oklch(0.12 0 0); /* Dark sidebar border */
-  --sidebar-ring: oklch(0.55 0.15 240); /* Blue sidebar ring */
+  --background: #000000; /* Pure black background */
+  --foreground: #fafafa; /* Almost white text */
+  --card: #111111; /* Very dark gray cards for better visibility */
+  --card-foreground: #fafafa; /* Almost white text on cards */
+  --popover: #0a0a0a; /* Dark popover */
+  --popover-foreground: #f0f0f0; /* Light popover text */
+  --primary: #3b82f6; /* Blue primary */
+  --primary-foreground: #fafafa; /* White on primary */
+  --secondary: #1f2937; /* Slightly lighter dark secondary */
+  --secondary-foreground: #f0f0f0; /* Very light secondary text */
+  --muted: #1e1e1e; /* Lighter muted background */
+  --muted-foreground: #cccccc; /* Much lighter muted text */
+  --accent: #1e1e1e; /* Accent dark */
+  --accent-foreground: #e5e5e5; /* Accent text */
+  --destructive: #ef4444; /* Red destructive */
+  --border: #374151; /* More visible border for black background */
+  --input: #1e1e1e; /* Darker input background */
+  --ring: #374151; /* More visible focus ring */
+  --chart-1: #3b82f6; /* Blue */
+  --chart-2: #10b981; /* Green */
+  --chart-3: #f59e0b; /* Yellow */
+  --chart-4: #8b5cf6; /* Purple */
+  --chart-5: #06b6d4; /* Cyan */
+  --sidebar: #050505; /* Almost black sidebar */
+  --sidebar-foreground: #e5e5e5; /* Light sidebar text */
+  --sidebar-primary: #3b82f6; /* Blue sidebar primary */
+  --sidebar-primary-foreground: #fafafa; /* White sidebar primary text */
+  --sidebar-accent: #111111; /* Dark sidebar accent */
+  --sidebar-accent-foreground: #e5e5e5; /* Light sidebar accent text */
+  --sidebar-border: #1e1e1e; /* Dark sidebar border */
+  --sidebar-ring: #3b82f6; /* Blue sidebar ring */
 }
 
 /* Dark theme is now the default - removed .dark class since we're always dark */
@@ -164,5 +164,294 @@
   /* Ensure card headers and content have proper styling */
   .bg-gray-800 {
     background-color: rgb(31 41 55) !important; /* Slightly lighter for cards */
+  }
+}
+
+/* Enhanced print styles for receipt */
+@media print {
+  /* Hide all navigation and non-essential elements */
+  nav, 
+  button, 
+  .no-print,
+  .receipt-footer,
+  footer,
+  .navbar,
+  .header {
+    display: none !important;
+  }
+
+  /* Force white background and black text */
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+
+  /* Ensure proper page setup */
+  html, body, #__next, #root {
+    background: white !important;
+    color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* Hide the footer specifically */
+  .receipt-footer,
+  div[class*="receipt-footer"],
+  .bg-gray-800.p-6.border-t.border-gray-700 {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* Receipt card styling for print - keep the same layout as web */
+  .receipt-card {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 20px !important;
+  }
+
+  /* Keep the same structure as web but with black text */
+  .receipt-card .bg-gradient-to-r {
+    background: white !important;
+    color: black !important;
+  }
+
+  .receipt-card .text-white {
+    color: black !important;
+  }
+
+  .receipt-card .text-gray-300 {
+    color: #333 !important;
+  }
+
+  .receipt-card .text-gray-400 {
+    color: #666 !important;
+  }
+
+  .receipt-card .text-gray-500 {
+    color: #666 !important;
+  }
+
+  /* Override all background colors */
+  .bg-black, .bg-gray-900, .bg-gray-800, .bg-gray-700 {
+    background: white !important;
+  }
+  
+  /* Override all text colors */
+  .text-white, .text-gray-100, .text-gray-200, .text-gray-300 {
+    color: black !important;
+  }
+  
+  .text-gray-400, .text-gray-500 {
+    color: #666 !important;
+  }
+  
+  /* Override border colors */
+  .border-gray-700, .border-gray-800, .border-gray-600 {
+    border-color: #ccc !important;
+  }
+  
+  /* Specific gradient overrides */
+  .bg-gradient-to-r {
+    background: white !important;
+  }
+  
+  /* Ensure proper contrast for print */
+  .text-blue-400, .text-purple-400 {
+    color: #333 !important;
+  }
+  
+  /* Remove shadows and effects */
+  .shadow-2xl, .shadow-lg, .shadow {
+    box-shadow: none !important;
+  }
+  
+  /* Ensure proper spacing */
+  .p-6, .px-6, .py-6 {
+    padding: 1rem !important;
+  }
+  
+  /* Force page breaks where needed */
+  .page-break {
+    page-break-before: always;
+  }
+
+  /* Specific styles for receipt elements */
+  .print-receipt {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+  
+  .print-receipt * {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .print-receipt .bg-gradient-to-r {
+    background: white !important;
+  }
+  
+  .print-receipt .text-white {
+    color: black !important;
+  }
+  
+  .print-receipt .text-gray-300 {
+    color: #333 !important;
+  }
+  
+  .print-receipt .text-gray-400 {
+    color: #666 !important;
+  }
+  
+  .print-receipt .border-gray-700,
+  .print-receipt .border-gray-800 {
+    border-color: #ccc !important;
+  }
+
+  /* Hide footer with multiple selectors for maximum compatibility */
+  .receipt-footer,
+  .bg-gray-800.p-6.border-t.border-gray-700,
+  div[class*="receipt-footer"],
+  footer,
+  .footer {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+  }
+
+  /* Ensure the receipt maintains its structure */
+  .receipt-card .bg-gradient-to-r.from-blue-900.to-purple-900 {
+    background: white !important;
+    color: black !important;
+    border-bottom: 1px solid #ccc !important;
+  }
+
+  .receipt-card .bg-gray-900 {
+    background: white !important;
+  }
+
+  .receipt-card .border-gray-700,
+  .receipt-card .border-gray-800 {
+    border-color: #ccc !important;
+  }
+
+  /* Ensure badges and status indicators are visible */
+  .receipt-card .bg-green-500\/20 {
+    background: #f0f8f0 !important;
+    color: #333 !important;
+    border: 1px solid #ccc !important;
+  }
+
+  .receipt-card .bg-blue-500\/20 {
+    background: #f0f0f8 !important;
+    color: #333 !important;
+    border: 1px solid #ccc !important;
+  }
+
+  .receipt-card .bg-purple-500\/20 {
+    background: #f8f0f8 !important;
+    color: #333 !important;
+    border: 1px solid #ccc !important;
+  }
+}
+
+/* Print mode styles for PDF generation */
+.print-mode {
+  background: white !important;
+  color: black !important;
+}
+
+.print-mode * {
+  background: white !important;
+  color: black !important;
+}
+
+.print-mode .bg-gray-900,
+.print-mode .bg-gray-800,
+.print-mode .bg-black {
+  background: white !important;
+}
+
+.print-mode .text-white,
+.print-mode .text-gray-300 {
+  color: black !important;
+}
+
+.print-mode .text-gray-400 {
+  color: #666 !important;
+}
+
+.print-mode .border-gray-700,
+.print-mode .border-gray-800 {
+  border-color: #ccc !important;
+}
+
+.print-mode .bg-gradient-to-r {
+  background: white !important;
+}
+
+.print-mode .shadow-2xl {
+  box-shadow: none !important;
+}
+
+.print-mode .receipt-footer {
+  display: none !important;
+}
+
+/* Specific print styles for receipt */
+@media print {
+  .print-receipt {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+  
+  .print-receipt * {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .print-receipt .bg-gradient-to-r {
+    background: white !important;
+  }
+  
+  .print-receipt .text-white {
+    color: black !important;
+  }
+  
+  .print-receipt .text-gray-300 {
+    color: #333 !important;
+  }
+  
+  .print-receipt .text-gray-400 {
+    color: #666 !important;
+  }
+  
+  .print-receipt .border-gray-700,
+  .print-receipt   .border-gray-800 {
+    border-color: #ccc !important;
+  }
+  
+  /* Hide footer in print */
+  .receipt-footer {
+    display: none !important;
   }
 }

@@ -1,14 +1,90 @@
-import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+import { createBrowserClient } from '@supabase/ssr';
 
 // Create a singleton instance to avoid multiple GoTrueClient instances
-let supabaseInstance: ReturnType<typeof createSupabaseClient> | null = null;
+let supabaseInstance: ReturnType<typeof createBrowserClient> | null = null;
 
 export function createClient() {
   if (!supabaseInstance) {
-    supabaseInstance = createSupabaseClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    // Validate environment variables
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    if (!supabaseUrl || !supabaseAnonKey) {
+      console.error('Missing Supabase environment variables');
+      throw new Error('Missing Supabase environment variables');
+    }
+
+    supabaseInstance = createBrowserClient(
+      supabaseUrl,
+      supabaseAnonKey,
+      {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true,
+          flowType: 'pkce'
+        },
+        global: {
+          headers: {
+            'X-Client-Info': 'buildunia-web'
+          }
+        }
+      }
     );
+
+    // Add error handling for session-related errors
+    const originalGetUser = supabaseInstance.auth.getUser;
+    supabaseInstance.auth.getUser = async () => {
+      try {
+        const result = await originalGetUser.call(supabaseInstance.auth);
+        return result;
+      } catch (error: any) {
+        if (error.message?.includes('Auth session missing')) {
+          // Clear invalid session data
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('supabase.auth.token');
+            sessionStorage.removeItem('supabase.auth.token');
+            localStorage.removeItem('sb-codeunia-dev.supabase.auth.token');
+            sessionStorage.removeItem('sb-codeunia-dev.supabase.auth.token');
+          }
+          // Return empty user instead of throwing
+          return { data: { user: null }, error: null };
+        }
+        throw error;
+      }
+    };
+
+    const originalRefreshSession = supabaseInstance.auth.refreshSession;
+    supabaseInstance.auth.refreshSession = async () => {
+      try {
+        const result = await originalRefreshSession.call(supabaseInstance.auth);
+        return result;
+      } catch (error: any) {
+        if (error.message?.includes('Auth session missing')) {
+          // Clear invalid session data
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('supabase.auth.token');
+            sessionStorage.removeItem('supabase.auth.token');
+            localStorage.removeItem('sb-codeunia-dev.supabase.auth.token');
+            sessionStorage.removeItem('sb-codeunia-dev.supabase.auth.token');
+          }
+          // Return empty session instead of throwing
+          return { data: { session: null, user: null }, error: null };
+        }
+        throw error;
+      }
+    };
+
+    const originalGetSession = supabaseInstance.auth.getSession;
+    supabaseInstance.auth.getSession = async () => {
+      try {
+        const result = await originalGetSession.call(supabaseInstance.auth);
+        return result;
+      } catch (error: any) {
+        // Return empty session instead of throwing
+        return { data: { session: null }, error: null };
+      }
+    };
   }
   return supabaseInstance;
 }
