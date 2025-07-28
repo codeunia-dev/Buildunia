@@ -8,6 +8,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useBuilduniaAuth } from '@/contexts/BuilduniaAuthContext'
+import { Github, Mail } from 'lucide-react'
+import { createClient } from '@/lib/supabase'
 
 function SignInForm() {
   const [email, setEmail] = useState('')
@@ -26,23 +28,64 @@ function SignInForm() {
     }
   }, [user, authLoading, router, searchParams])
 
+const handleGitHubSignIn = async () => {
+    setLoading(true);
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined,
+        },
+      });
+      if (error) {
+        throw error;
+      }
+      setError('');
+    } catch (error) {
+      console.error('GitHub sign in error:', error);
+      setError('GitHub sign in failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    try {
+      const supabase = createClient();
+      await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined,
+        },
+      });
+      setError('');
+    } catch (error) {
+      console.error('Google sign in error:', error);
+      setError('Google sign in failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
     try {
-      const { error } = await signIn(email, password)
-      
+      const { error } = await signIn(email, password);
+
       if (error) {
-        setError(error.message)
+        setError(error.message);
       } else {
-        router.push('/')
+        router.push('/');
       }
     } catch (err: any) {
-      setError(err.message || 'An error occurred')
+      setError(err.message || 'An error occurred');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -91,13 +134,53 @@ function SignInForm() {
             <CardTitle className="text-white text-center">Sign In</CardTitle>
           </CardHeader>
           <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-                <div className="bg-red-900/20 border border-red-500 text-red-400 px-4 py-3 rounded">
+                <div className="bg-red-900/20 border border-red-500 text-red-400 px-4 py-3 rounded mb-6">
                 {error}
               </div>
             )}
             
+            {/* OAuth buttons */}
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <Button 
+                variant="outline" 
+                className="w-full bg-gray-800 border-gray-600 text-white hover:bg-gray-700"
+                onClick={handleGitHubSignIn}
+                disabled={loading}
+              >
+                {loading ? (
+                  <div className="flex items-center">
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+                    Connecting...
+                  </div>
+                ) : (
+                  <>
+                    <Github className="mr-2 h-4 w-4" />
+                    GitHub
+                  </>
+                )}
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full bg-gray-800 border-gray-600 text-white hover:bg-gray-700"
+                onClick={handleGoogleSignIn}
+                disabled={loading}
+              >
+                <Mail className="mr-2 h-4 w-4" />
+                Google
+              </Button>
+            </div>
+
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-600"></div>
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-gray-900 px-2 text-gray-400">Or continue with email</span>
+              </div>
+            </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
                 <Label htmlFor="email" className="text-gray-300">Email</Label>
               <Input

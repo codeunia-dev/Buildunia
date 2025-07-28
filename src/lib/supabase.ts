@@ -39,39 +39,55 @@ export function createClient() {
         const result = await originalGetUser.call(supabaseInstance.auth);
         return result;
       } catch (error: any) {
-        if (error.message?.includes('Auth session missing')) {
+        console.log('getUser error caught:', error.message);
+        if (error.message?.includes('Auth session missing') || 
+            error.message?.includes('refresh_token_not_found') ||
+            error.message?.includes('Invalid Refresh Token')) {
           // Clear invalid session data
           if (typeof window !== 'undefined') {
             localStorage.removeItem('supabase.auth.token');
             sessionStorage.removeItem('supabase.auth.token');
-            localStorage.removeItem('sb-codeunia-dev.supabase.auth.token');
-            sessionStorage.removeItem('sb-codeunia-dev.supabase.auth.token');
+            const keys = Object.keys(localStorage);
+            keys.forEach(key => {
+              if (key.includes('supabase.auth.token') || key.includes('.auth.token')) {
+                localStorage.removeItem(key);
+              }
+            });
           }
           // Return empty user instead of throwing
           return { data: { user: null }, error: null };
         }
-        throw error;
+        // For other errors, return the error instead of throwing
+        return { data: { user: null }, error };
       }
     };
 
     const originalRefreshSession = supabaseInstance.auth.refreshSession;
-    supabaseInstance.auth.refreshSession = async () => {
+    supabaseInstance.auth.refreshSession = async (currentSession?: any) => {
       try {
-        const result = await originalRefreshSession.call(supabaseInstance.auth);
+        const result = await originalRefreshSession.call(supabaseInstance.auth, currentSession);
         return result;
       } catch (error: any) {
-        if (error.message?.includes('Auth session missing')) {
+        console.log('refreshSession error caught:', error.message);
+        if (error.message?.includes('Auth session missing') ||
+            error.message?.includes('refresh_token_not_found') ||
+            error.message?.includes('Invalid Refresh Token')) {
           // Clear invalid session data
           if (typeof window !== 'undefined') {
             localStorage.removeItem('supabase.auth.token');
             sessionStorage.removeItem('supabase.auth.token');
-            localStorage.removeItem('sb-codeunia-dev.supabase.auth.token');
-            sessionStorage.removeItem('sb-codeunia-dev.supabase.auth.token');
+            const keys = Object.keys(localStorage);
+            keys.forEach(key => {
+              if (key.includes('supabase.auth.token') || key.includes('.auth.token')) {
+                localStorage.removeItem(key);
+              }
+            });
           }
           // Return empty session instead of throwing
           return { data: { session: null, user: null }, error: null };
         }
-        throw error;
+        // For other errors, return the error instead of throwing
+        return { data: { session: null, user: null }, error };
       }
     };
 
@@ -81,6 +97,20 @@ export function createClient() {
         const result = await originalGetSession.call(supabaseInstance.auth);
         return result;
       } catch (error: any) {
+        console.log('getSession error caught:', error.message);
+        // Clear invalid session data for auth errors
+        if (error.message?.includes('Auth session missing') ||
+            error.message?.includes('refresh_token_not_found') ||
+            error.message?.includes('Invalid Refresh Token')) {
+          if (typeof window !== 'undefined') {
+            const keys = Object.keys(localStorage);
+            keys.forEach(key => {
+              if (key.includes('supabase.auth.token') || key.includes('.auth.token')) {
+                localStorage.removeItem(key);
+              }
+            });
+          }
+        }
         // Return empty session instead of throwing
         return { data: { session: null }, error: null };
       }
