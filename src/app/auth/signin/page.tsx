@@ -28,14 +28,36 @@ function SignInForm() {
     }
   }, [user, authLoading, router, searchParams])
 
-const handleGitHubSignIn = async () => {
+const getRedirectUrl = () => {
+    if (typeof window === 'undefined') return undefined;
+    
+    // Get current origin
+    const origin = window.location.origin;
+    
+    // If we're on localhost, use localhost callback
+    if (origin.includes('localhost')) {
+      return `${origin}/auth/callback`;
+    }
+    
+    // For production, always use the current domain's callback
+    return `${origin}/auth/callback`;
+  };
+
+  const handleGitHubSignIn = async () => {
     setLoading(true);
     try {
       const supabase = createClient();
+      const redirectUrl = getRedirectUrl();
+      console.log('GitHub OAuth redirect URL:', redirectUrl);
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined,
+          redirectTo: redirectUrl,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
         },
       });
       if (error) {
@@ -54,10 +76,17 @@ const handleGitHubSignIn = async () => {
     setLoading(true);
     try {
       const supabase = createClient();
+      const redirectUrl = getRedirectUrl();
+      console.log('Google OAuth redirect URL:', redirectUrl);
+      
       await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined,
+          redirectTo: redirectUrl,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
         },
       });
       setError('');
