@@ -11,6 +11,7 @@ interface BuilduniaAuthContextType {
   platform: 'buildunia';
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: any }>;
+  signInWithOAuth: (provider: 'google' | 'github') => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   hasCodeuniaAccess: boolean;
   refreshSession: () => Promise<void>;
@@ -23,6 +24,7 @@ const BuilduniaAuthContext = createContext<BuilduniaAuthContextType>({
   platform: 'buildunia',
   signIn: async () => ({ error: null }),
   signUp: async () => ({ error: null }),
+  signInWithOAuth: async () => ({ error: null }),
   signOut: async () => {},
   hasCodeuniaAccess: false,
   refreshSession: async () => {},
@@ -39,7 +41,15 @@ export function BuilduniaAuthProvider({ children }: { children: React.ReactNode 
   const refreshSession = async () => {
     try {
       // First, try to get the current session without refreshing
-      const { data: { session: currentSession } } = await supabase.auth.getSession()
+      const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession()
+      
+      if (sessionError) {
+        console.log('Session error:', sessionError.message)
+        setUser(null)
+        setHasCodeuniaAccess(false)
+        setLoading(false)
+        return
+      }
       
       if (!currentSession) {
         console.log('No current session found, clearing user state')
@@ -49,47 +59,41 @@ export function BuilduniaAuthProvider({ children }: { children: React.ReactNode 
         return
       }
 
-      // Only try to refresh if we have a session
-      const { data: { session }, error } = await supabase.auth.refreshSession()
-      
-      if (error) {
-        console.error('Error refreshing session:', error)
-        // Handle specific error types
-        if (error.message.includes('refresh_token_not_found') || 
-            error.message.includes('Invalid Refresh Token') ||
-            error.message.includes('Auth session missing')) {
-          console.log('Session invalid or missing, clearing user state')
+      // Only try to refresh if we have a valid session with refresh token
+      if (currentSession.refresh_token) {
+        const { data: { session }, error } = await supabase.auth.refreshSession(currentSession)
+        
+        if (error) {
+          console.log('Error refreshing session:', error.message)
+          // Clear user state for any refresh error
+          setUser(null)
+          setHasCodeuniaAccess(false)
+          setLoading(false)
+        } else if (session?.user) {
+          console.log('Session refreshed successfully for:', session.user.email)
+          setUser(session.user)
+          const platform = session.user.user_metadata?.platform
+          setHasCodeuniaAccess(platform === 'codeunia' || platform === 'buildunia')
+          setLoading(false)
+        } else {
+          console.log('No session available after refresh')
           setUser(null)
           setHasCodeuniaAccess(false)
           setLoading(false)
         }
-      } else if (session?.user) {
-        console.log('Session refreshed successfully for:', session.user.email)
-        setUser(session.user)
-        const platform = session.user.user_metadata?.platform
-        setHasCodeuniaAccess(platform === 'codeunia' || platform === 'buildunia')
-        setLoading(false)
       } else {
-        // No session available
-        console.log('No session available after refresh')
-        setUser(null)
-        setHasCodeuniaAccess(false)
+        // Use current session if no refresh token
+        setUser(currentSession.user)
+        const platform = currentSession.user.user_metadata?.platform
+        setHasCodeuniaAccess(platform === 'codeunia' || platform === 'buildunia')
         setLoading(false)
       }
     } catch (error: any) {
-      console.error('Error refreshing session:', error)
-      // Handle AuthSessionMissingError specifically
-      if (error.message?.includes('Auth session missing')) {
-        console.log('Auth session missing error caught, clearing user state')
-        setUser(null)
-        setHasCodeuniaAccess(false)
-        setLoading(false)
-      } else {
-        // For other errors, also clear the state
-        setUser(null)
-        setHasCodeuniaAccess(false)
-        setLoading(false)
-      }
+      console.log('Error in refreshSession:', error.message)
+      // For any error, clear the state and stop loading
+      setUser(null)
+      setHasCodeuniaAccess(false)
+      setLoading(false)
     }
   }
 
@@ -97,42 +101,34 @@ export function BuilduniaAuthProvider({ children }: { children: React.ReactNode 
     // Get initial user
     const getInitialUser = async () => {
       try {
-        const { data: { user }, error } = await supabase.auth.getUser()
+        // First check if we have a session
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
         
-        if (error) {
-          console.error('Error getting initial user:', error)
-          // Try to refresh the session first for specific errors
-          if (error.message.includes('refresh_token_not_found') || 
-              error.message.includes('Invalid Refresh Token') ||
-              error.message.includes('Auth session missing')) {
-            console.log('Attempting to refresh session...')
-            await refreshSession()
-          } else {
-            // For other errors, just set loading to false
-            setLoading(false)
-          }
-        } else {
-          console.log('Initial user loaded:', user?.email)
-          setUser(user)
-          
-          if (user) {
-            // Check if user has Codeunia access (simplified for now)
-            const platform = user.user_metadata?.platform
-            setHasCodeuniaAccess(platform === 'codeunia' || platform === 'buildunia')
-          }
-          setLoading(false)
-        }
-      } catch (error: any) {
-        console.error('Error getting initial user:', error)
-        // Handle AuthSessionMissingError specifically
-        if (error.message?.includes('Auth session missing')) {
-          console.log('Auth session missing error in initial load, clearing state')
+        if (sessionError) {
+          console.log('Session error on initial load:', sessionError.message)
           setUser(null)
           setHasCodeuniaAccess(false)
           setLoading(false)
+          return
+        }
+        
+        if (session?.user) {
+          console.log('Initial session found for:', session.user.email)
+          setUser(session.user)
+          const platform = session.user.user_metadata?.platform
+          setHasCodeuniaAccess(platform === 'codeunia' || platform === 'buildunia')
+          setLoading(false)
         } else {
+          console.log('No initial session found')
+          setUser(null)
+          setHasCodeuniaAccess(false)
           setLoading(false)
         }
+      } catch (error: any) {
+        console.log('Error in getInitialUser:', error.message)
+        setUser(null)
+        setHasCodeuniaAccess(false)
+        setLoading(false)
       }
     }
 
@@ -219,6 +215,27 @@ export function BuilduniaAuthProvider({ children }: { children: React.ReactNode 
     }
   }
 
+  const signInWithOAuth = async (provider: 'google' | 'github') => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: typeof window !== 'undefined'
+            ? `${window.location.origin}/auth/callback`
+            : undefined,
+        },
+      })
+
+      if (error) {
+        return { error }
+      }
+
+      return { error: null }
+    } catch (error) {
+      return { error }
+    }
+  }
+
   const signOut = async () => {
     try {
       await supabase.auth.signOut()
@@ -235,6 +252,7 @@ export function BuilduniaAuthProvider({ children }: { children: React.ReactNode 
       platform: 'buildunia',
       signIn, 
       signUp, 
+      signInWithOAuth,
       signOut,
       hasCodeuniaAccess,
       refreshSession
