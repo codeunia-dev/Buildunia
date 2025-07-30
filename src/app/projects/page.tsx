@@ -56,7 +56,7 @@ export default function ProjectsPage() {
       console.log('Products found:', data?.length || 0)
       
       // Parse the prices JSON for each product
-      const parsedProducts = data?.map(product => ({
+      const parsedProducts = data?.map((product: any) => ({
         ...product,
         prices: typeof product.prices === 'string' ? JSON.parse(product.prices) : product.prices
       })) || []
