@@ -8,13 +8,14 @@ import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/logo'
 import { useBuilduniaAuth } from '@/contexts/BuilduniaAuthContext'
 import { useCart } from '@/contexts/CartContext'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const { user, loading, signOut, hasCodeuniaAccess, isAdmin } = useBuilduniaAuth()
   const { state } = useCart()
   const router = useRouter()
+  const pathname = usePathname()
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -50,7 +51,7 @@ export default function Navbar() {
   }, [isOpen]);
 
   return (
-    <nav className="bg-gradient-to-r from-black via-gray-900 to-black shadow-2xl sticky top-0 z-50 border-b border-gray-800/50 backdrop-blur-sm !pointer-events-auto w-full overflow-hidden">
+    <nav className="bg-gradient-to-r from-black via-gray-900 to-black shadow-2xl fixed top-0 left-0 right-0 z-[1000] border-b border-gray-800/50 backdrop-blur-sm !pointer-events-auto w-full overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="flex justify-between h-16 w-full">
           <div className="flex items-center min-w-0 flex-1">
@@ -71,10 +72,10 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="relative border-transparent text-gray-300 hover:text-white inline-flex items-center px-3 py-2 text-sm font-medium transition-all duration-300 whitespace-nowrap group"
+                  className={`relative border-transparent ${pathname === item.href ? 'text-white' : 'text-gray-300 hover:text-white'} inline-flex items-center px-3 py-2 text-sm font-medium transition-all duration-300 whitespace-nowrap group`}
                 >
                   {item.name}
-                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-600 group-hover:w-full transition-all duration-300"></div>
+                  <div className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300 ${pathname === item.href ? 'w-full' : 'w-0 group-hover:w-full'}`}></div>
                 </Link>
               ))}
             </div>
