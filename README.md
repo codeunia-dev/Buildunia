@@ -1,6 +1,6 @@
-# 🔧 BuildUnia - A CodeUnia Product
+# 🔧 BuildUnia - A Codeunia Product
 
-BuildUnia is an innovative platform under **CodeUnia** that empowers students and developers to build real-world IoT-based and software-integrated solutions. Designed to bridge the gap between theory and application, BuildUnia offers guided projects, mentorship, and access to powerful tools and resources.
+BuildUnia is an innovative platform under **Codeunia** that empowers students and developers to build real-world IoT-based and software-integrated solutions. Designed to bridge the gap between theory and application, BuildUnia offers guided projects, mentorship, and access to powerful tools and resources.
 
 ## 🚀 Features
 
@@ -13,17 +13,17 @@ BuildUnia is an innovative platform under **CodeUnia** that empowers students an
 
 ## 🛡️ License & Ownership
 
-This project is an **official product of CodeUnia**.  
-All rights reserved. © 2025 CodeUnia.
+This project is an **official product of Codeunia**.  
+All rights reserved. © 2025 Codeunia.
 
 Feel free to contribute, fork, and share —  
-**But all commercial usage and official branding must be aligned with CodeUnia's license and policies.**
+**But all commercial usage and official branding must be aligned with Codeunia's license and policies.**
 
 ## 🤝 Join the Movement
 
 Be a part of something big.  
-Contribute to open innovation with CodeUnia + BuildUnia.
+Contribute to open innovation with Codeunia + BuildUnia.
 
-> [🌐 Visit CodeUnia](https://codeunia.in) | [🐙 GitHub](https://github.com/codeunia) | [📧 Contact Us](mailto:contact@codeunia.in)
+> [🌐 Visit Codeunia](https://Codeunia.in) | [🐙 GitHub](https://github.com/Codeunia) | [📧 Contact Us](mailto:contact@Codeunia.in)
 
 ---
